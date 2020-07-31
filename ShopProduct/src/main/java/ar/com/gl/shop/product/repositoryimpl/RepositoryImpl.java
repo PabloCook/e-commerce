@@ -16,27 +16,85 @@ public class RepositoryImpl implements Repository {
 	
 	public RepositoryImpl() {
 		
-		listaCategorias = new ArrayList<>();
+		listaCategorias = new ArrayList<Category>();
 		
-		listaProductos = new ArrayList<>();
+		listaProductos = new ArrayList<Product>();
 		
-		listaStock = new ArrayList<>();
+		listaStock = new ArrayList<Stock>();
 	}
 	
 	@Override
-	public List<Product> getListaProductos() {
-		return listaProductos;
+	public Category saveCategory(Category category) {
+		listaCategorias.add(category);
+		return category;
 	}
+
 	@Override
-	public List<Category> getListaCategorias() {
+	public List<Category> findAllCategory() {
 		return listaCategorias;
 	}
+
 	@Override
-	public List<Stock> getListaStock() {
+	public Stock saveStock(Stock stock) {
+		listaStock.add(stock);
+		return stock;
+	}
+
+	@Override
+	public List<Stock> findAllStock() {
 		return listaStock;
 	}
 
+	@Override
+	public Product saveProduct(Product product) {
+		listaProductos.add(product);
+		return product;
+	}
 
+	@Override
+	public List<Product> findAllProduct() {
+		return listaProductos;
+	}
+
+	@Override
+	public void deleteCategory(Category category) {
+		listaCategorias.remove(category);
+
+	}
+
+	@Override
+	public void deleteProduct(Product product) {
+		listaProductos.remove(product);
+
+	}
+
+	@Override
+	public void deleteStock(Stock stock) {
+		listaStock.remove(stock);
+	}
+
+	@Override
+	public Category findCategoryById(Long id) {
+		for (Category category : listaCategorias) {
+			if (category.getId().equals(id)) {
+				return category;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
 	
+	@Override
+	public Product findProductById(Long id) {
+		for (Product product : listaProductos) {
+			if (product.getId().equals(id)) {
+				return product;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
 
 }

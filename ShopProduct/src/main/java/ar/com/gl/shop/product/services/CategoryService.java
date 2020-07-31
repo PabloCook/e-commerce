@@ -19,7 +19,7 @@ public interface CategoryService {
 	 * @return Repository
 	 */
 	public Category findOneByiD(Long id, Boolean bool);
-	public Category updateById(Long id);
+	public Category updateById(Category category);
 	public void deleteById(Long id);
 
 
