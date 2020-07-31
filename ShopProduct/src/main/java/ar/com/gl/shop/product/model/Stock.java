@@ -1,27 +1,24 @@
 package ar.com.gl.shop.product.model;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Stock {
 	
-	Product product;
+	Long id;
 	Integer quantity;
 	String locationCode;
-	
+	private static final AtomicLong count = new AtomicLong(0);
 	public Stock() {
 		
 	}
 	
-	public Stock(Product product, Integer quantity, String locationCode) {
-		this.product = product;
+	public Stock(Integer quantity, String locationCode) {
+		this.id = count.incrementAndGet();
 		this.quantity = quantity;
 		this.locationCode = locationCode;
 	}
 	
-	public Product getProduct() {
-		return product;
-	}
-	public void setProduct(Product product) {
-		this.product = product;
-	}
+
 	public Integer getQuantity() {
 		return quantity;
 	}
@@ -37,7 +34,7 @@ public class Stock {
 	
 	@Override
 	public String toString() {
-		return "Stock [product=" + product + ", quantity=" + quantity + ", locationCode=" + locationCode + "]";
+		return "Stock [id=" + id + ", quantity=" + quantity + ", locationCode=" + locationCode + "]";
 	}
 	
 	

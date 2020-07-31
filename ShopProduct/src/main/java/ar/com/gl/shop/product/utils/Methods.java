@@ -7,6 +7,7 @@ import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.services.ProductService;
+import ar.com.gl.shop.product.services.StockService;
 
 public class Methods {
 	
@@ -147,7 +148,8 @@ public class Methods {
 				}
 				
 				System.out.println("\n");
-				//imprimo todas las habilitadas				
+				//imprimo todas las habilitadas	
+				
 				categoryService.findAll(true)
 				.stream()
 				.forEach(System.out::println);
@@ -187,8 +189,8 @@ public class Methods {
 				System.out.println("=====================");
 				
 				switch (selectedAtribute) {
-				
-				case "1":					
+								
+				case "1"://modifica nombre actual					
 					
 					String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
 					
@@ -197,7 +199,7 @@ public class Methods {
 					
 					break;
 					
-				case "2":
+				case "2"://modifica descripcion actual
 					
 					String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()) ;
 					
@@ -279,7 +281,7 @@ public class Methods {
 		} while (!input.equals("6"));
 	}
 
-	public static void opcion(ProductService productService, CategoryService categoryService) {
+	public static void opcion(ProductService productService, CategoryService categoryService, StockService stockService) {
 		
 		String input;
 		
@@ -326,26 +328,31 @@ public class Methods {
 
 				categoryOptional = Optional.ofNullable(categoryService.findOneByiD(categoryId, true));	
 				
-				
-				
 				if (!categoryOptional.isPresent()) {
 					
 					break;
 				}
 				
-				productService.create(id, name, description, price, categoryOptional.get());		
+				Product theProduct = new Product(id, name, description, price, categoryOptional.get());
 				
-				productOptional = Optional.ofNullable(productService.findOneByiD(id, true));				
 				
-				productOptional.get().getStock().setProduct(productOptional.get());
 				
-				Integer stock = Integer.parseInt(Methods.validarInput("Ingrese stock para este producto: ", "\\d+"));
+				productOptional = Optional.ofNullable(theProduct);				
 				
-				productOptional.get().getStock().setQuantity(stock);
+
+				Integer quantity = Integer.parseInt(Methods.validarInput("Ingrese stock para este producto: ", "\\d+"));
+				
+				//stockService.createStock(productOptional.get().getStock());
+				
+				productOptional.get().getStock().setQuantity(quantity);
 				
 				String location = Methods.validarInput("Ingrese la locacion del producto: ", regexPalabras);
 				
 				productOptional.get().getStock().setLocationCode(location);
+
+				theProduct.setStock(productOptional.get().getStock());
+				
+				productService.create(theProduct);		
 				
 				System.out.println("\nProducto creado\n" + productOptional.get());
 				break;
@@ -388,11 +395,10 @@ public class Methods {
 				}
 				
 				System.out.println("\n");
-				//imprimo todas las habilitadas				
-				productService.findAll(true)
-				.stream()
+				//imprimo todas las habilitadas						
+				productService.findAll(true).stream()
 				.forEach(System.out::println);
-			
+				
 				break;
 				
 			case "4":
@@ -497,7 +503,7 @@ public class Methods {
 					//controller
 					Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
 					
-					Product theProduct = new Product(
+					theProduct = new Product(
 							
 					productOptional.get().getId(),
 					productOptional.get().getName(), 
@@ -522,8 +528,8 @@ public class Methods {
 					.forEach(System.out::println);
 					
 					Long newCategory = Long.parseLong(Methods.validarInput("Seleccion el id de la categoria: ", "\\d+"));
-
-					productService.updateById(new Product(
+					
+					theProduct = new Product(
 							
 					productOptional.get().getId(),
 					productOptional.get().getName(), 
@@ -531,7 +537,11 @@ public class Methods {
 					productOptional.get().getPrice(),
 					categoryService.findOneByiD(newCategory, true)							
 					
-					));
+					);
+					
+					theProduct.setStock(productOptional.get().getStock());
+					
+					productService.updateById(theProduct);
 			
 					System.out.println("\nCambios Realizados");
 					
@@ -581,6 +591,49 @@ public class Methods {
 				System.out.println("\n");
 				
 				id = Long.parseLong(Methods.validarInput("Seleccione un id: ", "^\\d+"));
+				
+				productOptional = Optional.ofNullable(productService.findOneByiD(id, false));
+				
+				String input11;			
+				
+
+				System.out.println("=========Eliminar==========\n"
+								 + "1- Eliminar/Recuperar\n"
+								 + "2- Eliminar de memoria\n"
+								 + "3- Salir");
+						
+				input11 = Methods.validarInput("Seleccione una opción: ", "^[1|2|3]");
+				
+				switch (input11) {
+				
+				case "1":				
+					
+					productService.deleteById(productOptional.get());
+					
+					System.out.println("\nCategoria Eliminada/Recuperada");
+					
+					break;
+					
+				case "2":
+					
+					input11 = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
+							+ categoryOptional.get() + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
+
+					if (input11.matches(Methods.getRegexAfirmativo())) {
+
+						productService.forceDeleteById(productOptional.get());
+
+					}					
+					
+					System.out.println("\nCategoria Eliminada Permanentemente");
+					
+					break;
+				
+				case "3":
+					
+					break;
+
+				}
 				
 				productService.deleteById(productService.findOneByiD(id, false));
 				

@@ -2,8 +2,10 @@ package ar.com.gl.shop.product;
 
 import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.services.ProductService;
+import ar.com.gl.shop.product.services.StockService;
 import ar.com.gl.shop.product.servicesimpl.CategoryServiceImpl;
 import ar.com.gl.shop.product.servicesimpl.ProductServiceImpl;
+import ar.com.gl.shop.product.servicesimpl.StockServiceImpl;
 import ar.com.gl.shop.product.utils.Methods;
 
 public class App {
@@ -15,6 +17,7 @@ public class App {
     	
     	CategoryService categoryService = new CategoryServiceImpl();
     	ProductService productService = new ProductServiceImpl();
+    	StockService stockService = new StockServiceImpl();
     	
     	categoryService.agregarPrimerosObjetos();
     	
@@ -41,7 +44,7 @@ public class App {
 			case "2":
 				
 				try {
-					Methods.opcion(productService, categoryService);
+					Methods.opcion(productService, categoryService, stockService);
 				} catch (Exception e) {
 					
 					System.out.println("\nHa ocurrido un error\n" + e.getMessage() + "\n");

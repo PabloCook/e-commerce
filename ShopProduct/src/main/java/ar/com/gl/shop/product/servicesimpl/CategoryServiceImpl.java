@@ -98,15 +98,15 @@ public class CategoryServiceImpl implements CategoryService {
 		theCategory = findOneByiD(category.getId(), true);
 		
 		
-		String newName = category.getName();
+		//String newName = category.getName();
 		
-		theCategory.setName(newName);
+		//theCategory.setName(newName);
 		
 
 
-		repositoryImpl.deleteCategory(category);
+		repositoryImpl.deleteCategory(theCategory);
 		
-		repositoryImpl.saveCategory(theCategory);
+		repositoryImpl.saveCategory(category);
 
 		
 		return theCategory;		

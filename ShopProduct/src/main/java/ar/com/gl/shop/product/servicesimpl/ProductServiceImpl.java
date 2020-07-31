@@ -12,6 +12,7 @@ import ar.com.gl.shop.product.services.ProductService;
 public class ProductServiceImpl implements ProductService {
 	
 	private RepositoryImpl repositoryImpl;
+	private StockServiceImpl stockService;
 	
 	private Product theProduct;	
 	
@@ -19,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductServiceImpl() {
 		
 		repositoryImpl = new RepositoryImpl();
-
+		stockService = new StockServiceImpl();
 		
 		theProduct = new Product();
 	}
@@ -37,10 +38,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void create(Long id, String name, String description, Double price, Category category) {
+	public void create(Product product) {
 		
-		theProduct = new Product(id, name, description, price, category);		
+		theProduct = new Product(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getCategory());		
 		
+		theProduct.setStock(stockService.create(product.getStock()));
 		repositoryImpl.saveProduct(theProduct);
 		
 		//ordernar por id
@@ -98,7 +100,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product updateById(Product product){
 		
-		theProduct = findOneByiD(product.getId(), true);
+		
+		Product theProduct = repositoryImpl.findProductById(product.getId());
 		
 		String newName = product.getName();
 		
@@ -116,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		theProduct.setCategory(newCategory);
 		
-		Integer newQuantity = product.getStock().getQuantity();
+		Integer newQuantity = theProduct.getStock().getQuantity();
 		
 		theProduct.getStock().setQuantity(newQuantity);
 		

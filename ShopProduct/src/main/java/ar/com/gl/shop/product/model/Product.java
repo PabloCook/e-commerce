@@ -23,8 +23,8 @@ public class Product {
 		this.description = description;
 		this.price = price;
 		this.category = category;
+		this.stock= new Stock(0, "establecer");		
 		this.enabled = true;
-		this.stock = new Stock(null, 0,"Establecer");
 	}
 	
 	public Boolean getEnabled() {
