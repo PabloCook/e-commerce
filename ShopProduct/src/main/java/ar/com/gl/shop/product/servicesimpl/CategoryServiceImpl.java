@@ -14,18 +14,16 @@ public class CategoryServiceImpl implements CategoryService {
 	
 		
 	Repository repositoryImpl = new RepositoryImpl();
-	
-	List<Category> theCategories = repositoryImpl.getListaCategorias();
-	
+		
 	Category theCategory = new Category();
 	
 	
 	//Categorias iniciales
 	public void agregarPrimerosObjetos() {		
 		
-		theCategories.add(new Category(1l, "Consumibles", "Para comer"));
-		theCategories.add(new Category(2l,"Limpieza", "Para limpiar"));
-		theCategories.add(new Category(3l,"Ropa", "Para vestir"));	
+		repositoryImpl.saveCategory(new Category(1l, "Consumibles", "Para comer"));
+		repositoryImpl.saveCategory(new Category(2l,"Limpieza", "Para limpiar"));
+		repositoryImpl.saveCategory(new Category(3l,"Ropa", "Para vestir"));	
 		
 	}
 	
@@ -36,11 +34,10 @@ public class CategoryServiceImpl implements CategoryService {
 		
 		theCategory = new Category(id,name,description);
 		
-		//repo.save(thecategory) mari		
-		theCategories.add(theCategory);
+		repositoryImpl.saveCategory(theCategory);
 		
 		//ordernar por id
-		theCategories
+		repositoryImpl.findAllCategory()
 		.sort((o1,o2)->o1.getId()
 		.compareTo(o2.getId()));
 		
@@ -50,14 +47,12 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> findAll(Boolean bool) {		
 		
 		if (bool) {
-			
-			//repo.findAllCategory().str			
-			return theCategories.stream()
+					
+			return repositoryImpl.findAllCategory().stream()
 					.filter(category->category.getEnabled())
 					.collect(Collectors.toList());
 		}
-		//repo.findAllCategory
-		return theCategories;
+		return repositoryImpl.findAllCategory();
 	}
 
 	
@@ -66,14 +61,14 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category findOneByiD(Long id, Boolean bool){	
 		
 
-			try {                        //repo.findallcategory()
-				for (Category category : theCategories) {
+			try {                        
+				for (Category category : repositoryImpl.findAllCategory()) {
 					
-					if (bool && category.getId().equals(id) && category.getEnabled()) {
+					if (bool && repositoryImpl.findCategoryById(id).equals(category.getId()) && category.getEnabled()) {
 						
 							return category;
 						
-					}else if(!bool && category.getId().equals(id)) {					
+					}else if(!bool && repositoryImpl.findCategoryById(id).equals(category.getId())) {					
 
 							return category;
 					}
@@ -93,9 +88,9 @@ public class CategoryServiceImpl implements CategoryService {
 	
 
 	@Override
-	public Category updateById(Long id){		
+	public Category updateById(Category category){		
 
-		theCategory = findOneByiD(id, true);
+		theCategory = findOneByiD(category.getId(), true);
 		
 		//controller
 		String selectedAtribute = Methods.updateSelectedAtribute(theCategory);
@@ -118,6 +113,8 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		
 		System.out.println("\nCambios Realizados");
+		repositoryImpl.deleteCategory(category);
+		repositoryImpl.saveCategory(theCategory);
 		
 		return theCategory;		
 		
@@ -149,7 +146,7 @@ public class CategoryServiceImpl implements CategoryService {
 		case "2":
 			
 			
-			theCategories.remove(theCategory);
+			repositoryImpl.deleteCategory(theCategory);
 			
 			System.out.println("\nCategoria Eliminada Permanentemente");
 			
