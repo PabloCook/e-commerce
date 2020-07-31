@@ -10,7 +10,7 @@ public class Product {
 	private Boolean enabled;
 	private Category category;
 	
-public Product() {
+	public Product() {
 		
 	}
 	

@@ -93,62 +93,33 @@ public class ProductServiceImpl implements ProductService {
 	
 
 	@Override
-	public Product updateById(Long id, CategoryService categoryService){
+	public Product updateById(Product product, CategoryService categoryService){
 		
-		theProduct = findOneByiD(id, true);
+		theProduct = findOneByiD(product.getId(), true);
 		
-		//controller
-		String input = Methods.selectedAttribute(theProduct, categoryService);
+		String newName = product.getName();
 		
-		switch (input) {
+		theProduct.setName(newName);
 		
-		case "1":
-			//controller
-			String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
-			
-			theProduct.setName(newName);
-			break;
-			
-		case "2":
-			//controller
-			String description = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
-			
-			theProduct.setDescription(description);
-			break;
-			
-		case "3":
-			//controller
-			Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
-			
-			theProduct.setPrice(newPrice);
-			break;
-		case "4":
-			
-			//controller
-			Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
-			
-			theProduct.getStock().setQuantity(newQuantity);
-			break;
-		case "5":
-			
-			//controller
-			Long categoryId = Long.parseLong(Methods.validarInput("Seleccion el id de la categoria: ", "\\d+"));
-			
-			theProduct.setCategory(categoryService.findOneByiD(categoryId, true));
-			
-			break;
-			
-		case "6" :
-			
-			//controller
-			String newLocation = Methods.validarInput("Inserte nueva locación: ", Methods.getRegexPalabras());
-			
-			theProduct.getStock().setLocationCode(newLocation);
-			
-			break;
-		}
-			
-		System.out.println("\nCambios Realizados");
+		String newDescription = product.getDescription();
+		
+		theProduct.setDescription(newDescription);
+		
+		Double newPrice = product.getPrice();
+		
+		theProduct.setPrice(newPrice);
+		
+		Category newCategory = product.getCategory();
+		
+		theProduct.setCategory(newCategory);
+		
+		Integer newQuantity = product.getStock().getQuantity();
+		
+		theProduct.getStock().setQuantity(newQuantity);
+		
+		String newLocation = product.getStock().getLocationCode();
+		
+		theProduct.getStock().setLocationCode(newLocation);
 		
 		return theProduct;		
 		

@@ -249,9 +249,37 @@ public class Methods {
 					
 					break;
 				}
-	
-				categoryService.updateById(id);
 				
+				String selectedAtribute;
+				
+				
+				System.out.println("=====================\n"
+								 + "¿Que atributo quiere cambiar?\n"
+								 + "1- Nombre actual: " + categoryOptional.get().getName() +"\n"
+								 + "2- Descripción actual: " + categoryOptional.get().getDescription() +"\n"
+								 + "3- Ninguno\n");
+				selectedAtribute = Methods.validarInput("Seleccione un numero: ", "^[1|2|3]");
+				System.out.println("=====================");
+				
+				switch (selectedAtribute) {
+				
+				case "1":					
+					
+					String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
+					
+					
+					categoryService.updateById(new Category(id, newName, categoryOptional.get().getDescription()));
+					
+					break;
+					
+				case "2":
+					
+					String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()) ;
+					
+					categoryService.updateById(new Category(id, categoryOptional.get().getName(), newDescription));					
+								
+					break;
+				}
 				break;
 				
 			case "5":
@@ -272,9 +300,54 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("Seleccione un id: ", "^\\d+"));
 				
-				categoryService.deleteById(id);
+				categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
 				
-				break;
+				if (!categoryOptional.isPresent()) {
+					
+					break;
+				}
+				
+				
+				String input1;
+				
+
+				System.out.println("=========Eliminar==========\n"
+								 + "1- Eliminar/Recuperar\n"
+								 + "2- Eliminar de memoria\n"
+								 + "3- Salir");
+						
+				input1 = Methods.validarInput("Seleccione una opción: ", "^[1|2|3]");
+				
+				switch (input1) {
+				
+				case "1":				
+					
+					categoryService.deleteById(categoryOptional.get());
+					
+					System.out.println("\nCategoria Eliminada/Recuperada");
+					
+					break;
+					
+				case "2":
+					
+					input1 = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
+							+ categoryOptional.get() + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
+
+					if (input1.matches(Methods.getRegexAfirmativo())) {
+
+						categoryService.forceDeleteById(categoryOptional.get());
+
+					}					
+					
+					System.out.println("\nCategoria Eliminada Permanentemente");
+					
+					break;
+				
+				case "3":
+					
+					break;
+
+				}
 			
 			}
 			
@@ -448,9 +521,147 @@ public class Methods {
 					break;
 				}
 				
+				String input1;
 				
-	
-				productService.updateById(id, categoryService);
+				
+				System.out.println("=====================\n"
+								 + "¿Que atributo quiere cambiar?\n"
+								 + "1- Nombre actual: " + productOptional.get().getName() +"\n"
+								 + "2- Descripción actual: " + productOptional.get().getDescription() +"\n"
+								 + "3- Precio actual: $" + productOptional.get().getPrice() +"\n"
+								 + "4- Stock actual: " + productOptional.get().getStock().getQuantity() + "\n"
+								 + "5- Categoria actual: " + productOptional.get().getCategory().getName() + "\n"
+								 + "6- Locacion actual: " +productOptional.get().getStock().getLocationCode() + "\n"								 
+								 + "7- Ninguno\n");
+				input1 = Methods.validarInput("Seleccione un numero: ", "^[1|2|3|4|5|6|7]");
+				System.out.println("=====================");
+				
+				
+				switch (input1) {
+				
+				case "1":
+					//controller
+					String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
+					
+					
+					
+					productService.updateById(new Product(
+							
+							productOptional.get().getId(),
+							newName, 
+							productOptional.get().getDescription(),
+							productOptional.get().getPrice(),
+							productOptional.get().getCategory()							
+							
+							), categoryService);
+					
+					System.out.println("\nCambios Realizados");
+					
+					break;
+					
+				case "2":
+					//controller
+					String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
+					
+							productService.updateById(new Product(
+							
+							productOptional.get().getId(),
+							productOptional.get().getName(), 
+							newDescription,
+							productOptional.get().getPrice(),
+							productOptional.get().getCategory()							
+							
+							), categoryService);
+					
+					System.out.println("\nCambios Realizados");
+					break;
+					
+				case "3":
+					//controller
+					Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
+					
+					productService.updateById(new Product(
+							
+					productOptional.get().getId(),
+					productOptional.get().getName(), 
+					productOptional.get().getDescription(),
+					newPrice,
+					productOptional.get().getCategory()							
+					
+					), categoryService);
+			
+					System.out.println("\nCambios Realizados");
+			
+					break;
+				case "4":
+					
+					//controller
+					Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
+					
+					Product theProduct = new Product(
+							
+					productOptional.get().getId(),
+					productOptional.get().getName(), 
+					productOptional.get().getDescription(),
+					productOptional.get().getPrice(),
+					productOptional.get().getCategory()						
+					
+					);
+					
+					theProduct.getStock().setLocationCode(productOptional.get().getStock().getLocationCode());
+					theProduct.getStock().setQuantity(newQuantity);
+					
+					productService.updateById(theProduct, categoryService);
+			
+					System.out.println("\nCambios Realizados");
+					
+					break;
+				case "5":
+					
+					categoryService.findAll(true)
+					.stream()
+					.forEach(System.out::println);
+					
+					Long newCategory = Long.parseLong(Methods.validarInput("Seleccion el id de la categoria: ", "\\d+"));
+
+					productService.updateById(new Product(
+							
+					productOptional.get().getId(),
+					productOptional.get().getName(), 
+					productOptional.get().getDescription(),
+					productOptional.get().getPrice(),
+					categoryService.findOneByiD(newCategory, true)							
+					
+					), categoryService);
+			
+					System.out.println("\nCambios Realizados");
+					
+					break;
+					
+				case "6" :
+					
+					//controller
+					String newLocation = Methods.validarInput("Ingrese nuevo locacion: ", Methods.getRegexPalabras());
+					
+					theProduct = new Product(
+							
+					productOptional.get().getId(),
+					productOptional.get().getName(), 
+					productOptional.get().getDescription(),
+					productOptional.get().getPrice(),
+					productOptional.get().getCategory()						
+					
+					);
+					
+					theProduct.getStock().setQuantity(productOptional.get().getStock().getQuantity());
+					theProduct.getStock().setLocationCode(newLocation);
+					
+					productService.updateById(theProduct, categoryService);
+			
+					System.out.println("\nCambios Realizados");
+					
+					break;
+				}				
 				
 				break;
 				

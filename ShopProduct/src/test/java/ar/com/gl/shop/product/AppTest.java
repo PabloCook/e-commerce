@@ -337,7 +337,7 @@ public class AppTest{
 		class ProductServiceTest{
 			
 			
-			@Test			
+			/*@Test			
 			@DisplayName("Update by id Nombre")
 			void updateByIdNombre() {
 				
@@ -401,7 +401,7 @@ public class AppTest{
 				assertEquals(nuevaDescripcion, productService.findOneByiD(id, true).getDescription());
 				
 				
-			}
+			}*/
 			
 			
 			
@@ -417,5 +417,6 @@ public class AppTest{
 	
 
 	
+		
 }
 
