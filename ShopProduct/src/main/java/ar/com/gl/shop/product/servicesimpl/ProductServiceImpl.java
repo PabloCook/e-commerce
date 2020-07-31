@@ -14,9 +14,7 @@ import ar.com.gl.shop.product.utils.Methods;
 public class ProductServiceImpl implements ProductService {
 	
 	private RepositoryImpl repositoryImpl = new RepositoryImpl();
-	
-	private List<Product> theProducts = repositoryImpl.getListaProductos();
-	
+		
 	private Product theProduct = new Product();
 	
 	
@@ -26,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	public List<Product> getTheProducts() {
-		return theProducts;
+		return repositoryImpl.findAllProduct();
 	}
 
 	public Product getTheProduct() {
@@ -38,10 +36,10 @@ public class ProductServiceImpl implements ProductService {
 		
 		theProduct = new Product(id, name, description, price, category);		
 		
-		theProducts.add(theProduct);
+		repositoryImpl.saveProduct(theProduct);
 		
 		//ordernar por id
-		theProducts
+		repositoryImpl.findAllProduct()
 		.sort((o1,o2)->o1.getId()
 		.compareTo(o2.getId()));
 		
@@ -51,12 +49,12 @@ public class ProductServiceImpl implements ProductService {
 		
 		
 		if (bool) {
-			return theProducts.stream()
+			return repositoryImpl.findAllProduct().stream()
 					.filter(Product->Product.getEnabled())
 					.collect(Collectors.toList());
 		}
 		
-		return theProducts;
+		return repositoryImpl.findAllProduct();
 	}
 	
 
@@ -67,13 +65,13 @@ public class ProductServiceImpl implements ProductService {
 		
 
 			try {
-				for (Product product : theProducts) {
+				for (Product product : repositoryImpl.findAllProduct()) {
 					
-					if (bool && product.getId().equals(id) && product.getEnabled()) {
+					if (bool && product.equals(repositoryImpl.findProductById(id)) && product.getEnabled()) {
 						
 							return product;
 						
-					}else if(!bool && product.getId().equals(id)) {					
+					}else if(!bool && product.equals(repositoryImpl.findProductById(id))) {					
 
 							return product;
 					}
@@ -93,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
 	
 
 	@Override
-	public Product updateById(Long id, CategoryService categoryService){
+	public Product updateById(Product product, CategoryService categoryService){
 		
 		theProduct = findOneByiD(id, true);
 		
@@ -149,6 +147,8 @@ public class ProductServiceImpl implements ProductService {
 		}
 			
 		System.out.println("\nCambios Realizados");
+		repositoryImpl.deleteProduct(product);
+		repositoryImpl.saveProduct(theProduct);
 		
 		return theProduct;		
 		
@@ -179,7 +179,7 @@ public class ProductServiceImpl implements ProductService {
 			
 		case "2":			
 
-			theProducts.remove(theProduct);
+			repositoryImpl.deleteProduct(theProduct);
 			
 			break;
 		

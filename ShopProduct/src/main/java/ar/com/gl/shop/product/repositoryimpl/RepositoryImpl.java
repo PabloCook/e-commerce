@@ -74,5 +74,17 @@ public class RepositoryImpl implements Repository {
 		}
 		return null;
 	}
+	
+	@Override
+	public Product findProductById(Long id) {
+		for (Product product : listaProductos) {
+			if (product.getId().equals(id)) {
+				return product;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
 
 }

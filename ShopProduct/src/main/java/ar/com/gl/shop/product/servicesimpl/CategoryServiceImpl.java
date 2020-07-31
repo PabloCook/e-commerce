@@ -64,11 +64,11 @@ public class CategoryServiceImpl implements CategoryService {
 			try {                        
 				for (Category category : repositoryImpl.findAllCategory()) {
 					
-					if (bool && repositoryImpl.findCategoryById(id).equals(category.getId()) && category.getEnabled()) {
+					if (bool && repositoryImpl.findCategoryById(id).equals(category) && category.getEnabled()) {
 						
 							return category;
 						
-					}else if(!bool && repositoryImpl.findCategoryById(id).equals(category.getId())) {					
+					}else if(!bool && repositoryImpl.findCategoryById(id).equals(category)) {					
 
 							return category;
 					}

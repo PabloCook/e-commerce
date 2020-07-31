@@ -27,6 +27,8 @@ public interface Repository {
 	public List<Product> findAllProduct();
 
 	public void deleteProduct(Product product);
+	
+	public Product findProductById(Long id);
 
 
 }
