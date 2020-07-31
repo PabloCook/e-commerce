@@ -34,27 +34,17 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void agregarPrimerosObjetos() {
-		
-		/*theProducts.add(new Category(1l, "Fideos", "Para comer", 50, ));
-		theProducts.add(new Category(2l,"Limpieza", "Para limpiar"));
-		theProducts.add(new Category(3l,"Ropa", "Para vestir"));*/
-		
-	}
-
-	@Override
-	public String create(Long id, String name, String description, Double price, Category category) {
+	public void create(Long id, String name, String description, Double price, Category category) {
 		
 		theProduct = new Product(id, name, description, price, category);		
 		
 		theProducts.add(theProduct);
 		
 		//ordernar por id
-				theProducts
-				.sort((o1,o2)->o1.getId()
-				.compareTo(o2.getId()));
+		theProducts
+		.sort((o1,o2)->o1.getId()
+		.compareTo(o2.getId()));
 		
-		return "Categoria creada " + theProduct;
 	}
 	@Override
 	public List<Product> findAll(Boolean bool) {	
@@ -107,57 +97,54 @@ public class ProductServiceImpl implements ProductService {
 		
 		theProduct = findOneByiD(id, true);
 		
-		String input;
-		
-	
-			System.out.println("=====================\n"
-							 + "¿Que atributo quiere cambiar?\n"
-							 + "1- Nombre actual: " + theProduct.getName() +"\n"
-							 + "2- Descripción actual: " + theProduct.getDescription() +"\n"
-							 + "3- Precio actual: $" + theProduct.getPrice() +"\n"
-							 + "4- Stock actual: " + theProduct.getStock().getQuantity() + "\n"
-							 + "5- Categoria actual: " + theProduct.getCategory().getName() + "\n"
-							 + "6- Locacion actual: " +theProduct.getStock().getLocationCode() + "\n"								 
-							 + "7- Ninguno\n");
-			input = Methods.validarInput("Seleccione un numero: ", "^[1|2|3|4|5|6|7]");
-			System.out.println("=====================");
+		//controller
+		String input = Methods.selectedAttribute(theProduct, categoryService);
 		
 		switch (input) {
 		
 		case "1":
-			theProduct
-			.setName(Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras()));
+			//controller
+			String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
+			
+			theProduct.setName(newName);
 			break;
 			
 		case "2":
-			theProduct
-			.setDescription(Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()));
+			//controller
+			String description = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
+			
+			theProduct.setDescription(description);
 			break;
 			
 		case "3":
-			theProduct
-			.setPrice(Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+")));
+			//controller
+			Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
+			
+			theProduct.setPrice(newPrice);
 			break;
 		case "4":
-			theProduct
-			.getStock()
-			.setQuantity(Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+")));
+			
+			//controller
+			Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
+			
+			theProduct.getStock().setQuantity(newQuantity);
 			break;
 		case "5":
 			
-			categoryService.findAll(true)
-			.stream()
-			.forEach(System.out::println);
-			
+			//controller
 			Long categoryId = Long.parseLong(Methods.validarInput("Seleccion el id de la categoria: ", "\\d+"));
 			
 			theProduct.setCategory(categoryService.findOneByiD(categoryId, true));
 			
 			break;
+			
 		case "6" :
-			theProduct
-			.getStock()
-			.setLocationCode(Methods.validarInput("Inserte nueva locación: ", Methods.getRegexPalabras()));
+			
+			//controller
+			String newLocation = Methods.validarInput("Inserte nueva locación: ", Methods.getRegexPalabras());
+			
+			theProduct.getStock().setLocationCode(newLocation);
+			
 			break;
 		}
 			
@@ -167,21 +154,14 @@ public class ProductServiceImpl implements ProductService {
 		
 	}
 	
-	
 
 	@Override
 	public void  deleteById(Long id){
 		
 		theProduct = findOneByiD(id, false);	
-		String input;
-		
 
-			System.out.println("=========Eliminar==========\n"
-							 + "1- Eliminar/Recuperar\n"
-							 + "2- Eliminar de memoria\n"
-							 + "3- Salir");
-					
-			input = Methods.validarInput("Seleccione una opción: ", "^[1|2|3]");
+		//controller
+		String input = Methods.typeOfDelete(theProduct);
 			
 		
 		switch (input) {
@@ -197,15 +177,9 @@ public class ProductServiceImpl implements ProductService {
 			System.out.println("\nCategoria Eliminada/Recuperada");
 			break;
 			
-		case "2":
-	
-			input = Methods.validarInput("\n¿Estas seguro que quieres eliminar permanentemente el siguiente producto?: \n" 
-													+ theProduct + "\n\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
-			
-			if (input.matches(Methods.getRegexAfirmativo())) {
-				theProducts.remove(theProduct);
-				System.out.println("\nProducto eliminado permanentemente");
-			}
+		case "2":			
+
+			theProducts.remove(theProduct);
 			
 			break;
 		

@@ -8,17 +8,19 @@ import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
 import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.utils.Methods;
+import ar.com.gl.shop.product.repository.Repository;
 
 public class CategoryServiceImpl implements CategoryService {	
 	
 		
-	RepositoryImpl repositoryImpl = new RepositoryImpl();
+	Repository repositoryImpl = new RepositoryImpl();
 	
 	List<Category> theCategories = repositoryImpl.getListaCategorias();
 	
 	Category theCategory = new Category();
 	
 	
+	//Categorias iniciales
 	public void agregarPrimerosObjetos() {		
 		
 		theCategories.add(new Category(1l, "Consumibles", "Para comer"));
@@ -29,13 +31,12 @@ public class CategoryServiceImpl implements CategoryService {
 	
 
 	@Override
-	public String create(Long id, String name, String description) {	
+	public void create(Long id, String name, String description) {	
 		
 		
 		theCategory = new Category(id,name,description);
 		
-		//repo.save(thecategory) mari
-		
+		//repo.save(thecategory) mari		
 		theCategories.add(theCategory);
 		
 		//ordernar por id
@@ -43,20 +44,19 @@ public class CategoryServiceImpl implements CategoryService {
 		.sort((o1,o2)->o1.getId()
 		.compareTo(o2.getId()));
 		
-		return "Categoria creada " + theCategory;
 	}
+	
 	@Override
 	public List<Category> findAll(Boolean bool) {		
 		
 		if (bool) {
 			
-			//repo.findAllCategory().str
-			
+			//repo.findAllCategory().str			
 			return theCategories.stream()
 					.filter(category->category.getEnabled())
 					.collect(Collectors.toList());
 		}
-		
+		//repo.findAllCategory
 		return theCategories;
 	}
 
@@ -84,7 +84,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 			} catch (ItemNotFound e) {
 
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage());
 			}
 			
 			return null;	
@@ -93,54 +93,43 @@ public class CategoryServiceImpl implements CategoryService {
 	
 
 	@Override
-	public Category updateById(Long id){
-		
-		//
+	public Category updateById(Long id){		
+
 		theCategory = findOneByiD(id, true);
 		
-		String input;
+		//controller
+		String selectedAtribute = Methods.updateSelectedAtribute(theCategory);
 		
-	
-			System.out.println("=====================\n"
-							 + "¿Que atributo quiere cambiar?\n"
-							 + "1- Nombre actual: " + theCategory.getName() +"\n"
-							 + "2- Descripción actual: " + theCategory.getDescription() +"\n"
-							 + "3- Ninguno\n");
-			input = Methods.validarInput("Seleccione un numero: ", "^[1|2|3]");
-			System.out.println("=====================");
-		
-		switch (input) {
+		switch (selectedAtribute) {
 		
 		case "1":
-			theCategory.setName(Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras()));
+			//controller
+			String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
+			
+			theCategory.setName(newName);
 			break;
 			
 		case "2":
-			theCategory.setDescription(Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()));
+			//controller
+			String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()) ;
+			
+			theCategory.setDescription(newDescription);
 			break;
 		}
 		
-		System.err.println("\nCambios Realizados");
+		System.out.println("\nCambios Realizados");
 		
 		return theCategory;		
 		
 	}
-	
-	
 
 	@Override
 	public void  deleteById(Long id){
 		
 		theCategory = findOneByiD(id, false);	
-		String input;
 		
-
-			System.out.println("=========Eliminar==========\n"
-							 + "1- Eliminar/Recuperar\n"
-							 + "2- Eliminar de memoria\n"
-							 + "3- Salir");
-					
-			input = Methods.validarInput("Seleccione una opción: ", "^[1|2|3]");
+		//controller
+		String input = Methods.typeOfDelete(theCategory);
 			
 		
 		switch (input) {
@@ -153,26 +142,27 @@ public class CategoryServiceImpl implements CategoryService {
 				theCategory.setEnabled(true);
 			}
 			
-			System.err.println("\nCategoria Eliminada/Recuperada");
+			System.out.println("\nCategoria Eliminada/Recuperada");
+			
 			break;
 			
 		case "2":
-	
-			input = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
-													+ theCategory + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
 			
-			if (input.matches(Methods.getRegexAfirmativo())) {
-				theCategories.remove(theCategory);
-				System.err.println("\nCategoria Eliminada Permanentemente");
-			}
+			
+			theCategories.remove(theCategory);
+			
+			System.out.println("\nCategoria Eliminada Permanentemente");
 			
 			break;
 		
 		case "3":
+			
 			break;
 
 		}
 		
 	}
+
+
 
 }

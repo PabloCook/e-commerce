@@ -8,8 +8,7 @@ import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
 
 public interface ProductService {
 	
-	public void agregarPrimerosObjetos();
-	public String create(Long id, String name, String description, Double price, Category category);
+	public void create(Long id, String name, String description, Double price, Category category);
 	public List<Product> findAll(Boolean bool);
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,

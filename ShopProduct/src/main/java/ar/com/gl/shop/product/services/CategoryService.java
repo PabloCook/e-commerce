@@ -6,7 +6,7 @@ import ar.com.gl.shop.product.model.Category;
 public interface CategoryService {
 	
 	public void agregarPrimerosObjetos();
-	public String create(Long id, String name, String description);
+	public void create(Long id, String name, String description);
 	public List<Category> findAll(Boolean bool);
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,
