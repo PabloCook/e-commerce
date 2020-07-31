@@ -139,9 +139,7 @@ public class ProductServiceImpl implements ProductService {
 			theProduct.setEnabled(false);
 		}else {
 			theProduct.setEnabled(true);
-		}
-
-	
+			}
 	}
 	
 	@Override

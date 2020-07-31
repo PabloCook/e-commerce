@@ -442,135 +442,135 @@ public class Methods {
 				System.out.println("=====================");
 				
 				
-				switch (input1) {
-				
-				case "1":
-					//controller
-					String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
-					
-					
-					
-					productService.updateById(new Product(
+								switch (input1) {
+								
+								case "1":
+									//controller
+									String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
+									
+									
+									
+									productService.updateById(new Product(
+											
+											productOptional.get().getId(),
+											newName, 
+											productOptional.get().getDescription(),
+											productOptional.get().getPrice(),
+											productOptional.get().getCategory()							
+											
+											));
+									
+									System.out.println("\nCambios Realizados");
+									
+									break;
+									
+								case "2":
+									//controller
+									String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
+									
+											productService.updateById(new Product(
+											
+											productOptional.get().getId(),
+											productOptional.get().getName(), 
+											newDescription,
+											productOptional.get().getPrice(),
+											productOptional.get().getCategory()							
+											
+											));
+									
+									System.out.println("\nCambios Realizados");
+									break;
+									
+								case "3":
+									//controller
+									Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
+									
+									productService.updateById(new Product(
+											
+									productOptional.get().getId(),
+									productOptional.get().getName(), 
+									productOptional.get().getDescription(),
+									newPrice,
+									productOptional.get().getCategory()							
+									
+									));
 							
-							productOptional.get().getId(),
-							newName, 
-							productOptional.get().getDescription(),
-							productOptional.get().getPrice(),
-							productOptional.get().getCategory()							
+									System.out.println("\nCambios Realizados");
 							
-							));
-					
-					System.out.println("\nCambios Realizados");
-					
-					break;
-					
-				case "2":
-					//controller
-					String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
-					
-							productService.updateById(new Product(
+									break;
+								case "4":
+									
+									//controller
+									Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
+									
+									theProduct = new Product(
+											
+									productOptional.get().getId(),
+									productOptional.get().getName(), 
+									productOptional.get().getDescription(),
+									productOptional.get().getPrice(),
+									productOptional.get().getCategory()						
+									
+									);
+									
+									theProduct.getStock().setLocationCode(productOptional.get().getStock().getLocationCode());
+									theProduct.getStock().setQuantity(newQuantity);
+									
+									productService.updateById(theProduct);
 							
-							productOptional.get().getId(),
-							productOptional.get().getName(), 
-							newDescription,
-							productOptional.get().getPrice(),
-							productOptional.get().getCategory()							
+									System.out.println("\nCambios Realizados");
+									
+									break;
+								case "5":
+									
+									categoryService.findAll(true)
+									.stream()
+									.forEach(System.out::println);
+									
+									Long newCategory = Long.parseLong(Methods.validarInput("Seleccion el id de la categoria: ", "\\d+"));
+									
+									theProduct = new Product(
+											
+									productOptional.get().getId(),
+									productOptional.get().getName(), 
+									productOptional.get().getDescription(),
+									productOptional.get().getPrice(),
+									categoryService.findOneByiD(newCategory, true)							
+									
+									);
+									
+									theProduct.setStock(productOptional.get().getStock());
+									
+									productService.updateById(theProduct);
 							
-							));
-					
-					System.out.println("\nCambios Realizados");
-					break;
-					
-				case "3":
-					//controller
-					Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
-					
-					productService.updateById(new Product(
+									System.out.println("\nCambios Realizados");
+									
+									break;
+									
+								case "6" :
+									
+									//controller
+									String newLocation = Methods.validarInput("Ingrese nuevo locacion: ", Methods.getRegexPalabras());
+									
+									theProduct = new Product(
+											
+									productOptional.get().getId(),
+									productOptional.get().getName(), 
+									productOptional.get().getDescription(),
+									productOptional.get().getPrice(),
+									productOptional.get().getCategory()						
+									
+									);
+									
+									theProduct.getStock().setQuantity(productOptional.get().getStock().getQuantity());
+									theProduct.getStock().setLocationCode(newLocation);
+									
+									productService.updateById(theProduct);
 							
-					productOptional.get().getId(),
-					productOptional.get().getName(), 
-					productOptional.get().getDescription(),
-					newPrice,
-					productOptional.get().getCategory()							
-					
-					));
-			
-					System.out.println("\nCambios Realizados");
-			
-					break;
-				case "4":
-					
-					//controller
-					Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
-					
-					theProduct = new Product(
-							
-					productOptional.get().getId(),
-					productOptional.get().getName(), 
-					productOptional.get().getDescription(),
-					productOptional.get().getPrice(),
-					productOptional.get().getCategory()						
-					
-					);
-					
-					theProduct.getStock().setLocationCode(productOptional.get().getStock().getLocationCode());
-					theProduct.getStock().setQuantity(newQuantity);
-					
-					productService.updateById(theProduct);
-			
-					System.out.println("\nCambios Realizados");
-					
-					break;
-				case "5":
-					
-					categoryService.findAll(true)
-					.stream()
-					.forEach(System.out::println);
-					
-					Long newCategory = Long.parseLong(Methods.validarInput("Seleccion el id de la categoria: ", "\\d+"));
-					
-					theProduct = new Product(
-							
-					productOptional.get().getId(),
-					productOptional.get().getName(), 
-					productOptional.get().getDescription(),
-					productOptional.get().getPrice(),
-					categoryService.findOneByiD(newCategory, true)							
-					
-					);
-					
-					theProduct.setStock(productOptional.get().getStock());
-					
-					productService.updateById(theProduct);
-			
-					System.out.println("\nCambios Realizados");
-					
-					break;
-					
-				case "6" :
-					
-					//controller
-					String newLocation = Methods.validarInput("Ingrese nuevo locacion: ", Methods.getRegexPalabras());
-					
-					theProduct = new Product(
-							
-					productOptional.get().getId(),
-					productOptional.get().getName(), 
-					productOptional.get().getDescription(),
-					productOptional.get().getPrice(),
-					productOptional.get().getCategory()						
-					
-					);
-					
-					theProduct.getStock().setQuantity(productOptional.get().getStock().getQuantity());
-					theProduct.getStock().setLocationCode(newLocation);
-					
-					productService.updateById(theProduct);
-			
-					System.out.println("\nCambios Realizados");
-					
-					break;
-				}				
+									System.out.println("\nCambios Realizados");
+									
+									break;
+								}				
 				
 				break;
 				
@@ -604,38 +604,36 @@ public class Methods {
 						
 				input11 = Methods.validarInput("Seleccione una opción: ", "^[1|2|3]");
 				
-				switch (input11) {
-				
-				case "1":				
-					
-					productService.deleteById(productOptional.get());
-					
-					System.out.println("\nCategoria Eliminada/Recuperada");
-					
-					break;
-					
-				case "2":
-					
-					input11 = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
-							+ categoryOptional.get() + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
-
-					if (input11.matches(Methods.getRegexAfirmativo())) {
-
-						productService.forceDeleteById(productOptional.get());
-
-					}					
-					
-					System.out.println("\nCategoria Eliminada Permanentemente");
-					
-					break;
-				
-				case "3":
-					
-					break;
-
-				}
-				
-				productService.deleteById(productService.findOneByiD(id, false));
+							switch (input11) {
+							
+							case "1":				
+								
+								productService.deleteById(productOptional.get());
+								
+								System.out.println("\nCategoria Eliminada/Recuperada");
+								
+								break;
+								
+							case "2":
+								
+								input11 = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
+										+ categoryOptional.get() + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
+			
+								if (input11.matches(Methods.getRegexAfirmativo())) {
+			
+									productService.forceDeleteById(productOptional.get());
+			
+								}					
+								
+								System.out.println("\nCategoria Eliminada Permanentemente");
+								
+								break;
+							
+							case "3":
+								
+								break;
+			
+							}
 				
 				break;
 			case "6":
