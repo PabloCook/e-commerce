@@ -72,11 +72,11 @@ public class ProductServiceImpl implements ProductService {
 			try {
 				for (Product product : repositoryImpl.findAllProduct()) {
 					
-					if (bool && product.equals(repositoryImpl.findProductById(id)) && product.getEnabled()) {
+					if (bool && product.getId().equals(id) && product.getEnabled()) {
 						
 							return product;
 						
-					}else if(!bool && product.equals(repositoryImpl.findProductById(id))) {					
+					}else if(!bool && product.getId().equals(id)) {					
 
 							return product;
 					}

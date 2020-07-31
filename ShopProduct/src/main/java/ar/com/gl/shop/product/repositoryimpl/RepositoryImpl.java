@@ -78,8 +78,6 @@ public class RepositoryImpl implements Repository {
 		for (Category category : listaCategorias) {
 			if (category.getId().equals(id)) {
 				return category;
-			} else {
-				return null;
 			}
 		}
 		return null;
@@ -90,8 +88,6 @@ public class RepositoryImpl implements Repository {
 		for (Product product : listaProductos) {
 			if (product.getId().equals(id)) {
 				return product;
-			} else {
-				return null;
 			}
 		}
 		return null;

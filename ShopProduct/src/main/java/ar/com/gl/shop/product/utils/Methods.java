@@ -56,77 +56,6 @@ public class Methods {
 		return input;
 	}
 	
-	public static String updateSelectedAtribute(Category theCategory) {
-		String input;
-		
-	
-			System.out.println("=====================\n"
-							 + "¿Que atributo quiere cambiar?\n"
-							 + "1- Nombre actual: " + theCategory.getName() +"\n"
-							 + "2- Descripción actual: " + theCategory.getDescription() +"\n"
-							 + "3- Ninguno\n");
-			input = Methods.validarInput("Seleccione un numero: ", "^[1|2|3]");
-			System.out.println("=====================");
-			
-
-			
-		return input;		
-
-	}
-	
-
-	public static String typeOfDelete(Category theCategory) {
-		String input;
-		
-
-			System.out.println("=========Eliminar==========\n"
-							 + "1- Eliminar/Recuperar\n"
-							 + "2- Eliminar de memoria\n"
-							 + "3- Salir");
-					
-			input = Methods.validarInput("Seleccione una opción: ", "^[1|2|3]");
-			
-			if (input.equals("2")) {
-				
-				input = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
-														+ theCategory + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
-				
-				if (input.matches(Methods.getRegexAfirmativo())) {
-					
-					return input;
-					
-				}
-			}
-			
-		return input;
-	}
-	
-	public static String typeOfDelete(Product theProduct) {
-		String input;
-		
-
-			System.out.println("=========Eliminar==========\n"
-							 + "1- Eliminar/Recuperar\n"
-							 + "2- Eliminar de memoria\n"
-							 + "3- Salir");
-					
-			input = Methods.validarInput("Seleccione una opción: ", "^[1|2|3]");
-			
-			if (input.equals("2")) {
-				
-				input = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
-														+ theProduct + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
-				
-				if (input.matches(Methods.getRegexAfirmativo())) {
-					
-					return input;
-					
-				}
-			}
-			
-		return input;
-	}
-	
 	public static void opcion(CategoryService categoryService) {
 		
 		String input;
@@ -241,14 +170,10 @@ public class Methods {
 				
 				
 				
-				id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));	
-				
-				categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
-				
-				if (!categoryOptional.isPresent()) {
-					
-					break;
-				}
+				do {
+					id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));
+					categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
+				} while (!categoryOptional.isPresent());
 				
 				String selectedAtribute;
 				
@@ -353,33 +278,6 @@ public class Methods {
 			
 		} while (!input.equals("6"));
 	}
-	
-	public static String selectedAttribute(Product theProduct, CategoryService categoryService) {
-		String input;
-		
-	
-			System.out.println("=====================\n"
-							 + "¿Que atributo quiere cambiar?\n"
-							 + "1- Nombre actual: " + theProduct.getName() +"\n"
-							 + "2- Descripción actual: " + theProduct.getDescription() +"\n"
-							 + "3- Precio actual: $" + theProduct.getPrice() +"\n"
-							 + "4- Stock actual: " + theProduct.getStock().getQuantity() + "\n"
-							 + "5- Categoria actual: " + theProduct.getCategory().getName() + "\n"
-							 + "6- Locacion actual: " +theProduct.getStock().getLocationCode() + "\n"								 
-							 + "7- Ninguno\n");
-			input = Methods.validarInput("Seleccione un numero: ", "^[1|2|3|4|5|6|7]");
-			System.out.println("=====================");
-			
-			if (input.equals("5")) {			
-				
-				categoryService.findAll(true)
-				.stream()
-				.forEach(System.out::println);
-			}
-			
-		return input;
-	}
-
 
 	public static void opcion(ProductService productService, CategoryService categoryService) {
 		
@@ -400,6 +298,7 @@ public class Methods {
 			switch (input) {
 			
 			case "1":
+				
 				System.out.println("\nProductos existentes");
 				productService.findAll(true)
 				.stream()
