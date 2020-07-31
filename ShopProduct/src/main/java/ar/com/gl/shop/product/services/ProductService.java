@@ -21,8 +21,9 @@ public interface ProductService {
 	 * @return Repository
 	 */
 	public Product findOneByiD(Long id, Boolean bool);
-	public Product updateById(Long id, CategoryService categoryService);
-	public void deleteById(Long id);
+	public Product updateById(Product product);
+	public void deleteById(Product theProduct);
+	public void  forceDeleteById(Product theProduct);
 	public RepositoryImpl getRepositoryImpl();
 	public List<Product> getTheProducts();
 	public Product getTheProduct();

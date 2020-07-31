@@ -7,15 +7,14 @@ import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
-import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.services.ProductService;
-import ar.com.gl.shop.product.utils.Methods;
 
 public class ProductServiceImpl implements ProductService {
 	
 	private RepositoryImpl repositoryImpl;
 	
-	private Product theProduct;
+	private Product theProduct;	
+	
 	
 	public ProductServiceImpl() {
 		
@@ -97,64 +96,33 @@ public class ProductServiceImpl implements ProductService {
 	
 
 	@Override
-	public Product updateById(Product product, CategoryService categoryService){
+	public Product updateById(Product product){
 		
-		theProduct = findOneByiD(id, true);
+		theProduct = findOneByiD(product.getId(), true);
 		
-		//controller
-		String input = Methods.selectedAttribute(theProduct, categoryService);
+		String newName = product.getName();
 		
-		switch (input) {
+		theProduct.setName(newName);		
+
+		String newDescription = product.getDescription();
 		
-		case "1":
-			//controller
-			String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
-			
-			theProduct.setName(newName);
-			break;
-			
-		case "2":
-			//controller
-			String description = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
-			
-			theProduct.setDescription(description);
-			break;
-			
-		case "3":
-			//controller
-			Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
-			
-			theProduct.setPrice(newPrice);
-			break;
-		case "4":
-			
-			//controller
-			Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
-			
-			theProduct.getStock().setQuantity(newQuantity);
-			break;
-		case "5":
-			
-			//controller
-			Long categoryId = Long.parseLong(Methods.validarInput("Seleccion el id de la categoria: ", "\\d+"));
-			
-			theProduct.setCategory(categoryService.findOneByiD(categoryId, true));
-			
-			break;
-			
-		case "6" :
-			
-			//controller
-			String newLocation = Methods.validarInput("Inserte nueva locación: ", Methods.getRegexPalabras());
-			
-			theProduct.getStock().setLocationCode(newLocation);
-			
-			break;
-		}
-			
-		System.out.println("\nCambios Realizados");
-		repositoryImpl.deleteProduct(product);
-		repositoryImpl.saveProduct(theProduct);
+		theProduct.setDescription(newDescription);
+		
+		Double newPrice = product.getPrice();
+		
+		theProduct.setPrice(newPrice);
+		
+		Category newCategory = product.getCategory();
+		
+		theProduct.setCategory(newCategory);
+		
+		Integer newQuantity = product.getStock().getQuantity();
+		
+		theProduct.getStock().setQuantity(newQuantity);
+		
+		String newLocation = product.getStock().getLocationCode();
+		
+		theProduct.getStock().setLocationCode(newLocation);
 		
 		return theProduct;		
 		
@@ -162,38 +130,22 @@ public class ProductServiceImpl implements ProductService {
 	
 
 	@Override
-	public void  deleteById(Long id){
+	public void  deleteById(Product theProduct){
 		
-		theProduct = findOneByiD(id, false);	
-
-		//controller
-		String input = Methods.typeOfDelete(theProduct);
-			
-		
-		switch (input) {
-		
-		case "1":
-			
-			if (theProduct.getEnabled()) {
-				theProduct.setEnabled(false);
-			}else {
-				theProduct.setEnabled(true);
-			}
-			
-			System.out.println("\nCategoria Eliminada/Recuperada");
-			break;
-			
-		case "2":			
-
-			repositoryImpl.deleteProduct(theProduct);
-			
-			break;
-		
-		case "3":
-			break;
-
+		if (theProduct.getEnabled()) {
+			theProduct.setEnabled(false);
+		}else {
+			theProduct.setEnabled(true);
 		}
+
+	
+	}
+	
+	@Override
+	public void  forceDeleteById(Product theProduct){
 		
+		repositoryImpl.deleteProduct(theProduct);
+				
 	}
 
 }

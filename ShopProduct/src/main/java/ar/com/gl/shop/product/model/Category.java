@@ -10,6 +10,9 @@ public class Category {
 	public Category() {		
 		this.enabled = true;
 	}	
+	public Category(Long id) {		
+		this.id = id;
+	}
 	
 	public Category(Long id, String name, String description) {
 		this.id = id;

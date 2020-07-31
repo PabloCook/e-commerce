@@ -27,7 +27,7 @@ import ar.com.gl.shop.product.servicesimpl.ProductServiceImpl;
 
 public class AppTest{
 	
-	static Repository repository;
+	/*static Repository repository;
 	static CategoryService categoryService;
 	static ProductService productService;
 	static Category category;
@@ -408,7 +408,7 @@ public class AppTest{
 		}
 		
 		
-	}
+	}*/
 	
 	private void setStreams(String input) {
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
@@ -417,5 +417,6 @@ public class AppTest{
 	
 
 	
+		
 }
 

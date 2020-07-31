@@ -10,8 +10,10 @@ public class Product {
 	private Boolean enabled;
 	private Category category;
 	
-public Product() {
+
+	public Product() {
 		this.enabled = true;
+
 	}
 	
 	public Product(Long id, String name, String description, Double price, Category category) {

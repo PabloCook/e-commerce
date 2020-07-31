@@ -7,7 +7,6 @@ import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
 import ar.com.gl.shop.product.services.CategoryService;
-import ar.com.gl.shop.product.utils.Methods;
 import ar.com.gl.shop.product.repository.Repository;
 
 public class CategoryServiceImpl implements CategoryService {	
@@ -70,11 +69,11 @@ public class CategoryServiceImpl implements CategoryService {
 			try {                        
 				for (Category category : repositoryImpl.findAllCategory()) {
 					
-					if (bool && repositoryImpl.findCategoryById(id).equals(category) && category.getEnabled()) {
+					if (bool && repositoryImpl.findCategoryById(id).getId().equals(category.getId()) && category.getEnabled()) {
 						
 							return category;
 						
-					}else if(!bool && repositoryImpl.findCategoryById(id).equals(category)) {					
+					}else if(!bool && repositoryImpl.findCategoryById(id).getId().equals(category.getId())) {					
 
 							return category;
 					}
@@ -98,72 +97,38 @@ public class CategoryServiceImpl implements CategoryService {
 
 		theCategory = findOneByiD(category.getId(), true);
 		
-		//controller
-		String selectedAtribute = Methods.updateSelectedAtribute(theCategory);
 		
-		switch (selectedAtribute) {
+		String newName = category.getName();
 		
-		case "1":
-			//controller
-			String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
-			
-			theCategory.setName(newName);
-			break;
-			
-		case "2":
-			//controller
-			String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()) ;
-			
-			theCategory.setDescription(newDescription);
-			break;
-		}
+		theCategory.setName(newName);
 		
-		System.out.println("\nCambios Realizados");
+
+
 		repositoryImpl.deleteCategory(category);
+		
 		repositoryImpl.saveCategory(theCategory);
+
 		
 		return theCategory;		
 		
 	}
 
 	@Override
-	public void  deleteById(Long id){
+	public void  deleteById(Category theCategory){
 		
-		theCategory = findOneByiD(id, false);	
-		
-		//controller
-		String input = Methods.typeOfDelete(theCategory);
-			
-		
-		switch (input) {
-		
-		case "1":
-			
-			if (theCategory.getEnabled()) {
-				theCategory.setEnabled(false);
-			}else {
-				theCategory.setEnabled(true);
-			}
-			
-			System.out.println("\nCategoria Eliminada/Recuperada");
-			
-			break;
-			
-		case "2":
-			
-			
-			repositoryImpl.deleteCategory(theCategory);
-			
-			System.out.println("\nCategoria Eliminada Permanentemente");
-			
-			break;
-		
-		case "3":
-			
-			break;
-
+		if (theCategory.getEnabled()) {
+			theCategory.setEnabled(false);
+		}else {
+			theCategory.setEnabled(true);
 		}
 		
+	}
+	
+	@Override
+	public void  forceDeleteById(Category theCategory){
+		
+		repositoryImpl.deleteCategory(theCategory);
+			
 	}
 
 
