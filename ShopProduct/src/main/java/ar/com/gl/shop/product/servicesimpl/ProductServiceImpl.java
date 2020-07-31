@@ -9,7 +9,6 @@ import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
 import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.services.ProductService;
-import ar.com.gl.shop.product.utils.Methods;
 
 public class ProductServiceImpl implements ProductService {
 	

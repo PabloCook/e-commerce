@@ -683,7 +683,7 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("Seleccione un id: ", "^\\d+"));
 				
-				productService.deleteById(id);
+				productService.deleteById(productService.findOneByiD(id, false));
 				
 				break;
 			case "6":
