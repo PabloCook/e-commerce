@@ -13,13 +13,20 @@ import ar.com.gl.shop.product.utils.Methods;
 
 public class ProductServiceImpl implements ProductService {
 	
-	private RepositoryImpl repositoryImpl = new RepositoryImpl();
+	private RepositoryImpl repositoryImpl;
 	
-	private List<Product> theProducts = repositoryImpl.getListaProductos();
+	private List<Product> theProducts;
 	
-	private Product theProduct = new Product();
+	private Product theProduct;
 	
-	
+	public ProductServiceImpl() {
+		
+		repositoryImpl = new RepositoryImpl();
+		
+		theProducts = repositoryImpl.getListaProductos();
+		
+		theProduct = new Product();
+	}
 
 	public RepositoryImpl getRepositoryImpl() {
 		return repositoryImpl;

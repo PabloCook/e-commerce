@@ -13,12 +13,20 @@ import ar.com.gl.shop.product.repository.Repository;
 public class CategoryServiceImpl implements CategoryService {	
 	
 		
-	Repository repositoryImpl = new RepositoryImpl();
+	Repository repositoryImpl;
 	
-	List<Category> theCategories = repositoryImpl.getListaCategorias();
+	List<Category> theCategories;
 	
-	Category theCategory = new Category();
+	Category theCategory;
 	
+	public CategoryServiceImpl() {
+		
+		repositoryImpl = new RepositoryImpl();
+		
+		theCategories = repositoryImpl.getListaCategorias();
+		
+		theCategory = new Category();
+	}
 	
 	//Categorias iniciales
 	public void agregarPrimerosObjetos() {		

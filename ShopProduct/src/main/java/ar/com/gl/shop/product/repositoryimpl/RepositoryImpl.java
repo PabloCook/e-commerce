@@ -10,13 +10,18 @@ import ar.com.gl.shop.product.repository.Repository;
 
 public class RepositoryImpl implements Repository {
 	
-	private List<Category> listaCategorias = new ArrayList<>();
-
-	private List<Product> listaProductos = new ArrayList<>();
+	private static List<Category> listaCategorias;
+	private static List<Product> listaProductos;
+	private static List<Stock> listaStock;
 	
-	private List<Stock> listaStock = new ArrayList<>();
-	
-
+	public RepositoryImpl() {
+		
+		listaCategorias = new ArrayList<>();
+		
+		listaProductos = new ArrayList<>();
+		
+		listaStock = new ArrayList<>();
+	}
 	
 	@Override
 	public List<Product> getListaProductos() {

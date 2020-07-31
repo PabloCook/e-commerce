@@ -10,6 +10,12 @@ public class Stock {
 		
 	}
 	
+	public Stock(Product product, Integer quantity, String locationCode) {
+		this.product = product;
+		this.quantity = quantity;
+		this.locationCode = locationCode;
+	}
+	
 	public Product getProduct() {
 		return product;
 	}
@@ -28,11 +34,7 @@ public class Stock {
 	public void setLocationCode(String locationCode) {
 		this.locationCode = locationCode;
 	}
-	public Stock(Product product, Integer quantity, String locationCode) {
-		this.product = product;
-		this.quantity = quantity;
-		this.locationCode = locationCode;
-	}
+	
 	@Override
 	public String toString() {
 		return "Stock [product=" + product + ", quantity=" + quantity + ", locationCode=" + locationCode + "]";

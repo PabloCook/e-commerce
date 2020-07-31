@@ -1,3 +1,6 @@
+*.class
+MANIFEST.FM
+pom.properties
 /.metadata/
 HELP.md
 /target/

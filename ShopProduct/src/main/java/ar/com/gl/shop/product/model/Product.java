@@ -11,7 +11,7 @@ public class Product {
 	private Category category;
 	
 public Product() {
-		
+		this.enabled = true;
 	}
 	
 	public Product(Long id, String name, String description, Double price, Category category) {

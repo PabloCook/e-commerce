@@ -8,7 +8,7 @@ public class Category {
 	private Boolean enabled; 
 	
 	public Category() {		
-		
+		this.enabled = true;
 	}	
 	
 	public Category(Long id, String name, String description) {
