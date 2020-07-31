@@ -22,7 +22,8 @@ public interface ProductService {
 	 */
 	public Product findOneByiD(Long id, Boolean bool);
 	public Product updateById(Product product, CategoryService categoryService);
-	public void deleteById(Long id);
+	public void deleteById(Product theProduct);
+	public void  forceDeleteById(Product theProduct);
 	public RepositoryImpl getRepositoryImpl();
 	public List<Product> getTheProducts();
 	public Product getTheProduct();

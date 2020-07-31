@@ -127,38 +127,21 @@ public class ProductServiceImpl implements ProductService {
 	
 
 	@Override
-	public void  deleteById(Long id){
+	public void  deleteById(Product theProduct){
 		
-		theProduct = findOneByiD(id, false);	
-
-		//controller
-		String input = Methods.typeOfDelete(theProduct);
-			
-		
-		switch (input) {
-		
-		case "1":
-			
-			if (theProduct.getEnabled()) {
-				theProduct.setEnabled(false);
-			}else {
-				theProduct.setEnabled(true);
-			}
-			
-			System.out.println("\nCategoria Eliminada/Recuperada");
-			break;
-			
-		case "2":			
-
-			theProducts.remove(theProduct);
-			
-			break;
-		
-		case "3":
-			break;
-
+		if (theProduct.getEnabled()) {
+			theProduct.setEnabled(false);
+		}else {
+			theProduct.setEnabled(true);
 		}
+
 		
+	}
+	
+	@Override
+	public void  forceDeleteById(Product theProduct){
+		
+		theProducts.remove(theProducts.indexOf(theProduct));		
 	}
 
 }
