@@ -9,7 +9,7 @@ import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
 public interface ProductService {
 	
 	public void create(Product product);
-	public List<Product> findAll(Boolean bool);
+	public List<Product> findAll();
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,
 	 * el segundo parametro es la manera de buscar, si se pasa true va a hacer una busqueda
@@ -20,12 +20,13 @@ public interface ProductService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Product findOneByiD(Long id, Boolean bool);
+	public Product findById(Long id, Boolean bool);
 	public Product updateById(Product product);
 	public void deleteById(Product theProduct);
 	public void  forceDeleteById(Product theProduct);
 	public RepositoryImpl getRepositoryImpl();
 	public List<Product> getTheProducts();
 	public Product getTheProduct();
+	public List<Product> findAllDisabled();
 
 }

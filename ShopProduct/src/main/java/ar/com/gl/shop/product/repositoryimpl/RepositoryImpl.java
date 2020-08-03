@@ -94,4 +94,14 @@ public class RepositoryImpl implements Repository {
 		return null;
 	}
 
+		@Override
+	public Stock findStockById(Long id) {
+		for (Stock stock : listaStock) {
+			if (stock.getId().equals(id)) {
+				return stock;
+			}
+		}
+		return null;
+	}
+
 }

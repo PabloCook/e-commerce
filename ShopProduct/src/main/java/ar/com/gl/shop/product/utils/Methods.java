@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
+import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.services.ProductService;
 import ar.com.gl.shop.product.services.StockService;
@@ -83,7 +84,7 @@ public class Methods {
 					
 				System.out.println("\nCategorias existentes");
 				
-				categoryService.findAll(true)
+				categoryService.findAll()
 				.stream()
 				.forEach(System.out::println);
 				
@@ -92,7 +93,7 @@ public class Methods {
 				
 				do {
 					id = Long.parseLong(Methods.validarInput("\nInserte un id único: ", "^\\d+"));
-					categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
+					categoryOptional = Optional.ofNullable(categoryService.findById(id, true));
 				} while (categoryOptional.isPresent());
 				
 				
@@ -110,7 +111,7 @@ public class Methods {
 			case "2": //Obtener categoria por Id
 				
 				//Verifico si la lista esta vacia
-				if(categoryService.findAll(true).isEmpty()) {
+				if(categoryService.findAll().isEmpty()) {
 					System.out.println("\nNo hay categorias");
 					break;
 				}
@@ -120,7 +121,7 @@ public class Methods {
 				
 				Boolean check;
 				
-				categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
+				categoryOptional = Optional.ofNullable(categoryService.findById(id, true));
 				
 					
 					if (!categoryOptional.isPresent()) {
@@ -142,7 +143,7 @@ public class Methods {
 			case "3": //Obtener todas las categorias
 				
 				//Verifico si la lista esta vacia
-				if(categoryService.findAll(true).isEmpty()) {
+				if(categoryService.findAll().isEmpty()) {
 					System.out.println("\nNo hay categorias");
 					break;
 				}
@@ -150,7 +151,7 @@ public class Methods {
 				System.out.println("\n");
 				//imprimo todas las habilitadas	
 				
-				categoryService.findAll(true)
+				categoryService.findAll()
 				.stream()
 				.forEach(System.out::println);
 			
@@ -159,14 +160,14 @@ public class Methods {
 			case "4": //Actualizar categoria
 				
 							//Verifico si la lista esta vacia
-							if(categoryService.findAll(true).isEmpty()) {
+							if(categoryService.findAll().isEmpty()) {
 								System.out.println("\nNo hay categorias");
 								break;
 							}
 							
 							System.out.println("\n");
 							//imprimo todos lo habilitados
-							categoryService.findAll(true)
+							categoryService.findAll()
 							.stream()			
 							.forEach(System.out::println);	
 							
@@ -174,7 +175,7 @@ public class Methods {
 							
 							do {
 								id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));
-								categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
+								categoryOptional = Optional.ofNullable(categoryService.findById(id, true));
 							} while (!categoryOptional.isPresent());
 							
 							String selectedAtribute;
@@ -211,7 +212,7 @@ public class Methods {
 				
 			case "5": //Eliminar/recuperar Categoria
 				
-				if(categoryService.findAll(false).isEmpty()) {
+				if(categoryService.findAllDisabled().isEmpty()) {
 					System.out.println("\nNo hay categorias");
 					break;
 				}
@@ -219,7 +220,7 @@ public class Methods {
 				System.out.println("================================"
 						         + "\n¿Cual quieres eliminar/recuperar?\n");
 				
-				categoryService.findAll(false)
+				categoryService.findAllDisabled()
 				.stream()
 				.forEach(System.out::println);
 				
@@ -227,7 +228,7 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("Seleccione un id: ", "^\\d+"));
 				
-				categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, false));
+				categoryOptional = Optional.ofNullable(categoryService.findById(id, false));
 				
 				if (!categoryOptional.isPresent()) {
 					
@@ -302,7 +303,7 @@ public class Methods {
 			case "1": //Elige una opcion
 				
 				System.out.println("\nProductos existentes");
-				productService.findAll(true)
+				productService.findAll()
 				.stream()
 				.forEach(System.out::println);
 				
@@ -311,7 +312,7 @@ public class Methods {
 				do {
 					
 					id = Long.parseLong(Methods.validarInput("\nInserte un id único: ", "^\\d+"));
-					productOptional = Optional.ofNullable(productService.findOneByiD(id, true));					
+					productOptional = Optional.ofNullable(productService.findById(id, true));					
 					
 				} while (productOptional.isPresent());
 				
@@ -320,13 +321,13 @@ public class Methods {
 				String description = Methods.validarInput("Ingrese una descripción: ", regexPalabras);
 				Double price = Double.parseDouble(Methods.validarInput("Ingrese un precio: ", "\\d+"));
 				
-				categoryService.findAll(true)
+				categoryService.findAll()
 				.stream()
 				.forEach(System.out::println);
 				
 				Long categoryId = Long.parseLong(Methods.validarInput("Ingrese el id de la categoria correspondiente: ", "\\d+"));
 
-				categoryOptional = Optional.ofNullable(categoryService.findOneByiD(categoryId, true));	
+				categoryOptional = Optional.ofNullable(categoryService.findById(categoryId, true));	
 				
 				if (!categoryOptional.isPresent()) {
 					
@@ -337,18 +338,21 @@ public class Methods {
 				
 				
 				
-				productOptional = Optional.ofNullable(theProduct);				
+				productOptional = Optional.ofNullable(theProduct);	
 				
-
+				
 				Integer quantity = Integer.parseInt(Methods.validarInput("Ingrese stock para este producto: ", "\\d+"));
 				
-				//stockService.createStock(productOptional.get().getStock());
-				
-				productOptional.get().getStock().setQuantity(quantity);
+
 				
 				String location = Methods.validarInput("Ingrese la locacion del producto: ", regexPalabras);
 				
-				productOptional.get().getStock().setLocationCode(location);
+
+				Stock stock = new Stock();
+				stock.setLocationCode(location);
+				stock.setQuantity(quantity);
+				
+				productOptional.get().setStock(stock);
 
 				theProduct.setStock(productOptional.get().getStock());
 				
@@ -360,7 +364,7 @@ public class Methods {
 			case "2": //Obtener producto por Id
 				
 				//Verifico si la lista esta vacia
-				if(productService.findAll(true).isEmpty()) {
+				if(productService.findAll().isEmpty()) {
 					System.out.println("\nNo hay productos");
 					break;
 				}
@@ -368,7 +372,7 @@ public class Methods {
 				//Valida input
 				id = Long.parseLong(Methods.validarInput("Inserte un id: ", "^\\d+"));				
 				
-				productOptional = Optional.ofNullable(productService.findOneByiD(id, true));
+				productOptional = Optional.ofNullable(productService.findById(id, true));
 					
 					if (!productOptional.isPresent()) {
 						
@@ -389,14 +393,14 @@ public class Methods {
 			case "3": //Obtener todos los productos
 				
 				//Verifico si la lista esta vacia
-				if(productService.findAll(true).isEmpty()) {
+				if(productService.findAll().isEmpty()) {
 					System.out.println("\nNo hay productos");
 					break;
 				}
 				
 				System.out.println("\n");
 				//imprimo todas las habilitadas						
-				productService.findAll(true).stream()
+				productService.findAll().stream()
 				.forEach(System.out::println);
 				
 				break;
@@ -404,14 +408,14 @@ public class Methods {
 			case "4": //Actualizar producto
 				
 				//Verifico si la lista esta vacia
-				if(productService.findAll(true).isEmpty()) {
+				if(productService.findAll().isEmpty()) {
 					System.out.println("\nNo hay productos");
 					break;
 				}
 				
 				System.out.println("\n");
 				//imprimo todos lo habilitados
-				productService.findAll(false)
+				productService.findAllDisabled()
 				.stream()			
 				.forEach(System.out::println);	
 				
@@ -419,7 +423,7 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));	
 				
-				productOptional = Optional.ofNullable(productService.findOneByiD(id, true));
+				productOptional = Optional.ofNullable(productService.findById(id, true));
 				
 				if (!productOptional.isPresent()) {
 					
@@ -513,8 +517,12 @@ public class Methods {
 									
 									);
 									
-									theProduct.getStock().setLocationCode(productOptional.get().getStock().getLocationCode());
-									theProduct.getStock().setQuantity(newQuantity);
+									stock = new Stock();
+									stock.setLocationCode(productOptional.get().getStock().getLocationCode());
+									stock.setQuantity(newQuantity);
+									stock.setId(productOptional.get().getStock().getId());
+									
+									theProduct.setStock(stock);
 									
 									productService.updateById(theProduct);
 							
@@ -523,7 +531,7 @@ public class Methods {
 									break;
 								case "5"://Categoria actual
 									
-									categoryService.findAll(true)
+									categoryService.findAll()
 									.stream()
 									.forEach(System.out::println);
 									
@@ -535,7 +543,7 @@ public class Methods {
 									productOptional.get().getName(), 
 									productOptional.get().getDescription(),
 									productOptional.get().getPrice(),
-									categoryService.findOneByiD(newCategory, true)							
+									categoryService.findById(newCategory, true)							
 									
 									);
 									
@@ -576,7 +584,7 @@ public class Methods {
 				
 			case "5": //Eliminar/recuperar producto
 				
-				if(productService.findAll(false).isEmpty()) {
+				if(productService.findAllDisabled().isEmpty()) {
 					System.out.println("\nNo hay productos");
 					break;
 				}
@@ -584,7 +592,7 @@ public class Methods {
 				System.out.println("================================"
 						         + "\n¿Cual quieres eliminar/recuperar?\n");
 				
-				productService.findAll(false)
+				productService.findAllDisabled()
 				.stream()
 				.forEach(System.out::println);
 				
@@ -592,7 +600,7 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("Seleccione un id: ", "^\\d+"));
 				
-				productOptional = Optional.ofNullable(productService.findOneByiD(id, false));
+				productOptional = Optional.ofNullable(productService.findById(id, false));
 				
 				String input11;			
 				

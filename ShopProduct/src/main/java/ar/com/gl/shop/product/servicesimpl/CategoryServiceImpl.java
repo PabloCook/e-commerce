@@ -1,13 +1,14 @@
 package ar.com.gl.shop.product.servicesimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
+import ar.com.gl.shop.product.repository.Repository;
 import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
 import ar.com.gl.shop.product.services.CategoryService;
-import ar.com.gl.shop.product.repository.Repository;
 
 public class CategoryServiceImpl implements CategoryService {	
 	
@@ -49,45 +50,50 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 	
 	@Override
-	public List<Category> findAll(Boolean bool) {		
+	public List<Category> findAll() {	
 		
-		if (bool) {
+		List<Category> theCategoriesEnabled = new ArrayList<>();
+
+		for (Category category : repositoryImpl.findAllCategory()) {
+			if (category.getEnabled()) {
+				theCategoriesEnabled.add(category);
+			}
+		}	
+		
+		/*if (bool) {
 					
 			return repositoryImpl.findAllCategory().stream()
 					.filter(category->category.getEnabled())
 					.collect(Collectors.toList());
-		}
+		}*/
+		
+		//return repositoryImpl.findAllCategory();
+		
+		return theCategoriesEnabled;
+	}
+	
+	@Override
+	public List<Category> findAllDisabled(){		
+		
 		return repositoryImpl.findAllCategory();
+		
 	}
 
 	
-
 	@Override
-	public Category findOneByiD(Long id, Boolean bool){	
-		
-
-			try {                        
-				for (Category category : repositoryImpl.findAllCategory()) {
-					
-					if (bool && category.getId().equals(id) && category.getEnabled()) {
-						
-							return category;
-						
-					}else if(!bool && repositoryImpl.findCategoryById(id).getId().equals(category.getId())) {					
-
-							return category;
-					}
-					
-				}
-
+	public Category findById(Long id, Boolean searchEnable){	
+		Category category = repositoryImpl.findCategoryById(id);	
+		try {
+			if(category == null) {
 				throw new ItemNotFound("No se encontró categoria con este id");
-
-			} catch (ItemNotFound e) {
-
-				System.out.println(e.getMessage());
 			}
-			
-			return null;	
+			if(searchEnable) {
+				category = category.getEnabled() ? category : null;
+			}			
+		}catch (ItemNotFound e) {
+			System.out.println(e.getMessage());	
+		}
+		return category;		
 	}
 	
 	
@@ -95,7 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Category updateById(Category category){		
 
-		theCategory = findOneByiD(category.getId(), true);
+		theCategory = findById(category.getId(), true);
 		
 		
 		//String newName = category.getName();
@@ -130,6 +136,8 @@ public class CategoryServiceImpl implements CategoryService {
 		repositoryImpl.deleteCategory(theCategory);
 			
 	}
+	
+
 
 
 

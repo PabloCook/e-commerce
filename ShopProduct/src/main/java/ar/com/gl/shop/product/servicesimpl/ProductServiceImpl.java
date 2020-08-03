@@ -1,7 +1,7 @@
 package ar.com.gl.shop.product.servicesimpl;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
@@ -52,47 +52,55 @@ public class ProductServiceImpl implements ProductService {
 		
 	}
 	@Override
-	public List<Product> findAll(Boolean bool) {	
+	public List<Product> findAll() {	
+		
+		List<Product> theProducts = new ArrayList<>();	
+		
+		int listSize = repositoryImpl.findAllProduct().size();
 		
 		
-		if (bool) {
+		for (int i = 0; i < listSize; i++) {
+			
+			theProduct = repositoryImpl.findAllProduct().get(i);
+			
+			if (theProduct.getEnabled()) {
+				
+				theProducts.add(theProduct);
+			}
+			
+			
+		}
+		
+		/*if (bool) {
 			return repositoryImpl.findAllProduct().stream()
 					.filter(Product->Product.getEnabled())
 					.collect(Collectors.toList());
 		}
 		
+		return repositoryImpl.findAllProduct();*/
+		
+		return theProducts;
+	}
+	
+	public List<Product> findAllDisabled(){
+		
 		return repositoryImpl.findAllProduct();
 	}
 	
-
-	
-
 	@Override
-	public Product findOneByiD(Long id, Boolean bool) {	
-		
-
-			try {
-				for (Product product : repositoryImpl.findAllProduct()) {
-					
-					if (bool && product.getId().equals(id) && product.getEnabled()) {
-						
-							return product;
-						
-					}else if(!bool && product.getId().equals(id)) {					
-
-							return product;
-					}
-					
-				}
-
-				throw new ItemNotFound("No se encontró producto con este id");
-
-			} catch (ItemNotFound e) {
-
-				System.out.println(e.getMessage());
+	public Product findById(Long id, Boolean searchEnable){	
+		Product product = repositoryImpl.findProductById(id);	
+		try {
+			if(product == null) {
+				throw new ItemNotFound("No se encontró categoria con este id");
 			}
-			
-			return null;	
+			if(searchEnable) {
+				product = product.getEnabled() ? product : null;
+			}			
+		}catch (ItemNotFound e) {
+			System.out.println(e.getMessage());	
+		}
+		return product;		
 	}
 	
 	
@@ -117,15 +125,9 @@ public class ProductServiceImpl implements ProductService {
 		
 		Category newCategory = product.getCategory();
 		
-		theProduct.setCategory(newCategory);
-		
-		Integer newQuantity = theProduct.getStock().getQuantity();
-		
-		theProduct.getStock().setQuantity(newQuantity);
-		
-		String newLocation = product.getStock().getLocationCode();
-		
-		theProduct.getStock().setLocationCode(newLocation);
+		theProduct.setCategory(newCategory);		
+
+		theProduct.setStock(stockService.update(product.getStock()));
 		
 		return theProduct;		
 		

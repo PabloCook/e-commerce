@@ -30,5 +30,7 @@ public interface Repository {
 	
 	public Product findProductById(Long id);
 
+	public Stock findStockById(Long id);
+
 
 }

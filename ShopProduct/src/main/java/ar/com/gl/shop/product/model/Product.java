@@ -23,7 +23,7 @@ public class Product {
 		this.description = description;
 		this.price = price;
 		this.category = category;
-		this.stock= new Stock(0, "establecer");		
+		//this.stock= new Stock();		
 		this.enabled = true;
 	}
 	

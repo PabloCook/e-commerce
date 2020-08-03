@@ -7,7 +7,7 @@ public interface CategoryService {
 	
 	public void agregarPrimerosObjetos();
 	public void create(Long id, String name, String description);
-	public List<Category> findAll(Boolean bool);
+	public List<Category> findAll();
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,
 	 * el segundo parametro es la manera de buscar, si se pasa true va a hacer una busqueda
@@ -18,10 +18,11 @@ public interface CategoryService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Category findOneByiD(Long id, Boolean bool);
+	public Category findById(Long id, Boolean bool);
 	public Category updateById(Category theCategory);
 	public void deleteById(Category theCategory);
 	public void forceDeleteById(Category theCategory);
+	public List<Category> findAllDisabled();
 
 
 }
