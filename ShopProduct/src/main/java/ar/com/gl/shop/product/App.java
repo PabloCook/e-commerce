@@ -31,7 +31,7 @@ public class App {
 			input = Methods.validarInput("Inserte un numero: ", "^[1|2|3]");
 			
 			switch (input) {
-			case "1":
+			case "1": //Categorias
 				
 	    		try {
 					Methods.opcion(categoryService);
@@ -41,7 +41,7 @@ public class App {
 				}	    		
 	    		
 				break;
-			case "2":
+			case "2": //Productos
 				
 				try {
 					Methods.opcion(productService, categoryService, stockService);

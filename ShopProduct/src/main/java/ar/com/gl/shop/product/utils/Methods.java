@@ -78,7 +78,7 @@ public class Methods {
 			case "6":
 				break;
 			
-			case "1":
+			case "1"://Categoria
 				
 					
 				System.out.println("\nCategorias existentes");
@@ -107,7 +107,7 @@ public class Methods {
 				
 				break;
 				
-			case "2":
+			case "2": //Obtener categoria por Id
 				
 				//Verifico si la lista esta vacia
 				if(categoryService.findAll(true).isEmpty()) {
@@ -139,7 +139,7 @@ public class Methods {
 
 				break;
 				
-			case "3":
+			case "3": //Obtener todas las categorias
 				
 				//Verifico si la lista esta vacia
 				if(categoryService.findAll(true).isEmpty()) {
@@ -156,60 +156,60 @@ public class Methods {
 			
 				break;
 				
-			case "4":
+			case "4": //Actualizar categoria
 				
-				//Verifico si la lista esta vacia
-				if(categoryService.findAll(true).isEmpty()) {
-					System.out.println("\nNo hay categorias");
-					break;
-				}
-				
-				System.out.println("\n");
-				//imprimo todos lo habilitados
-				categoryService.findAll(true)
-				.stream()			
-				.forEach(System.out::println);	
-				
-				
-				
-				do {
-					id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));
-					categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
-				} while (!categoryOptional.isPresent());
-				
-				String selectedAtribute;
-				
-				
-				System.out.println("=====================\n"
-								 + "¿Que atributo quiere cambiar?\n"
-								 + "1- Nombre actual: " + categoryOptional.get().getName() +"\n"
-								 + "2- Descripción actual: " + categoryOptional.get().getDescription() +"\n"
-								 + "3- Ninguno\n");
-				selectedAtribute = Methods.validarInput("Seleccione un numero: ", "^[1|2|3]");
-				System.out.println("=====================");
-				
-				switch (selectedAtribute) {
+							//Verifico si la lista esta vacia
+							if(categoryService.findAll(true).isEmpty()) {
+								System.out.println("\nNo hay categorias");
+								break;
+							}
+							
+							System.out.println("\n");
+							//imprimo todos lo habilitados
+							categoryService.findAll(true)
+							.stream()			
+							.forEach(System.out::println);	
+							
+							
+							
+							do {
+								id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));
+								categoryOptional = Optional.ofNullable(categoryService.findOneByiD(id, true));
+							} while (!categoryOptional.isPresent());
+							
+							String selectedAtribute;
+							
+							
+							System.out.println("=====================\n"
+											 + "¿Que atributo quiere cambiar?\n"
+											 + "1- Nombre actual: " + categoryOptional.get().getName() +"\n"
+											 + "2- Descripción actual: " + categoryOptional.get().getDescription() +"\n"
+											 + "3- Ninguno\n");
+							selectedAtribute = Methods.validarInput("Seleccione un numero: ", "^[1|2|3]");
+							System.out.println("=====================");
+							
+							switch (selectedAtribute) {
+											
+							case "1"://modifica nombre actual					
 								
-				case "1"://modifica nombre actual					
-					
-					String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
-					
-					
-					categoryService.updateById(new Category(id, newName, categoryOptional.get().getDescription()));
-					
-					break;
-					
-				case "2"://modifica descripcion actual
-					
-					String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()) ;
-					
-					categoryService.updateById(new Category(id, categoryOptional.get().getName(), newDescription));					
+								String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
 								
-					break;
-				}
-				break;
+								
+								categoryService.updateById(new Category(id, newName, categoryOptional.get().getDescription()));
+								
+								break;
+								
+							case "2"://modifica descripcion actual
+								
+								String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()) ;
+								
+								categoryService.updateById(new Category(id, categoryOptional.get().getName(), newDescription));					
+											
+								break;
+							}
+							break;
 				
-			case "5":
+			case "5": //Eliminar/recuperar Categoria
 				
 				if(categoryService.findAll(false).isEmpty()) {
 					System.out.println("\nNo hay categorias");
@@ -247,7 +247,7 @@ public class Methods {
 				
 				switch (input1) {
 				
-				case "1":				
+				case "1": //Eliminar/Recuperar		
 					
 					categoryService.deleteById(categoryOptional.get());
 					
@@ -255,7 +255,7 @@ public class Methods {
 					
 					break;
 					
-				case "2":
+				case "2": //Eliminar de memoria
 					
 					input1 = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
 							+ categoryOptional.get() + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
@@ -270,7 +270,7 @@ public class Methods {
 					
 					break;
 				
-				case "3":
+				case "3": //salir
 					
 					break;
 
@@ -299,7 +299,7 @@ public class Methods {
 			
 			switch (input) {
 			
-			case "1":
+			case "1": //Elige una opcion
 				
 				System.out.println("\nProductos existentes");
 				productService.findAll(true)
@@ -357,7 +357,7 @@ public class Methods {
 				System.out.println("\nProducto creado\n" + productOptional.get());
 				break;
 				
-			case "2":
+			case "2": //Obtener producto por Id
 				
 				//Verifico si la lista esta vacia
 				if(productService.findAll(true).isEmpty()) {
@@ -386,7 +386,7 @@ public class Methods {
 	
 				break;
 				
-			case "3":
+			case "3": //Obtener todos los productos
 				
 				//Verifico si la lista esta vacia
 				if(productService.findAll(true).isEmpty()) {
@@ -401,7 +401,7 @@ public class Methods {
 				
 				break;
 				
-			case "4":
+			case "4": //Actualizar producto
 				
 				//Verifico si la lista esta vacia
 				if(productService.findAll(true).isEmpty()) {
@@ -444,7 +444,7 @@ public class Methods {
 				
 								switch (input1) {
 								
-								case "1":
+								case "1": //Nombre actual
 									//controller
 									String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
 									
@@ -464,7 +464,7 @@ public class Methods {
 									
 									break;
 									
-								case "2":
+								case "2"://Descripción actual
 									//controller
 									String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
 									
@@ -481,7 +481,7 @@ public class Methods {
 									System.out.println("\nCambios Realizados");
 									break;
 									
-								case "3":
+								case "3"://Precio actual
 									//controller
 									Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
 									
@@ -498,7 +498,7 @@ public class Methods {
 									System.out.println("\nCambios Realizados");
 							
 									break;
-								case "4":
+								case "4"://Stock actual
 									
 									//controller
 									Integer newQuantity = Integer.parseInt(Methods.validarInput("Ingrese nuevo stock: ", "\\d+"));
@@ -521,7 +521,7 @@ public class Methods {
 									System.out.println("\nCambios Realizados");
 									
 									break;
-								case "5":
+								case "5"://Categoria actual
 									
 									categoryService.findAll(true)
 									.stream()
@@ -547,7 +547,7 @@ public class Methods {
 									
 									break;
 									
-								case "6" :
+								case "6"://Locacion actual
 									
 									//controller
 									String newLocation = Methods.validarInput("Ingrese nuevo locacion: ", Methods.getRegexPalabras());
@@ -574,7 +574,7 @@ public class Methods {
 				
 				break;
 				
-			case "5":
+			case "5": //Eliminar/recuperar producto
 				
 				if(productService.findAll(false).isEmpty()) {
 					System.out.println("\nNo hay productos");
@@ -606,7 +606,7 @@ public class Methods {
 				
 							switch (input11) {
 							
-							case "1":				
+							case "1"://Eliminar/Recuperar				
 								
 								productService.deleteById(productOptional.get());
 								
@@ -614,7 +614,7 @@ public class Methods {
 								
 								break;
 								
-							case "2":
+							case "2"://Eliminar de memoria
 								
 								input11 = Methods.validarInput("¿Estas seguro que quieres eliminar permanentemente la siguiente categoria?: \n" 
 										+ categoryOptional.get() + "\nIngrese Respuesta: ", Methods.getRegexConfirmacion());
