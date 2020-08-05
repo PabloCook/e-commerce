@@ -26,10 +26,7 @@ class CategoryServicesImplTest {
 		categoryService.agregarPrimerosObjetos();
 		
 	}
-	
-	
-	/*@ParameterizedTest
-	@MethodSource("provideStringsForFindAll")*/
+
 	@Test
 	@DisplayName("testFindAll")
 	void testCase_1() {
@@ -44,21 +41,7 @@ class CategoryServicesImplTest {
 		
 		assertArrayEquals(theCategories, categoryService.findAll().toArray());
 	}
-	
-	/*private static Stream<Arguments> provideStringsForFindAll() {
-		
-		List<Category> outcome = categoryService.findAll();
-		
-		List<Category> expected = new ArrayList<Category>();
-		
-		expected.add(new Category(1l, "Consumibles", "Para comer"));
-		expected.add(new Category(2l,"Limpieza", "Para limpiar"));
-		expected.add(new Category(3l,"Ropa", "Para vestir"));
-		expected.add(new Category(4L, "Test Category", "Category for testing"));
-		
-		return Stream.of(Arguments.of(expected.get(0).toString(), outcome.get(0).toString()), Arguments.of(expected.get(1).toString(), outcome.get(1).toString()), Arguments.of(expected.get(2).toString(), outcome.get(2).toString()),
-				Arguments.of(expected.get(3).toString(), outcome.get(3).toString()));
-	}*/
+
 	
 	@Test
 	@DisplayName("testFindByIdNotNull")
@@ -92,9 +75,7 @@ class CategoryServicesImplTest {
 		categoryService.deleteById(categoryToDelete);
 		assertNull(categoryService.findById(3L, true));
 	}
-	
-	/*@ParameterizedTest
-	@MethodSource("provideStringsForFindAllDisabled")*/
+
 	@Test
 	@DisplayName("test FindAllDisabled")
 	void testCase_5() {
@@ -107,21 +88,7 @@ class CategoryServicesImplTest {
 				
 		assertTrue(sameSize);
 	}
-	
-	/*private static Stream<Arguments> provideStringsForFindAllDisabled() {
-		
-		List<Category> outcome = categoryService.findAllDisabled();
-		
-		List<Category> expected = new ArrayList<Category>();
-		
-		expected.add(new Category(1l, "Consumibles", "Para comer"));
-		expected.add(new Category(2l,"Limpieza", "Para limpiar"));
-		expected.add(new Category(3l,"Ropa", "Para vestir"));
-		expected.add(new Category(4L, "Test Category", "Category for testing"));
-		
-		return Stream.of(Arguments.of(expected.get(0).toString(), outcome.get(0).toString()), Arguments.of(expected.get(1).toString(), outcome.get(1).toString()), Arguments.of(expected.get(2).toString(), outcome.get(2).toString()),
-				Arguments.of(expected.get(3).toString(), outcome.get(3).toString()));
-	}*/
+
 	
 	@Test
 	@DisplayName("test recover category")

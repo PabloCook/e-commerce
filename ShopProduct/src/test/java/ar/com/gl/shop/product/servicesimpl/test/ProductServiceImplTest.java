@@ -35,8 +35,6 @@ class ProductServiceImplTest {
 		productService.create(product2);
 	}
 
-	/*@ParameterizedTest
-	@MethodSource("provideStringsForFindAll")*/
 	@Test
 	@DisplayName("test find all")
 	void testCase_1() {
@@ -50,15 +48,7 @@ class ProductServiceImplTest {
 		
 		assertArrayEquals(theProducts, productService.findAll().toArray());
 	}
-	
-	/*private static Stream<Arguments> provideStringsForFindAll() {
-		
-		List<Product> outcome = productService.findAll();
-		List<Product> expected = new ArrayList<Product>();
-		expected.add(product1);
-		expected.add(product2);
-		return Stream.of(Arguments.of(expected.get(0).toString(), outcome.get(0).toString()),Arguments.of(expected.get(1).toString(), outcome.get(1).toString()));
-	}*/
+
 	
 	@Test
 	@DisplayName("test DeleteById")
@@ -68,9 +58,7 @@ class ProductServiceImplTest {
 		productService.deleteById(productToDelete);
 		assertNull(productService.findById(1L, true));
 	}
-	
-	/*@ParameterizedTest
-	@MethodSource("provideStringsForFindAllDisabled")*/
+
 	@Test
 	@DisplayName("test FindAllDisabled")
 	void testCase_3() {
@@ -105,16 +93,6 @@ class ProductServiceImplTest {
 		productService.updateById(updateProduct);
 		assertEquals("updated product",updateProduct.getName());
 	}
-	
-	
-	/*private static Stream<Arguments> provideStringsForFindAllDisabled() {
-		
-		List<Product> outcome = productService.findAllDisabled();
-		List<Product> expected = new ArrayList<Product>();
-		expected.add(product1);
-		expected.add(product2);
-		return Stream.of(Arguments.of(expected.get(0).toString(), outcome.get(0).toString()),Arguments.of(expected.get(1).toString(), outcome.get(1).toString()));
-	}*/
 	
 	
 	@Test
