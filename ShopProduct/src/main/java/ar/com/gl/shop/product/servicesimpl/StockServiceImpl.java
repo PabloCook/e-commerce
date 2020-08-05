@@ -2,35 +2,31 @@ package ar.com.gl.shop.product.servicesimpl;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Stock;
-import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
+import ar.com.gl.shop.product.repository.StockRepository;
+import ar.com.gl.shop.product.repositoryimpl.StockRepositoryImpl;
 import ar.com.gl.shop.product.services.StockService;
 
 public class StockServiceImpl implements StockService {
 	
-    private RepositoryImpl repositoryImpl;
+    private StockRepository repositoryImpl;
 	
 	private Stock theStock;	
 	
 	
 	public StockServiceImpl() {
 		
-		repositoryImpl = new RepositoryImpl();
-
-		
+		repositoryImpl = StockRepositoryImpl.getInstance();
 		theStock = new Stock();
 	}
 	
 	@Override
 	public Stock create(Stock stock){
-
-        theStock = new Stock(stock.getQuantity(), stock.getLocationCode());		
-		
-		return repositoryImpl.saveStock(theStock);
+		return repositoryImpl.save(new Stock(stock.getQuantity(), stock.getLocationCode()));
     }
 
 	@Override
 	public Stock findById(Long id, Boolean searchEnable){	
-		Stock stock = repositoryImpl.findStockById(id);	
+		Stock stock = repositoryImpl.getById(id);	
 		try {
 			if(stock == null) {
 				throw new ItemNotFound("No se encontró stock con este id");
@@ -46,7 +42,7 @@ public class StockServiceImpl implements StockService {
 
 	@Override
 	public void delete(Stock stock){
-		repositoryImpl.deleteStock(stock);
+		repositoryImpl.delete(stock);
 	}
 
 	@Override
@@ -63,9 +59,9 @@ public class StockServiceImpl implements StockService {
 	public Stock update(Stock stock){		
 
 		Stock oldStock = findById(stock.getId(), true);
-		repositoryImpl.deleteStock(oldStock);
+		repositoryImpl.delete(oldStock);
 		
-		repositoryImpl.saveStock(stock);
+		repositoryImpl.save(stock);
 		return stock;		
 	}
 }

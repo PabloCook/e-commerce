@@ -60,15 +60,6 @@ public class CategoryServiceImpl implements CategoryService {
 			}
 		}	
 		
-		/*if (bool) {
-					
-			return repositoryImpl.findAllCategory().stream()
-					.filter(category->category.getEnabled())
-					.collect(Collectors.toList());
-		}*/
-		
-		//return repositoryImpl.findAllCategory();
-		
 		return theCategoriesEnabled;
 	}
 	
@@ -102,14 +93,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category updateById(Category category){		
 
 		theCategory = findById(category.getId(), true);
-		
-		
-		//String newName = category.getName();
-		
-		//theCategory.setName(newName);
-		
-
-
+	
 		repositoryImpl.deleteCategory(theCategory);
 		
 		repositoryImpl.saveCategory(category);
