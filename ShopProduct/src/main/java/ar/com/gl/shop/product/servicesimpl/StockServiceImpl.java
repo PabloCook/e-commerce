@@ -33,7 +33,7 @@ public class StockServiceImpl implements StockService {
 		Stock stock = repositoryImpl.findStockById(id);	
 		try {
 			if(stock == null) {
-				throw new ItemNotFound("No se encontró categoria con este id");
+				throw new ItemNotFound("No se encontró stock con este id");
 			}
 			if(searchEnable) {
 				stock = stock.getEnabled() ? stock : null;
