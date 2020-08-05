@@ -1,35 +1,31 @@
 package ar.com.gl.shop.product.servicesimpl.test;
 
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
-import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.runners.MethodSorters;
-
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
+import ar.com.gl.shop.product.services.ProductService;
 import ar.com.gl.shop.product.servicesimpl.ProductServiceImpl;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+
 class ProductServiceImplTest {
 
-	static ProductServiceImpl productService;
-	static Product product1, product2;
+	ProductService productService;
+	Product product1, product2;
 	
-	@BeforeAll
-	static void setUp() throws Exception {
+	@BeforeEach
+	void setUp(){
 		productService =  new ProductServiceImpl();
 		product1 = new Product(1L,"Test product", "Product for testing", 500.0, new Category());
 		product1.setStock(new Stock(30, "SJ"));
@@ -39,22 +35,30 @@ class ProductServiceImplTest {
 		productService.create(product2);
 	}
 
-	@ParameterizedTest
-	@MethodSource("provideStringsForFindAll")
+	/*@ParameterizedTest
+	@MethodSource("provideStringsForFindAll")*/
+	@Test
 	@DisplayName("test find all")
-	void testCase_1(String expected, String outcome) {
+	void testCase_1() {
 		
-		assertEquals(expected, outcome);
+		Product[] theProducts = {
+				
+				productService.findById(1l, true),
+				productService.findById(2l, true)
+		};
+		
+		
+		assertArrayEquals(theProducts, productService.findAll().toArray());
 	}
 	
-	private static Stream<Arguments> provideStringsForFindAll() {
+	/*private static Stream<Arguments> provideStringsForFindAll() {
 		
 		List<Product> outcome = productService.findAll();
 		List<Product> expected = new ArrayList<Product>();
 		expected.add(product1);
 		expected.add(product2);
 		return Stream.of(Arguments.of(expected.get(0).toString(), outcome.get(0).toString()),Arguments.of(expected.get(1).toString(), outcome.get(1).toString()));
-	}
+	}*/
 	
 	@Test
 	@DisplayName("test DeleteById")
@@ -65,22 +69,30 @@ class ProductServiceImplTest {
 		assertNull(productService.findById(1L, true));
 	}
 	
-	@ParameterizedTest
-	@MethodSource("provideStringsForFindAllDisabled")
+	/*@ParameterizedTest
+	@MethodSource("provideStringsForFindAllDisabled")*/
+	@Test
 	@DisplayName("test FindAllDisabled")
-	void testCase_3(String expected, String outcome) {
+	void testCase_3() {
 		
-		assertEquals(expected, outcome);
+		
+		productService.findById(1l, true).setEnabled(false);
+		productService.findById(2l, true).setEnabled(false);
+		
+		Boolean sameSize = productService.findAllDisabled().size() == 2;
+				
+		assertTrue(sameSize);
 	}
 	
 	@Test
 	@DisplayName("test recover product")
 	void testCase_4()
 	{
-		Product product = productService.findById(1L, false);
+		Product  product = productService.findById(2L, true);
+		product.setEnabled(false);
 		productService.deleteById(product);
-		Product  recoveredProduct = productService.findById(1L, true);
-		assertEquals(product.toString(), recoveredProduct.toString());
+		Product  recoveredProducty = productService.findById(2L, true);
+		assertNotNull(recoveredProducty);
 	}
 	
 	
@@ -91,18 +103,18 @@ class ProductServiceImplTest {
 		Product updateProduct = productService.findById(1L, true);
 		updateProduct.setName("updated product");
 		productService.updateById(updateProduct);
-		assertEquals(productService.findById(1L, true).toString(),updateProduct.toString());
+		assertEquals("updated product",updateProduct.getName());
 	}
 	
 	
-	private static Stream<Arguments> provideStringsForFindAllDisabled() {
+	/*private static Stream<Arguments> provideStringsForFindAllDisabled() {
 		
 		List<Product> outcome = productService.findAllDisabled();
 		List<Product> expected = new ArrayList<Product>();
 		expected.add(product1);
 		expected.add(product2);
 		return Stream.of(Arguments.of(expected.get(0).toString(), outcome.get(0).toString()),Arguments.of(expected.get(1).toString(), outcome.get(1).toString()));
-	}
+	}*/
 	
 	
 	@Test
