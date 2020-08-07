@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
 		Product product = repositoryImpl.findProductById(id);	
 		try {
 			if(product == null) {
-				throw new ItemNotFound("No se encontró categoria con este id");
+				throw new ItemNotFound("No se encontró producto con este id");
 			}
 			if(searchEnable) {
 				product = product.getEnabled() ? product : null;
