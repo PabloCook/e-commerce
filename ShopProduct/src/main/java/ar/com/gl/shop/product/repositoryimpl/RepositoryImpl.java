@@ -63,9 +63,7 @@ public class RepositoryImpl implements Repository {
 
 	@Override
 	public void deleteProduct(Product product) {
-
 		listaProductos.remove(product);
-
 	}
 
 	@Override
