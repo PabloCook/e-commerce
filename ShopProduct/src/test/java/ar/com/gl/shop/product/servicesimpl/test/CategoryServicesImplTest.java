@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ar.com.gl.shop.product.model.Category;
@@ -28,7 +27,7 @@ class CategoryServicesImplTest {
 
 	
 	@InjectMocks
-	CategoryServiceImpl categoryService = new CategoryServiceImpl();
+	CategoryServiceImpl categoryService;
 	
 	
 	
@@ -82,14 +81,14 @@ class CategoryServicesImplTest {
 	@DisplayName("testFindByIdNotNull")
 	void testCase_2()
 	{	
-		Mockito.when(repositoryImpl.findCategoryById(3L)).thenReturn(category3);
+		when(repositoryImpl.findCategoryById(3L)).thenReturn(category3);
 		assertNotNull(categoryService.findById(3L, true));
 	}
 
 	@Test
 	@DisplayName("testFindByIdNull")
 	void testCase_3()
-	{	Mockito.when(repositoryImpl.findCategoryById(3L)).thenReturn(null);
+	{	when(repositoryImpl.findCategoryById(3L)).thenReturn(null);
 		assertNull(categoryService.findById(3L, true));
 	}
 	

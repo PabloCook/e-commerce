@@ -9,10 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,13 +23,12 @@ import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
-import ar.com.gl.shop.product.services.ProductService;
 import ar.com.gl.shop.product.servicesimpl.ProductServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 	@InjectMocks
-	ProductServiceImpl productService = new ProductServiceImpl();
+	ProductServiceImpl productService;
 	
 	@Mock
 	RepositoryImpl repositoryImpl;
