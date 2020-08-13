@@ -9,6 +9,8 @@ import ar.com.gl.shop.product.model.Stock;
 public interface Repository {
 
 	public Category saveCategory(Category category);
+	
+	public Category updateCategory(Category category);
 
 	public void deleteCategory(Category category);
 
@@ -16,12 +18,6 @@ public interface Repository {
 	
 	public Category findCategoryById(Long id);
 
-	public Product saveProduct(Product category);
 
-	public List<Product> findAllProduct();
-
-	public void deleteProduct(Product product);
-	
-	public Product findProductById(Long id);
 
 }

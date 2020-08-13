@@ -2,9 +2,8 @@ package ar.com.gl.shop.product.services;
 
 import java.util.List;
 
-import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
+import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
 
 public interface ProductService {
 	
@@ -24,9 +23,7 @@ public interface ProductService {
 	public Product updateById(Product product);
 	public void deleteById(Product theProduct);
 	public void  forceDeleteById(Product theProduct);
-	public RepositoryImpl getRepositoryImpl();
-	public List<Product> getTheProducts();
-	public Product getTheProduct();
+	public ProductRepositoryImpl getRepositoryImpl();
 	public List<Product> findAllDisabled();
 
 }

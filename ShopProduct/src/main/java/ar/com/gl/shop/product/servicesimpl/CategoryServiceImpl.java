@@ -2,127 +2,94 @@ package ar.com.gl.shop.product.servicesimpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
-import ar.com.gl.shop.product.repository.Repository;
-import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
+import ar.com.gl.shop.product.repositoryimpl.CategoryRepositoryImpl;
+import ar.com.gl.shop.product.repositoryimpl.StockRepositoryImpl;
 import ar.com.gl.shop.product.services.CategoryService;
 
-public class CategoryServiceImpl implements CategoryService {	
-	
-	
-	Repository repositoryImpl;
-	
-	Category theCategory;
-	
+public class CategoryServiceImpl implements CategoryService {
+
+	CategoryRepositoryImpl repositoryImpl;
+
 	public CategoryServiceImpl() {
-		
-		repositoryImpl = new RepositoryImpl();
-		
-		theCategory = new Category();
+
+		repositoryImpl = CategoryRepositoryImpl.getInstance();
 	}
-	
-	//Categorias iniciales
-	public void agregarPrimerosObjetos() {		
-		
-		repositoryImpl.saveCategory(new Category(1l, "Consumibles", "Para comer"));
-		repositoryImpl.saveCategory(new Category(2l,"Limpieza", "Para limpiar"));
-		repositoryImpl.saveCategory(new Category(3l,"Ropa", "Para vestir"));	
-		
-	}
-	
 
 	@Override
-	public void create(Long id, String name, String description) {	
-		
-		
-		theCategory = new Category(id,name,description);
-		
-		repositoryImpl.saveCategory(theCategory);
-		
-		//ordernar por id
-		repositoryImpl.findAllCategory()
-		.sort((o1,o2)->o1.getId()
-		.compareTo(o2.getId()));
-		
-	}
-	
-	@Override
-	public List<Category> findAll() {	
-		
-		List<Category> theCategoriesEnabled = new ArrayList<>();
+	public void create(Long id, String name, String description) {
 
-		for (Category category : repositoryImpl.findAllCategory()) {
-			if (category.getEnabled()) {
-				theCategoriesEnabled.add(category);
-			}
-		}	
-		
-		return theCategoriesEnabled;
-	}
-	
-	@Override
-	public List<Category> findAllDisabled(){		
-		
-		return repositoryImpl.findAllCategory();
-		
-	}
+		Category category = new Category(id, name, description);
 
-	
-	@Override
-	public Category findById(Long id, Boolean searchEnable){	
-		Category category = repositoryImpl.findCategoryById(id);	
-		try {
-			if(category == null) {
-				throw new ItemNotFound("No se encontró categoria con este id");
-			}
-			if(searchEnable) {
-				category = category.getEnabled() ? category : null;
-			}			
-		}catch (ItemNotFound e) {
-			System.out.println(e.getMessage());	
-		}
-		return category;		
-	}
-	
-	
-
-	@Override
-	public Category updateById(Category category){		
-
-		theCategory = findById(category.getId(), true);
-	
-		repositoryImpl.deleteCategory(theCategory);
-		
 		repositoryImpl.saveCategory(category);
 
-		
-		return theCategory;		
-		
 	}
 
 	@Override
-	public void  deleteById(Category theCategory){
-		
-		if (theCategory.getEnabled()) {
-			theCategory.setEnabled(false);
-		}else {
-			theCategory.setEnabled(true);
+	public List<Category> findAll() {
+
+		List<Category> categoriesEnabled = new ArrayList<>();
+
+		for (Category category : repositoryImpl.findAllCategory()) {
+
+			if (category.getEnabled()) {
+				categoriesEnabled.add(category);
+			}
 		}
-		
+
+		return categoriesEnabled;
 	}
-	
+
 	@Override
-	public void  forceDeleteById(Category theCategory){
-		
-		repositoryImpl.deleteCategory(theCategory);
-			
+	public List<Category> findAllDisabled() {
+
+		return repositoryImpl.findAllCategory();
+
 	}
-	
 
+	@Override
+	public Category findById(Long id, Boolean searchEnable) {
+		Category category = repositoryImpl.findCategoryById(id);
+		// try {
+		// if(category == null) {
+		// throw new ItemNotFound("No se encontró categoria con este id");
+		// }
+		if (category != null && searchEnable) {
+			category = category.getEnabled() ? category : null;
+		}
+		// }catch (ItemNotFound e) {
+		// System.out.println(e.getMessage());
+		// }
+		return category;
+	}
 
+	@Override
+	public Category updateById(Category category) {
 
+		category = findById(category.getId(), true);
+
+		repositoryImpl.updateCategory(category);
+
+		return category;
+
+	}
+
+	@Override
+	public void deleteById(Category category) {
+
+		category.setEnabled(!category.getEnabled());
+
+		repositoryImpl.updateCategory(category);
+
+	}
+
+	@Override
+	public void forceDeleteById(Category category) {
+
+		repositoryImpl.deleteCategory(category);
+
+	}
 
 }

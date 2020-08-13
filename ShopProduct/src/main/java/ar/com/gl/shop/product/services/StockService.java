@@ -8,7 +8,7 @@ public interface StockService {
 
     public Stock findById(Long id, Boolean searchEnable);
 
-    public void delete(Stock stock);
+    public void delete(Long id);
 
     public void  softDelete(Stock stock);
 

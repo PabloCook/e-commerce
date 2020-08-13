@@ -1,5 +1,8 @@
 package ar.com.gl.shop.product;
 
+import ar.com.gl.shop.product.model.Category;
+import ar.com.gl.shop.product.model.Product;
+import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.services.ProductService;
 import ar.com.gl.shop.product.services.StockService;
@@ -19,7 +22,38 @@ public class App {
     	ProductService productService = new ProductServiceImpl();
     	StockService stockService = new StockServiceImpl();
     	
-    	categoryService.agregarPrimerosObjetos();
+
+    //	categoryService.create(2L, "comestible", "comestible3");
+    	Category category = categoryService.findById(2L, true);
+    	Product product = new Product(1L, "product10", "description1", 10.0, category);
+    	
+    	//product.setStock(new Stock(9, "MDZ"));
+    	
+   // 	productService.create(product);
+    	
+    	
+    //	product = productService.findById(8L, true);
+    	
+    	System.out.println("BUSCAR TODOS");
+    	System.out.println(productService.findAll());
+ 
+
+    	
+    	
+    	//Category category = categoryService.findById(2L, true);
+    	//category.setEnabled(true);
+    	//System.out.println(category.getEnabled());
+    	
+    	//categoryService.deleteById(categoryService.findById(2L, true));
+    	
+    	
+    	//categoryService.updateById(categoryService.findById(2L, true));
+    	//System.out.println(categoryService.findAll());
+    	
+    	//categoryService.forceDeleteById(categoryService.findById(2L, true));
+    	//System.out.println(categoryService.findAll());
+    	
+    	/*categoryService.agregarPrimerosObjetos();
     	
     	do {
     		System.out.println("========Pagina de inicio========\n"
@@ -53,9 +87,10 @@ public class App {
 				break;
 			}
 		} while (!input.equals("3"));
-    	
+    	*/
     	      
     }
+
 		
 }
 

@@ -16,10 +16,9 @@ public class Stock {
 	}
 	
 	public Stock(Integer quantity, String locationCode) {
-		this.id = count.incrementAndGet();
 		this.quantity = quantity;
 		this.locationCode = locationCode;
-		enabled = true;
+		this.enabled = true;
 	}	
 	
 	public Long getId() {

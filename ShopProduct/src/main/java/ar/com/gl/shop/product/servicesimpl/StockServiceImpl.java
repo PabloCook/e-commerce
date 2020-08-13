@@ -7,61 +7,57 @@ import ar.com.gl.shop.product.repositoryimpl.StockRepositoryImpl;
 import ar.com.gl.shop.product.services.StockService;
 
 public class StockServiceImpl implements StockService {
-	
-    private StockRepository repositoryImpl;
-	
-	private Stock theStock;	
-	
-	
+
+	private StockRepositoryImpl repositoryImpl;
+
+	private Stock theStock;
+
 	public StockServiceImpl() {
-		
+
 		repositoryImpl = StockRepositoryImpl.getInstance();
 		theStock = new Stock();
 	}
-	
-	@Override
-	public Stock create(Stock stock){
-		return repositoryImpl.save(new Stock(stock.getQuantity(), stock.getLocationCode()));
-    }
 
 	@Override
-	public Stock findById(Long id, Boolean searchEnable){	
-		Stock stock = repositoryImpl.getById(id);	
-		try {
-			if(stock == null) {
-				throw new ItemNotFound("No se encontró stock con este id");
-			}
-			if(searchEnable) {
+	public Stock create(Stock stock) {
+		Stock stockFind = repositoryImpl.save(new Stock(stock.getQuantity(), stock.getLocationCode()));
+		return stockFind;
+	}
+
+	@Override
+	public Stock findById(Long id, Boolean searchEnable) {
+		Stock stock = repositoryImpl.getById(id);
+		//try {
+			//if (stock == null) {
+			//	throw new ItemNotFound("No se encontró stock con este id");
+			//}
+			if (stock != null && searchEnable) {
 				stock = stock.getEnabled() ? stock : null;
-			}			
-		}catch (ItemNotFound e) {
-			System.out.println(e.getMessage());	
-		}
-		return stock;		
-	}
-
-	@Override
-	public void delete(Stock stock){
-		repositoryImpl.delete(stock);
-	}
-
-	@Override
-	public void softDelete(Stock stock){
-		
-		if (stock.getEnabled()) {
-			stock.setEnabled(false);
-		}else {
-			stock.setEnabled(true);
 			}
+	//	} catch (ItemNotFound e) {
+		//	System.out.println(e.getMessage());
+		//}
+		return stock;
 	}
 
 	@Override
-	public Stock update(Stock stock){		
+	public void delete(Long idStock) {
 
-		Stock oldStock = findById(stock.getId(), true);
-		repositoryImpl.delete(oldStock);
-		
-		repositoryImpl.save(stock);
-		return stock;		
+		repositoryImpl.delete(repositoryImpl.getById(idStock));
+	}
+
+	@Override
+	public void softDelete(Stock stock) {
+
+		stock.setEnabled(!stock.getEnabled());
+		repositoryImpl.updateStock(stock);
+	}
+
+	@Override
+	public Stock update(Stock stock) {
+
+		stock = repositoryImpl.updateStock(stock);
+
+		return stock;
 	}
 }

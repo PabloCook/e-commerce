@@ -5,7 +5,6 @@ import ar.com.gl.shop.product.model.Category;
 
 public interface CategoryService {
 	
-	public void agregarPrimerosObjetos();
 	public void create(Long id, String name, String description);
 	public List<Category> findAll();
 	/**
