@@ -19,8 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ar.com.gl.shop.product.model.Category;
-import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
-import ar.com.gl.shop.product.servicesimpl.CategoryServiceImpl;
+import ar.com.gl.shop.product.repository.impl.RepositoryImpl;
+import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServicesImplTest {

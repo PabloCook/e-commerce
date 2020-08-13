@@ -1,4 +1,4 @@
-package ar.com.gl.shop.product.repositoryimpl;
+package ar.com.gl.shop.product.repository.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;

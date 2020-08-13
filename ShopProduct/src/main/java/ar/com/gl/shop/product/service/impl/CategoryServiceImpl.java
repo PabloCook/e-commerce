@@ -1,4 +1,4 @@
-package ar.com.gl.shop.product.servicesimpl;
+package ar.com.gl.shop.product.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.repository.Repository;
-import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
-import ar.com.gl.shop.product.services.CategoryService;
+import ar.com.gl.shop.product.repository.impl.RepositoryImpl;
+import ar.com.gl.shop.product.service.CategoryService;
 
 public class CategoryServiceImpl implements CategoryService {	
 	

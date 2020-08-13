@@ -14,8 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ar.com.gl.shop.product.model.Stock;
-import ar.com.gl.shop.product.repositoryimpl.StockRepositoryImpl;
-import ar.com.gl.shop.product.servicesimpl.StockServiceImpl;
+import ar.com.gl.shop.product.repository.impl.StockRepositoryImpl;
+import ar.com.gl.shop.product.service.impl.StockServiceImpl;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @ExtendWith(MockitoExtension.class)
