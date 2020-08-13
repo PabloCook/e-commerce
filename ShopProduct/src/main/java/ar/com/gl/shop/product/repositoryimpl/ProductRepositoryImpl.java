@@ -132,7 +132,6 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			st = con.createStatement();
 
 			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			System.out.println(product.getId() + "IDDD");
 			pst.setLong(1, product.getId());
 
 			pst.executeUpdate();

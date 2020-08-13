@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
 
 		Product product = null;
 
-		for (int i = 0; i < repositoryImpl.findAllProduct().size(); i++) {
+		for (int i = 0; i < repositoryImpl.findAllProduct().size(); i++) { //
 
 			product = repositoryImpl.findAllProduct().get(i);
 
