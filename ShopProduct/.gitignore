@@ -30,3 +30,5 @@ dockerfile
 ### VS Code ###
 .vscode/
 ocal
+
+bin/*

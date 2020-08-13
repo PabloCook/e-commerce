@@ -1,4 +1,4 @@
-package ar.com.gl.shop.product.servicesimpl;
+package ar.com.gl.shop.product.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
-import ar.com.gl.shop.product.services.ProductService;
+import ar.com.gl.shop.product.repository.impl.RepositoryImpl;
+import ar.com.gl.shop.product.service.ProductService;
 
 public class ProductServiceImpl implements ProductService {
 	
@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
 		Product product = repositoryImpl.findProductById(id);	
 		try {
 			if(product == null) {
-				throw new ItemNotFound("No se encontró categoria con este id");
+				throw new ItemNotFound("No se encontró producto con este id");
 			}
 			if(searchEnable) {
 				product = product.getEnabled() ? product : null;

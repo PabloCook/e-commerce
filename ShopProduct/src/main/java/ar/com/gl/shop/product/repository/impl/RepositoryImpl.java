@@ -1,4 +1,4 @@
-package ar.com.gl.shop.product.repositoryimpl;
+package ar.com.gl.shop.product.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,21 +12,25 @@ public class RepositoryImpl implements Repository {
 
 	private static List<Category> listaCategorias;
 	private static List<Product> listaProductos;
-	private static List<Stock> listaStock;
+
 
 	public RepositoryImpl() {
-
 		listaCategorias = new ArrayList<Category>();
-
 		listaProductos = new ArrayList<Product>();
 
-		listaStock = new ArrayList<Stock>();
 	}
 
+	//Category
 	@Override
 	public Category saveCategory(Category category) {
 		listaCategorias.add(category);
 		return category;
+	}
+
+	@Override
+	public void deleteCategory(Category category) {
+		listaCategorias.remove(category);
+
 	}
 
 	@Override
@@ -35,15 +39,16 @@ public class RepositoryImpl implements Repository {
 	}
 
 	@Override
-	public Stock saveStock(Stock stock) {
-		listaStock.add(stock);
-		return stock;
+	public Category findCategoryById(Long id) {
+		for (Category category : listaCategorias) {
+			if (category.getId().equals(id)) {
+				return category;
+			}
+		}
+		return null;
 	}
-
-	@Override
-	public List<Stock> findAllStock() {
-		return listaStock;
-	}
+		
+	// PRODUCT
 
 	@Override
 	public Product saveProduct(Product product) {
@@ -57,31 +62,8 @@ public class RepositoryImpl implements Repository {
 	}
 
 	@Override
-	public void deleteCategory(Category category) {
-		listaCategorias.remove(category);
-
-	}
-
-	@Override
 	public void deleteProduct(Product product) {
-		
-				listaProductos.remove(product);
-
-	}
-
-	@Override
-	public void deleteStock(Stock stock) {
-		listaStock.remove(stock);
-	}
-
-	@Override
-	public Category findCategoryById(Long id) {
-		for (Category category : listaCategorias) {
-			if (category.getId().equals(id)) {
-				return category;
-			}
-		}
-		return null;
+		listaProductos.remove(product);
 	}
 
 	@Override
@@ -89,16 +71,6 @@ public class RepositoryImpl implements Repository {
 		for (Product product : listaProductos) {
 			if (product.getId().equals(id)) {
 				return product;
-			}
-		}
-		return null;
-	}
-
-		@Override
-	public Stock findStockById(Long id) {
-		for (Stock stock : listaStock) {
-			if (stock.getId().equals(id)) {
-				return stock;
 			}
 		}
 		return null;

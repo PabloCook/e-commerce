@@ -16,12 +16,6 @@ public interface Repository {
 	
 	public Category findCategoryById(Long id);
 
-	public Stock saveStock(Stock category);
-	
-	public void deleteStock(Stock stock);
-
-	public List<Stock> findAllStock();
-
 	public Product saveProduct(Product category);
 
 	public List<Product> findAllProduct();
@@ -29,8 +23,5 @@ public interface Repository {
 	public void deleteProduct(Product product);
 	
 	public Product findProductById(Long id);
-
-	public Stock findStockById(Long id);
-
 
 }
