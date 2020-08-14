@@ -23,19 +23,20 @@ public class App {
     	StockService stockService = new StockServiceImpl();
     	
 
-    //	categoryService.create(2L, "comestible", "comestible3");
-    	Category category = categoryService.findById(2L, true);
-    	Product product = new Product(1L, "product10", "description1", 10.0, category);
+    //	categoryService.create(1L, "product10", "description1", 10.0, category);
+    	//Category category = categoryService.findById(2L, true);
+    //	Product product = new Product(1L, "product10", "description1", 10.0, category);
+    	//categoryService.create(1L, "CAT", "CATDESC");
+    	//Category category = categoryService.findById(49L, true);
     	
     	//product.setStock(new Stock(9, "MDZ"));
     	
    // 	productService.create(product);
     	
     	
-    //	product = productService.findById(8L, true);
+    	//productService.findById(8L, true);
     	
-    	System.out.println("BUSCAR TODOS");
-    	System.out.println(productService.findAll());
+    	categoryService.forceDeleteById(categoryService.findById(47L, true));
  
 
     	
