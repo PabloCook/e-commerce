@@ -7,7 +7,7 @@ import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
 
 public interface ProductService {
 	
-	public void create(Product product);
+	public Product create(Product product);
 	public List<Product> findAll();
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,
@@ -21,8 +21,8 @@ public interface ProductService {
 	 */
 	public Product findById(Long id, Boolean bool);
 	public Product updateById(Product product);
-	public void deleteById(Product theProduct);
-	public void  forceDeleteById(Product theProduct);
+	public Product softDelete(Product theProduct);
+	public Product  delete(Product theProduct);
 	public ProductRepositoryImpl getRepositoryImpl();
 	public List<Product> findAllDisabled();
 
