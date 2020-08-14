@@ -7,9 +7,9 @@ import java.util.Scanner;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
-import ar.com.gl.shop.product.services.CategoryService;
-import ar.com.gl.shop.product.services.ProductService;
-import ar.com.gl.shop.product.services.StockService;
+import ar.com.gl.shop.product.service.CategoryService;
+import ar.com.gl.shop.product.service.ProductService;
+import ar.com.gl.shop.product.service.StockService;
 
 public class Methods {
 	

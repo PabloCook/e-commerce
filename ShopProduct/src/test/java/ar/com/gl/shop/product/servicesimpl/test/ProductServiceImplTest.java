@@ -22,13 +22,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
-import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
-import ar.com.gl.shop.product.servicesimpl.ProductServiceImpl;
+import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
+import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 	@InjectMocks
-	ProductServiceImpl productService = new ProductServiceImpl();
+	ProductServiceImpl productService;
 
 	@Mock
 	ProductRepositoryImpl productRepositoryImpl;

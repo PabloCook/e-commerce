@@ -1,10 +1,10 @@
-package ar.com.gl.shop.product.servicesimpl;
+package ar.com.gl.shop.product.service.impl;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.repository.StockRepository;
-import ar.com.gl.shop.product.repositoryimpl.StockRepositoryImpl;
-import ar.com.gl.shop.product.services.StockService;
+import ar.com.gl.shop.product.repository.impl.StockRepositoryImpl;
+import ar.com.gl.shop.product.service.StockService;
 
 public class StockServiceImpl implements StockService {
 

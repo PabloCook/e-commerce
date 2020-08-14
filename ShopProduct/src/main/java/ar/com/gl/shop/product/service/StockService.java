@@ -1,4 +1,4 @@
-package ar.com.gl.shop.product.services;
+package ar.com.gl.shop.product.service;
 
 import ar.com.gl.shop.product.model.Stock;
 

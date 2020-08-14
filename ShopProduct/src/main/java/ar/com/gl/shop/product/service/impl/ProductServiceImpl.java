@@ -1,11 +1,11 @@
-package ar.com.gl.shop.product.servicesimpl;
+package ar.com.gl.shop.product.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
-import ar.com.gl.shop.product.services.ProductService;
+import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
+import ar.com.gl.shop.product.service.ProductService;
 
 public class ProductServiceImpl implements ProductService {
 

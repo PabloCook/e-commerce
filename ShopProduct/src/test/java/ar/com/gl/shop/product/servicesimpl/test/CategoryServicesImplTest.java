@@ -16,21 +16,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ar.com.gl.shop.product.model.Category;
-import ar.com.gl.shop.product.repositoryimpl.CategoryRepositoryImpl;
-import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
-import ar.com.gl.shop.product.repositoryimpl.StockRepositoryImpl;
-import ar.com.gl.shop.product.servicesimpl.CategoryServiceImpl;
+import ar.com.gl.shop.product.repository.impl.CategoryRepositoryImpl;
+import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServicesImplTest {
 
 	
 	@InjectMocks
-	CategoryServiceImpl categoryService = new CategoryServiceImpl();
+	CategoryServiceImpl categoryService ;
 	
 	@Mock
 	CategoryRepositoryImpl categoryRepositoryImpl;
@@ -81,14 +78,14 @@ class CategoryServicesImplTest {
 	@DisplayName("testFindByIdNotNull")
 	void testCase_2()
 	{	
-		Mockito.when(categoryRepositoryImpl.getById(3L)).thenReturn(category3);
+		when(categoryRepositoryImpl.getById(3L)).thenReturn(category3);
 		assertNotNull(categoryService.getById(3L, true));
 	}
 
 	@Test
 	@DisplayName("testFindByIdNull")
 	void testCase_3()
-	{	Mockito.when(categoryRepositoryImpl.getById(3L)).thenReturn(null);
+	{	when(categoryRepositoryImpl.getById(3L)).thenReturn(null);
 		assertNull(categoryService.getById(3L, true));
 	}
 	

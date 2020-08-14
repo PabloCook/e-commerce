@@ -1,9 +1,9 @@
-package ar.com.gl.shop.product.services;
+package ar.com.gl.shop.product.service;
 
 import java.util.List;
 
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
+import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
 
 public interface ProductService {
 	

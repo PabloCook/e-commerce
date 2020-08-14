@@ -1,11 +1,11 @@
 package ar.com.gl.shop.product;
 
-import ar.com.gl.shop.product.services.CategoryService;
-import ar.com.gl.shop.product.services.ProductService;
-import ar.com.gl.shop.product.services.StockService;
-import ar.com.gl.shop.product.servicesimpl.CategoryServiceImpl;
-import ar.com.gl.shop.product.servicesimpl.ProductServiceImpl;
-import ar.com.gl.shop.product.servicesimpl.StockServiceImpl;
+import ar.com.gl.shop.product.service.CategoryService;
+import ar.com.gl.shop.product.service.ProductService;
+import ar.com.gl.shop.product.service.StockService;
+import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
+import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
+import ar.com.gl.shop.product.service.impl.StockServiceImpl;
 import ar.com.gl.shop.product.utils.Methods;
 
 public class App {
