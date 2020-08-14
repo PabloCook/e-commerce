@@ -1,8 +1,5 @@
 package ar.com.gl.shop.product;
 
-import ar.com.gl.shop.product.model.Category;
-import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.services.CategoryService;
 import ar.com.gl.shop.product.services.ProductService;
 import ar.com.gl.shop.product.services.StockService;

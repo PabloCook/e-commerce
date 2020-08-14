@@ -43,12 +43,12 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 			pst.setBoolean(3, stock.getEnabled());
 
 			pst.executeUpdate();
-
+			rs = pst.getGeneratedKeys();
 			if (!rs.next()) {
 				throw new SQLException("Registro no encontrado");
 			}
 			
-			rs = pst.getGeneratedKeys();
+			
 			stockSave = getById((long) rs.getInt(1));
 			
 		} catch (SQLException e) {

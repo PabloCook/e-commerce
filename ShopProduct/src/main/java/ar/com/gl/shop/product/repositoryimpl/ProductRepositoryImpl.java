@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.repository.datasources.ProductDatasource;
@@ -202,20 +203,20 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			pst.setBoolean(5, product.getEnabled());
 			pst.setLong(6, product.getId());
 
-			pst.executeUpdate();
+			Integer rs = pst.executeUpdate();
 
-			rs = pst.getGeneratedKeys();
-
-			if (rs.next()) {
-
-				productSave = getById((long) rs.getInt(1));
-			}else {
-				throw new SQLException("Registro no encontrados");
+			if (rs.equals(0)) {
+				throw new ItemNotFound();	
 			}
+
+				productSave = getById(product.getId());
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
+		}catch (ItemNotFound e) {
+			System.out.println(e.getMessage());
+		}  finally {
 			try {
 				con.close();
 				pst.close();
