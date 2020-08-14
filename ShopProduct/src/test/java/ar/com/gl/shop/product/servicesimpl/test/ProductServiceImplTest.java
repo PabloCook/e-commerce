@@ -38,9 +38,9 @@ class ProductServiceImplTest {
 	
 	@BeforeEach
 	void setUp(){
-		product1 = new Product(1L,"Test product", "Product for testing", 500.0, new Category());
+		product1 = new Product("Test product", "Product for testing", 500.0, new Category());
 		product1.setStock(new Stock(30, "SJ"));
-		product2 = new Product(2L,"Test product2", "Second product for testing", 500.0, new Category());
+		product2 = new Product("Test product2", "Second product for testing", 500.0, new Category());
 		product2.setStock(new Stock(50, "MDZ"));
 		productService.create(product1);
 		productService.create(product2);

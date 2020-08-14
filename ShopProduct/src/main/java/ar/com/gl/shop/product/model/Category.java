@@ -15,7 +15,7 @@ public class Category {
 		this.enabled = true;
 	}
 	
-	public Category(Long id, String name, String description) {
+	public Category(String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;

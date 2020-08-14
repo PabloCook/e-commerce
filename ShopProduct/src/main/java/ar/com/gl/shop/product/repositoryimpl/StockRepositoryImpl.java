@@ -17,7 +17,6 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	private static StockRepositoryImpl INSTANCE;
 
 	private Connection con;
-	private Statement st;
 	private ResultSet rs;
 	private PreparedStatement pst;
 
@@ -138,24 +137,24 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 
 			pst.setLong(1, id);
 
+			rs = pst.executeQuery();
 			
 			if (!rs.next()) {
 				throw new SQLException("Registros no encontrado");
-			}
+			}else {
 			
-			rs = pst.executeQuery();
 			stock = new Stock();
 			stock.setId(rs.getLong("id"));
 			stock.setLocationCode(rs.getString("locationCode"));
 			stock.setQuantity(rs.getInt("quantity"));
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
-				pst.close();
-				rs.close();
+				pst.close(); 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

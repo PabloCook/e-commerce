@@ -47,13 +47,24 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 			pst.setBoolean(3, category.getEnabled());
 
 			pst.executeUpdate();
+<<<<<<< HEAD
 			
 			rs = pst.getGeneratedKeys();
 		
+=======
+
+			rs = pst.getGeneratedKeys();
+			
+>>>>>>> 8444f2bc6089a8ba53759dfc81ac411efe98870e
 			if (!rs.next()) {
 				throw new SQLException("Registro no encontrado");	
 			} 
 			
+<<<<<<< HEAD
+=======
+			
+
+>>>>>>> 8444f2bc6089a8ba53759dfc81ac411efe98870e
 			categorySave = getById((long) rs.getInt(1));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -110,13 +121,20 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 			pst.setBoolean(3, category.getEnabled());
 			pst.setLong(4, category.getId());
 
+<<<<<<< HEAD
 			pst.executeUpdate();
 			
 			if (!rs.next()) {
+=======
+			int rs = pst.executeUpdate();
+
+
+			if (rs == 0) {
+>>>>>>> 8444f2bc6089a8ba53759dfc81ac411efe98870e
 				throw new SQLException("Registro no encontrado");	
 			}
 			
-			categorySave = getById((long) rs.getInt(1));
+		categorySave = getById(category.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -124,6 +142,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 			try {
 				con.close();
 				pst.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
