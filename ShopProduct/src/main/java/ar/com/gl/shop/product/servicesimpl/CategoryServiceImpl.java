@@ -65,8 +65,6 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Category update(Category category) {
 
-		category = getById(category.getId(), true);
-
 		repositoryImpl.update(category);
 
 		return category;
@@ -75,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category softDelete(Category category) {
-		
+		productRepositoryImpl = productRepositoryImpl.getInstance();
 		try {
 			for (Product product : productRepositoryImpl.findAll()) {
 				if (product.getCategory().getId().equals(category.getId())) {
@@ -83,7 +81,6 @@ public class CategoryServiceImpl implements CategoryService {
 				}
 			}
 		} catch (Exception e) {
-			
 			e.getMessage();
 			return null;
 		}
@@ -96,7 +93,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category delete(Category category) {
-		
+		productRepositoryImpl = productRepositoryImpl.getInstance();
 		try {
 			for (Product product : productRepositoryImpl.findAll()) {
 				if (product.getCategory().getId().equals(category.getId())) {

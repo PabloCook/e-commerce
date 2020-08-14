@@ -84,7 +84,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 
 			pst.setLong(1, category.getId());
 			
-			pst.executeQuery();
+			pst.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -113,13 +113,13 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 			pst.setBoolean(3, category.getEnabled());
 			pst.setLong(4, category.getId());
 
-			pst.executeUpdate();
+			Integer rs = pst.executeUpdate();
 			
-			if (!rs.next()) {
+			if (rs.equals(0)) {
 				throw new ItemNotFound();	
 			}
 			
-			categorySave = getById((long) rs.getInt(1));
+			categorySave = getById(category.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
