@@ -14,6 +14,6 @@ public interface ProductRepository {
 
 	public void delete(Product product);
 	
-	public Product getBydId(Long id);
+	public Product getById(Long id);
 
 }

@@ -44,8 +44,8 @@ class ProductServiceImplTest {
 		product2.setStock(new Stock(50, "MDZ"));
 		productService.create(product1);
 		productService.create(product2);
-		lenient().when(productRepositoryImpl.getBydId(2L)).thenReturn(product2);
-		lenient().when(productRepositoryImpl.getBydId(1L)).thenReturn(product1);
+		lenient().when(productRepositoryImpl.getById(2L)).thenReturn(product2);
+		lenient().when(productRepositoryImpl.getById(1L)).thenReturn(product1);
 	}
 
 	@Test
@@ -69,10 +69,10 @@ class ProductServiceImplTest {
 		Product productToDelete = productService.getById(1L, true);
 		productService.softDelete(productToDelete);
 		
-		when(productRepositoryImpl.getBydId(1L)).thenReturn(null);
+		when(productRepositoryImpl.getById(1L)).thenReturn(null);
 		assertNull(productService.getById(1L, true));
 		
-		when(productRepositoryImpl.getBydId(1L)).thenReturn(product1);
+		when(productRepositoryImpl.getById(1L)).thenReturn(product1);
 		assertNotNull(productService.getById(1L, false));
 	}
 
@@ -123,7 +123,7 @@ class ProductServiceImplTest {
 		Product product = productService.getById(2L, true);
 		productService.delete(product);
 		
-		when(productRepositoryImpl.getBydId(2L)).thenReturn(null);
+		when(productRepositoryImpl.getById(2L)).thenReturn(null);
 		assertNull(productService.getById(2L, true));
 		assertNull(productService.getById(2L, false));
 	}

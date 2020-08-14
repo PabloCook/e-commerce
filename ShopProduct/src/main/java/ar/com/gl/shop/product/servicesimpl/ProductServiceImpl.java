@@ -3,10 +3,7 @@ package ar.com.gl.shop.product.servicesimpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.com.gl.shop.product.exceptions.ItemNotFound;
-import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repositoryimpl.CategoryRepositoryImpl;
 import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
 import ar.com.gl.shop.product.services.ProductService;
 
@@ -30,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void create(Product product) {
+	public Product create(Product product) {
 
 		Product newProduct = new Product(product.getId(), product.getName(), product.getDescription(),
 				product.getPrice(), product.getCategory());
@@ -44,6 +41,8 @@ public class ProductServiceImpl implements ProductService {
 			stockService.delete(newProduct.getStock().getId());
 		}
 
+		return productFind;
+
 	}
 
 	@Override
@@ -51,11 +50,14 @@ public class ProductServiceImpl implements ProductService {
 
 		List<Product> products = new ArrayList<>();
 
+		List<Product> productsRepo = repositoryImpl.findAll();
+
 		Product product = null;
 
-		for (int i = 0; i < repositoryImpl.findAll().size(); i++) { //
 
-			product = repositoryImpl.findAll().get(i);
+		for (int i = 0; i < productsRepo.size(); i++) { //
+
+			product = productsRepo.get(i);
 
 			if (product.getEnabled()) {
 
@@ -64,37 +66,41 @@ public class ProductServiceImpl implements ProductService {
 
 		}
 
-		/*
-		 * if (bool) { return repositoryImpl.findAllProduct().stream()
-		 * .filter(Product->Product.getEnabled()) .collect(Collectors.toList()); }
-		 * 
-		 * return repositoryImpl.findAllProduct();
-		 */
-
 		return products;
 	}
 
 	public List<Product> findAllDisabled() {
 
-		return repositoryImpl.findAll();
+
+		List<Product> products = new ArrayList<Product>();
+
+		List<Product> productsRepo = repositoryImpl.findAll();
+
+		Product product = null;
+
+		for (int i = 0; i < productsRepo.size(); i++) { 
+
+			product = productsRepo.get(i);
+
+			if (!product.getEnabled()) {
+
+				products.add(product);
+			}
+		}
+		return products;
 	}
 
 	@Override
 	public Product getById(Long id, Boolean searchEnable) {
-		Product product = repositoryImpl.getBydId(id);
 
-		// try {
-		// if(product == null) {
-		// throw new ItemNotFound("No se encontró producto con este id");
-		// }
+		Product product = repositoryImpl.getById(id);
+
 		if (product != null && searchEnable) {
 			product.setStock(stockService.getById(product.getStock().getId(), true));
 			product.setCategory(categoryService.getById(product.getCategory().getId(), true));
 			product = product.getEnabled() ? product : null;
 		}
-		// }catch (ItemNotFound e) {
-		// System.out.println(e.getMessage());
-		// }
+
 		return product;
 	}
 
@@ -108,17 +114,19 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void softDelete(Product product) {
+	public Product softDelete(Product product) {
 
 		product.setEnabled(!product.getEnabled());
-		repositoryImpl.update(product);
+		return repositoryImpl.update(product);
 
 	}
 
 	@Override
-	public void delete(Product product) {
+	public Product delete(Product product) {
 
 		repositoryImpl.delete(product);
+
+		return product;
 
 	}
 

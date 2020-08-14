@@ -110,11 +110,6 @@ public class Methods {
 				
 			case "2": //Obtener categoria por Id
 				
-				//Verifico si la lista esta vacia
-				if(categoryService.findAll().isEmpty()) {
-					System.out.println("\nNo hay categorias");
-					break;
-				}
 				
 				//Valida input
 				id = Long.parseLong(Methods.validarInput("Inserte un id: ", "^\\d+"));				
@@ -142,12 +137,6 @@ public class Methods {
 				
 			case "3": //Obtener todas las categorias
 				
-				//Verifico si la lista esta vacia
-				if(categoryService.findAll().isEmpty()) {
-					System.out.println("\nNo hay categorias");
-					break;
-				}
-				
 				System.out.println("\n");
 				//imprimo todas las habilitadas	
 				
@@ -159,11 +148,6 @@ public class Methods {
 				
 			case "4": //Actualizar categoria
 				
-							//Verifico si la lista esta vacia
-							if(categoryService.findAll().isEmpty()) {
-								System.out.println("\nNo hay categorias");
-								break;
-							}
 							
 							System.out.println("\n");
 							//imprimo todos lo habilitados
@@ -212,10 +196,6 @@ public class Methods {
 				
 			case "5": //Eliminar/recuperar Categoria
 				
-				if(categoryService.findAllDisabled().isEmpty()) {
-					System.out.println("\nNo hay categorias");
-					break;
-				}
 				
 				System.out.println("================================"
 						         + "\n¿Cual quieres eliminar/recuperar?\n");
@@ -363,12 +343,7 @@ public class Methods {
 				
 			case "2": //Obtener producto por Id
 				
-				//Verifico si la lista esta vacia
-				if(productService.findAll().isEmpty()) {
-					System.out.println("\nNo hay productos");
-					break;
-				}
-				
+			
 				//Valida input
 				id = Long.parseLong(Methods.validarInput("Inserte un id: ", "^\\d+"));				
 				
@@ -407,11 +382,6 @@ public class Methods {
 				
 			case "4": //Actualizar producto
 				
-				//Verifico si la lista esta vacia
-				if(productService.findAll().isEmpty()) {
-					System.out.println("\nNo hay productos");
-					break;
-				}
 				
 				System.out.println("\n");
 				//imprimo todos lo habilitados

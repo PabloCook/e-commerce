@@ -21,7 +21,8 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 	private Connection con;
 	private Statement st;
 	private ResultSet rs;
-
+	private PreparedStatement pst;
+	
 	private CategoryRepositoryImpl() {
 	}
 
@@ -32,14 +33,13 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 		return INSTANCE;
 	}
 
-	// Category
 	@Override
 	public Category create(Category category) {
 		final String query = "INSERT INTO category (name, description, enabled) VALUES (?,?,?);";
 		Category categorySave = null;
 		try {
 			con = CategoryDatasource.getCategoryDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setString(1, category.getName());
 			pst.setString(2, category.getDescription());
@@ -47,20 +47,20 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 
 			pst.executeUpdate();
 
+			if (!rs.next()) {
+				throw new SQLException("Registro no encontrado");	
+			} 
+			
 			rs = pst.getGeneratedKeys();
 
-			if (rs.next()) {
-				categorySave = getById((long) rs.getInt(1));
-			} else {
-				throw new SQLException("Registro no encontrado");
-			}
-
+			categorySave = getById((long) rs.getInt(1));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
+				pst.close();
 				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -76,11 +76,12 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 		try {
 
 			con = CategoryDatasource.getCategoryDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setLong(1, category.getId());
 			
-			return category;
+
+			pst.executeQuery();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,13 +89,12 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 		} finally {
 			try {
 				con.close();
-				st.close();
-				// rs.close();
+				pst.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
+			}			
 		}
-
+		return category;
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 		try {
 
 			con = CategoryDatasource.getCategoryDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setString(1, category.getName());
 			pst.setString(2, category.getDescription());
@@ -113,19 +113,19 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 
 			pst.executeUpdate();
 
-			if (rs.next()) {
-				categorySave = getById((long) rs.getInt(1));
-			}else {
-				throw new SQLException("Registro no encontrado");
+
+			if (!rs.next()) {
+				throw new SQLException("Registro no encontrado");	
 			}
+			
+			categorySave = getById((long) rs.getInt(1));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
-				st.close();
-				// rs.close();
+				pst.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -143,20 +143,18 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 			st = con.createStatement();
 			rs = st.executeQuery(query);
 
-			if (!rs.first()) {
+			if (!rs.next()) {
 				throw new SQLException("Registros no encontrados");
-			} else {
-				while (rs.next()) {
-					Category category = new Category();
-
-					category.setId(rs.getLong("id"));
-					category.setName(rs.getString("name"));
-					category.setDescription(rs.getString("description"));
-					category.setEnabled(rs.getBoolean("enabled"));
-
-					categories.add(category);
-				}
-			}
+			} 
+			do {
+				Category category = new Category();
+				category.setId(rs.getLong("id"));
+				category.setName(rs.getString("name"));
+				category.setDescription(rs.getString("description"));
+				category.setEnabled(rs.getBoolean("enabled"));
+				categories.add(category);
+			}while (rs.next());
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -178,7 +176,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 		try {
 			con = CategoryDatasource.getCategoryDatasource().getConnection();
 			st = con.createStatement();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setLong(1, id);
 
@@ -186,19 +184,20 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 
 			if (!rs.next()) {
 				throw new SQLException("Registro no encontrado");
-			} else {
-				category = new Category();
-				category.setId(rs.getLong("id"));
-				category.setName(rs.getString("name"));
-				category.setDescription(rs.getString("description"));
-				category.setEnabled(rs.getBoolean("enabled"));
-			}
+			} 
+			
+			category = new Category();
+			category.setId(rs.getLong("id"));
+			category.setName(rs.getString("name"));
+			category.setDescription(rs.getString("description"));
+			category.setEnabled(rs.getBoolean("enabled"));
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
-				st.close();
+				pst.close();
 				rs.close();
 			} catch (SQLException e) {
 				e.getMessage();
@@ -207,7 +206,5 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 		}
 		return category;
 	}
-
-	// PRODUCT
 
 }

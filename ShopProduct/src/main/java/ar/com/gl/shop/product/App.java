@@ -21,40 +21,7 @@ public class App {
     	CategoryService categoryService = new CategoryServiceImpl();
     	ProductService productService = new ProductServiceImpl();
     	StockService stockService = new StockServiceImpl();
-    	
 
-    //	categoryService.create(2L, "comestible", "comestible3");
-    	Category category = categoryService.getById(2L, true);
-    	Product product = new Product(1L, "product10", "description1", 10.0, category);
-    	
-    	//product.setStock(new Stock(9, "MDZ"));
-    	
-   // 	productService.create(product);
-    	
-    	
-    //	product = productService.findById(8L, true);
-    	
-    	System.out.println("BUSCAR TODOS");
-    	System.out.println(productService.findAll());
- 
-
-    	
-    	
-    	//Category category = categoryService.findById(2L, true);
-    	//category.setEnabled(true);
-    	//System.out.println(category.getEnabled());
-    	
-    	//categoryService.deleteById(categoryService.findById(2L, true));
-    	
-    	
-    	//categoryService.updateById(categoryService.findById(2L, true));
-    	//System.out.println(categoryService.findAll());
-    	
-    	//categoryService.forceDeleteById(categoryService.findById(2L, true));
-    	//System.out.println(categoryService.findAll());
-    	
-    	/*categoryService.agregarPrimerosObjetos();
-    	
     	do {
     		System.out.println("========Pagina de inicio========\n"
     				+ "Elige una opcion:\n"
@@ -87,7 +54,6 @@ public class App {
 				break;
 			}
 		} while (!input.equals("3"));
-    	*/
     	      
     }
 
