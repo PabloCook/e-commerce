@@ -19,7 +19,7 @@ public class ProductServiceImpl implements ProductService {
 		stockService = new StockServiceImpl();
 		categoryService = new CategoryServiceImpl();
 	}
- 
+
 	@Override
 	public ProductRepositoryImpl getRepositoryImpl() {
 
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 		if (productFind == null) {
 			stockService.delete(newProduct.getStock().getId());
 		}
-		
+
 		return productFind;
 
 	}
@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> findAll() {
 
 		List<Product> products = new ArrayList<>();
-		
+
 		List<Product> productsRepo = repositoryImpl.findAllProduct();
 
 		Product product = null;
@@ -70,11 +70,26 @@ public class ProductServiceImpl implements ProductService {
 
 	public List<Product> findAllDisabled() {
 
-		return repositoryImpl.findAllProduct();
+		List<Product> products = new ArrayList<Product>();
+
+		List<Product> productsRepo = repositoryImpl.findAllProduct();
+
+		Product product = null;
+
+		for (int i = 0; i < productsRepo.size(); i++) { 
+
+			product = productsRepo.get(i);
+
+			if (!product.getEnabled()) {
+
+				products.add(product);
+			}
+		}
+		return products;
 	}
 
 	@Override
-	public Product findById(Long id, Boolean searchEnable) {
+	public Product getById(Long id, Boolean searchEnable) {
 		Product product = repositoryImpl.findProductById(id);
 
 		if (product != null && searchEnable) {
@@ -82,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setCategory(categoryService.findById(product.getCategory().getId(), true));
 			product = product.getEnabled() ? product : null;
 		}
-		
+
 		return product;
 	}
 
@@ -107,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
 	public Product delete(Product product) {
 
 		repositoryImpl.deleteProduct(product);
-		
+
 		return product;
 
 	}
