@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void create(Product product) {
+	public Product create(Product product) {
 
 		Product newProduct = new Product(product.getId(), product.getName(), product.getDescription(),
 				product.getPrice(), product.getCategory());
@@ -40,6 +40,8 @@ public class ProductServiceImpl implements ProductService {
 		if (productFind == null) {
 			stockService.delete(newProduct.getStock().getId());
 		}
+		
+		return productFind;
 
 	}
 
@@ -94,17 +96,19 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void deleteById(Product product) {
+	public Product softDelete(Product product) {
 
 		product.setEnabled(!product.getEnabled());
-		repositoryImpl.updateProduct(product);
+		return repositoryImpl.updateProduct(product);
 
 	}
 
 	@Override
-	public void forceDeleteById(Product product) {
+	public Product delete(Product product) {
 
 		repositoryImpl.deleteProduct(product);
+		
+		return product;
 
 	}
 
