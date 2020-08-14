@@ -6,7 +6,7 @@ public interface StockService {
 
     public Stock create(Stock stock);
 
-    public Stock findById(Long id, Boolean searchEnable);
+    public Stock getById(Long id, Boolean searchEnable);
 
     public void delete(Long id);
 

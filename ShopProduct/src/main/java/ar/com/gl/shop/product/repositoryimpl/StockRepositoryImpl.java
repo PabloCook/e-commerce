@@ -17,8 +17,8 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	private static StockRepositoryImpl INSTANCE;
 
 	private Connection con;
-	private Statement st;
 	private ResultSet rs;
+	private PreparedStatement pst;
 
 	private StockRepositoryImpl() {
 	}
@@ -31,13 +31,12 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	@Override
-	public Stock save(Stock stock) {
+	public Stock create(Stock stock) {
 		final String query = "INSERT INTO stock (quantity, locationCode, enabled) VALUES (?,?,?);";
 		Stock stockSave = null;
 		try {
-
 			con = StockDatasource.getStockDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setDouble(1, stock.getQuantity());
 			pst.setString(2, stock.getLocationCode());
@@ -45,22 +44,21 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 
 			pst.executeUpdate();
 
-			rs = pst.getGeneratedKeys();
-
-			if (rs.next()) {
-				stockSave = getById((long) rs.getInt(1));
-			} else {
+			if (!rs.next()) {
 				throw new SQLException("Registro no encontrado");
 			}
-
+			
+			rs = pst.getGeneratedKeys();
+			stockSave = getById((long) rs.getInt(1));
+			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
-				// st.close();
-				// rs.close();
+				pst.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -70,14 +68,14 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	@Override
-	public Stock updateStock(Stock stock) {
+	public Stock update(Stock stock) {
 		final String query = "UPDATE stock SET quantity=?, locationCode=? where id=?;";
 
 		Stock stockSave = null;
 
 		try {
 			con = StockDatasource.getStockDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setDouble(1, stock.getQuantity());
 			pst.setString(2, stock.getLocationCode());
@@ -85,19 +83,19 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 
 			pst.executeUpdate();
 
-			if (rs.next()) {
-				stockSave = getById((long) rs.getInt(1));
-			} else {
+			if (!rs.next()) {
 				throw new SQLException("Registro no encontrado");
 			}
+			
+			stockSave = getById((long) rs.getInt(1));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
-				st.close();
-				// rs.close();
+				pst.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -105,17 +103,12 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 		return stockSave;
 	}
 
-	// @Override
-	// public List<Stock> getAll() {
-	// }
-
 	@Override
 	public void delete(Stock stock) {
 		final String query = "DELETE FROM stock WHERE id=?;";
 		try {
-
 			con = StockDatasource.getStockDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setLong(6, stock.getId());
 
@@ -126,8 +119,8 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 		} finally {
 			try {
 				con.close();
-				st.close();
-				// rs.close();
+				pst.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -140,26 +133,28 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 		Stock stock = null;
 		try {
 			con = StockDatasource.getStockDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setLong(1, id);
 
 			rs = pst.executeQuery();
+			
 			if (!rs.next()) {
 				throw new SQLException("Registros no encontrado");
-			} else {
-				stock = new Stock();
-				stock.setId(rs.getLong("id"));
-				stock.setLocationCode(rs.getString("locationCode"));
-				stock.setQuantity(rs.getInt("quantity"));
+			}else {
+			
+			stock = new Stock();
+			stock.setId(rs.getLong("id"));
+			stock.setLocationCode(rs.getString("locationCode"));
+			stock.setQuantity(rs.getInt("quantity"));
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
-				// st.close();
-				rs.close();
+				pst.close(); 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
 		newProduct.setStock(stockService.create(product.getStock()));
 
-		Product productFind = repositoryImpl.saveProduct(newProduct);
+		Product productFind = repositoryImpl.create(newProduct);
 
 		// Si no se crea el producto elimina el stock creado
 		if (productFind == null) {
@@ -50,9 +50,10 @@ public class ProductServiceImpl implements ProductService {
 
 		List<Product> products = new ArrayList<>();
 
-		List<Product> productsRepo = repositoryImpl.findAllProduct();
+		List<Product> productsRepo = repositoryImpl.findAll();
 
 		Product product = null;
+
 
 		for (int i = 0; i < productsRepo.size(); i++) { //
 
@@ -70,9 +71,10 @@ public class ProductServiceImpl implements ProductService {
 
 	public List<Product> findAllDisabled() {
 
+
 		List<Product> products = new ArrayList<Product>();
 
-		List<Product> productsRepo = repositoryImpl.findAllProduct();
+		List<Product> productsRepo = repositoryImpl.findAll();
 
 		Product product = null;
 
@@ -90,11 +92,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getById(Long id, Boolean searchEnable) {
-		Product product = repositoryImpl.findProductById(id);
+
+		Product product = repositoryImpl.getById(id);
 
 		if (product != null && searchEnable) {
-			product.setStock(stockService.findById(product.getStock().getId(), true));
-			product.setCategory(categoryService.findById(product.getCategory().getId(), true));
+			product.setStock(stockService.getById(product.getStock().getId(), true));
+			product.setCategory(categoryService.getById(product.getCategory().getId(), true));
 			product = product.getEnabled() ? product : null;
 		}
 
@@ -102,9 +105,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product updateById(Product product) {
+	public Product update(Product product) {
 
-		product = repositoryImpl.updateProduct(product);
+		product = repositoryImpl.update(product);
 
 		return product;
 
@@ -114,14 +117,14 @@ public class ProductServiceImpl implements ProductService {
 	public Product softDelete(Product product) {
 
 		product.setEnabled(!product.getEnabled());
-		return repositoryImpl.updateProduct(product);
+		return repositoryImpl.update(product);
 
 	}
 
 	@Override
 	public Product delete(Product product) {
 
-		repositoryImpl.deleteProduct(product);
+		repositoryImpl.delete(product);
 
 		return product;
 
