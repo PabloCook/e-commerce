@@ -20,12 +20,12 @@ public class StockServiceImpl implements StockService {
 
 	@Override
 	public Stock create(Stock stock) {
-		Stock stockFind = repositoryImpl.save(new Stock(stock.getQuantity(), stock.getLocationCode()));
+		Stock stockFind = repositoryImpl.create(new Stock(stock.getQuantity(), stock.getLocationCode()));
 		return stockFind;
 	}
 
 	@Override
-	public Stock findById(Long id, Boolean searchEnable) {
+	public Stock getById(Long id, Boolean searchEnable) {
 		Stock stock = repositoryImpl.getById(id);
 		//try {
 			//if (stock == null) {
@@ -50,13 +50,13 @@ public class StockServiceImpl implements StockService {
 	public void softDelete(Stock stock) {
 
 		stock.setEnabled(!stock.getEnabled());
-		repositoryImpl.updateStock(stock);
+		repositoryImpl.update(stock);
 	}
 
 	@Override
 	public Stock update(Stock stock) {
 
-		stock = repositoryImpl.updateStock(stock);
+		stock = repositoryImpl.update(stock);
 
 		return stock;
 	}

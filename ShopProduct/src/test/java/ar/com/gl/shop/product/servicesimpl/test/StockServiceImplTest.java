@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
-import ar.com.gl.shop.product.repositoryimpl.RepositoryImpl;
 import ar.com.gl.shop.product.repositoryimpl.StockRepositoryImpl;
 import ar.com.gl.shop.product.servicesimpl.StockServiceImpl;
 
@@ -45,7 +44,7 @@ class StockServiceImplTest {
 	void testCase_0()
 	{
 		Mockito.when(repositoryMock.getById(2L)).thenReturn(stock);
-		Stock stockFind = stockService.findById(2L, true);
+		Stock stockFind = stockService.getById(2L, true);
 		assertEquals(stock, stockFind); //
 	//	assertEquals(400, stockFind.getQuantity());
 	//	assertEquals("SJ", stockFind.getLocationCode());
@@ -56,7 +55,7 @@ class StockServiceImplTest {
 	void testCase_1() {
 		stock.setId(5L);
 		Mockito.when(repositoryMock.getById(5L)).thenReturn(stock);
-		assertEquals(5L,stockService.findById(5L, true).getId());
+		assertEquals(5L,stockService.getById(5L, true).getId());
 	}
 	
 	@Test
@@ -64,7 +63,7 @@ class StockServiceImplTest {
 	void testCase_2() {
 		stock.setQuantity(78);
 		Mockito.when(repositoryMock.getById(5L)).thenReturn(stock);
-		assertEquals(78,stockService.findById(5L, true).getQuantity());
+		assertEquals(78,stockService.getById(5L, true).getQuantity());
 	}
 	
 	@Test
@@ -72,7 +71,7 @@ class StockServiceImplTest {
 	void testCase_3() {
 		stock.setLocationCode("MDZ");
 		Mockito.when(repositoryMock.getById(5L)).thenReturn(stock);
-		assertEquals("MDZ",stockService.findById(5L, true).getLocationCode());
+		assertEquals("MDZ",stockService.getById(5L, true).getLocationCode());
 	}
 
 	@Test
@@ -80,13 +79,13 @@ class StockServiceImplTest {
 	void testCase_4() {
 		stock.setEnabled(true);
 		Mockito.when(repositoryMock.getById(5L)).thenReturn(stock);//
-		stockService.softDelete(stockService.findById(5L, true));
-		assertNull(stockService.findById(5L, true));
-		assertNotNull(stockService.findById(5L, false)); 
+		stockService.softDelete(stockService.getById(5L, true));
+		assertNull(stockService.getById(5L, true));
+		assertNotNull(stockService.getById(5L, false)); 
 		
 		//stock.setEnabled(false);
 		//Mockito.when(repositoryMock.findStockById(5L)).thenReturn(stock);//
-		assertFalse(stockService.findById(5L, false).getEnabled());
+		assertFalse(stockService.getById(5L, false).getEnabled());
 	}
 	
 	
@@ -94,8 +93,8 @@ class StockServiceImplTest {
 	@DisplayName("findById() - null")
 	void testCase_5() {
 		Mockito.when(repositoryMock.getById(6L)).thenReturn(null);//
-		assertNull(stockService.findById(6L, true));
-		assertNull(stockService.findById(6L, false));
+		assertNull(stockService.getById(6L, true));
+		assertNull(stockService.getById(6L, false));
 	}
 	
 	
@@ -103,9 +102,9 @@ class StockServiceImplTest {
 	@DisplayName("softDelete() - true")
 	void testCase_6() {
 		Mockito.when(repositoryMock.getById(5L)).thenReturn(stock);//
-		stockService.softDelete(stockService.findById(5L, false));
-		assertNotNull(stockService.findById(5L, true));
-		assertTrue(stockService.findById(5L, false).getEnabled());
+		stockService.softDelete(stockService.getById(5L, false));
+		assertNotNull(stockService.getById(5L, true));
+		assertTrue(stockService.getById(5L, false).getEnabled());
 	}
 	
 	
@@ -115,7 +114,7 @@ class StockServiceImplTest {
 		stock.setLocationCode("SJ");
 		stock.setQuantity(10);
 		Mockito.when(repositoryMock.getById(5L)).thenReturn(stock);//
-		assertEquals("Stock [id=5, quantity=10, locationCode=SJ]",stockService.findById(5L, true).toString());
+		assertEquals("Stock [id=5, quantity=10, locationCode=SJ]",stockService.getById(5L, true).toString());
 	}
 	
 	@Test
@@ -131,10 +130,10 @@ class StockServiceImplTest {
 	@Test
 	@DisplayName("delete()")
 	void testCase_9() {
-		stockService.delete(stockService.findById(5L, true));
+		stockService.delete(stockService.getById(5L, true).getId());
 		Mockito.when(repositoryMock.getById(5L)).thenReturn(null);//
-		assertNull(stockService.findById(5L, true));
-		assertNull(stockService.findById(5L, false));
+		assertNull(stockService.getById(5L, true));
+		assertNull(stockService.getById(5L, false));
 	}
 	
 	

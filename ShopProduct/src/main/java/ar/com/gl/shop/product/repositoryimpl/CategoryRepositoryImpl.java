@@ -34,7 +34,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 
 	// Category
 	@Override
-	public Category saveCategory(Category category) {
+	public Category create(Category category) {
 		final String query = "INSERT INTO category (name, description, enabled) VALUES (?,?,?);";
 		Category categorySave = null;
 		try {
@@ -50,7 +50,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 			rs = pst.getGeneratedKeys();
 
 			if (rs.next()) {
-				categorySave = findCategoryById((long) rs.getInt(1));
+				categorySave = getById((long) rs.getInt(1));
 			} else {
 				throw new SQLException("Registro no encontrado");
 			}
@@ -71,7 +71,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 	}
 
 	@Override
-	public void deleteCategory(Category category) {
+	public Category delete(Category category) {
 		final String query = "DELETE FROM category WHERE id=? ;";
 		try {
 
@@ -79,9 +79,12 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setLong(1, category.getId());
+			
+			return category;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		} finally {
 			try {
 				con.close();
@@ -95,7 +98,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 	}
 
 	@Override
-	public Category updateCategory(Category category) {
+	public Category update(Category category) {
 		final String query = "UPDATE category SET name=?, description=?, enabled=? where id=?;";
 		Category categorySave = null;
 		try {
@@ -111,7 +114,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 			pst.executeUpdate();
 
 			if (rs.next()) {
-				categorySave = findCategoryById((long) rs.getInt(1));
+				categorySave = getById((long) rs.getInt(1));
 			}else {
 				throw new SQLException("Registro no encontrado");
 			}
@@ -132,7 +135,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 	}
 
 	@Override
-	public List<Category> findAllCategory() {
+	public List<Category> findAll() {
 		final String query = "SELECT * FROM category;";
 		List<Category> categories = new ArrayList<Category>();
 		try {
@@ -169,7 +172,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 	}
 
 	@Override
-	public Category findCategoryById(Long id) {
+	public Category getById(Long id) {
 		final String query = "SELECT * FROM category WHERE id=?;";
 		Category category = null;
 		try {

@@ -93,7 +93,7 @@ public class Methods {
 				
 				do {
 					id = Long.parseLong(Methods.validarInput("\nInserte un id único: ", "^\\d+"));
-					categoryOptional = Optional.ofNullable(categoryService.findById(id, true));
+					categoryOptional = Optional.ofNullable(categoryService.getById(id, true));
 				} while (categoryOptional.isPresent());
 				
 				
@@ -121,7 +121,7 @@ public class Methods {
 				
 				Boolean check;
 				
-				categoryOptional = Optional.ofNullable(categoryService.findById(id, true));
+				categoryOptional = Optional.ofNullable(categoryService.getById(id, true));
 				
 					
 					if (!categoryOptional.isPresent()) {
@@ -175,7 +175,7 @@ public class Methods {
 							
 							do {
 								id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));
-								categoryOptional = Optional.ofNullable(categoryService.findById(id, true));
+								categoryOptional = Optional.ofNullable(categoryService.getById(id, true));
 							} while (!categoryOptional.isPresent());
 							
 							String selectedAtribute;
@@ -196,7 +196,7 @@ public class Methods {
 								String newName = Methods.validarInput("Ingrese nuevo nombre: ", Methods.getRegexPalabras());
 								
 								
-								categoryService.updateById(new Category(id, newName, categoryOptional.get().getDescription()));
+								categoryService.update(new Category(id, newName, categoryOptional.get().getDescription()));
 								
 								break;
 								
@@ -204,7 +204,7 @@ public class Methods {
 								
 								String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras()) ;
 								
-								categoryService.updateById(new Category(id, categoryOptional.get().getName(), newDescription));					
+								categoryService.update(new Category(id, categoryOptional.get().getName(), newDescription));					
 											
 								break;
 							}
@@ -228,7 +228,7 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("Seleccione un id: ", "^\\d+"));
 				
-				categoryOptional = Optional.ofNullable(categoryService.findById(id, false));
+				categoryOptional = Optional.ofNullable(categoryService.getById(id, false));
 				
 				if (!categoryOptional.isPresent()) {
 					
@@ -250,7 +250,7 @@ public class Methods {
 				
 				case "1": //Eliminar/Recuperar		
 					
-					categoryService.deleteById(categoryOptional.get());
+					categoryService.softDelete(categoryOptional.get());
 					
 					System.out.println("\nCategoria Eliminada/Recuperada");
 					
@@ -263,7 +263,7 @@ public class Methods {
 
 					if (input1.matches(Methods.getRegexAfirmativo())) {
 
-						categoryService.forceDeleteById(categoryOptional.get());
+						categoryService.delete(categoryOptional.get());
 
 					}					
 					
@@ -312,7 +312,7 @@ public class Methods {
 				do {
 					
 					id = Long.parseLong(Methods.validarInput("\nInserte un id único: ", "^\\d+"));
-					productOptional = Optional.ofNullable(productService.findById(id, true));					
+					productOptional = Optional.ofNullable(productService.getById(id, true));					
 					
 				} while (productOptional.isPresent());
 				
@@ -327,7 +327,7 @@ public class Methods {
 				
 				Long categoryId = Long.parseLong(Methods.validarInput("Ingrese el id de la categoria correspondiente: ", "\\d+"));
 
-				categoryOptional = Optional.ofNullable(categoryService.findById(categoryId, true));	
+				categoryOptional = Optional.ofNullable(categoryService.getById(categoryId, true));	
 				
 				if (!categoryOptional.isPresent()) {
 					
@@ -372,7 +372,7 @@ public class Methods {
 				//Valida input
 				id = Long.parseLong(Methods.validarInput("Inserte un id: ", "^\\d+"));				
 				
-				productOptional = Optional.ofNullable(productService.findById(id, true));
+				productOptional = Optional.ofNullable(productService.getById(id, true));
 					
 					if (!productOptional.isPresent()) {
 						
@@ -423,7 +423,7 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("\nInserte un id: ", "^\\d+"));	
 				
-				productOptional = Optional.ofNullable(productService.findById(id, true));
+				productOptional = Optional.ofNullable(productService.getById(id, true));
 				
 				if (!productOptional.isPresent()) {
 					
@@ -454,7 +454,7 @@ public class Methods {
 									
 									
 									
-									productService.updateById(new Product(
+									productService.update(new Product(
 											
 											productOptional.get().getId(),
 											newName, 
@@ -472,7 +472,7 @@ public class Methods {
 									//controller
 									String newDescription = Methods.validarInput("Ingrese nueva descripcion: ", Methods.getRegexPalabras());
 									
-											productService.updateById(new Product(
+											productService.update(new Product(
 											
 											productOptional.get().getId(),
 											productOptional.get().getName(), 
@@ -489,7 +489,7 @@ public class Methods {
 									//controller
 									Double newPrice = Double.parseDouble(Methods.validarInput("Ingrese nuevo precio: ", "\\d+"));
 									
-									productService.updateById(new Product(
+									productService.update(new Product(
 											
 									productOptional.get().getId(),
 									productOptional.get().getName(), 
@@ -524,7 +524,7 @@ public class Methods {
 									
 									theProduct.setStock(stock);
 									
-									productService.updateById(theProduct);
+									productService.update(theProduct);
 							
 									System.out.println("\nCambios Realizados");
 									
@@ -543,13 +543,13 @@ public class Methods {
 									productOptional.get().getName(), 
 									productOptional.get().getDescription(),
 									productOptional.get().getPrice(),
-									categoryService.findById(newCategory, true)							
+									categoryService.getById(newCategory, true)							
 									
 									);
 									
 									theProduct.setStock(productOptional.get().getStock());
 									
-									productService.updateById(theProduct);
+									productService.update(theProduct);
 							
 									System.out.println("\nCambios Realizados");
 									
@@ -573,7 +573,7 @@ public class Methods {
 									theProduct.getStock().setQuantity(productOptional.get().getStock().getQuantity());
 									theProduct.getStock().setLocationCode(newLocation);
 									
-									productService.updateById(theProduct);
+									productService.update(theProduct);
 							
 									System.out.println("\nCambios Realizados");
 									
@@ -600,7 +600,7 @@ public class Methods {
 				
 				id = Long.parseLong(Methods.validarInput("Seleccione un id: ", "^\\d+"));
 				
-				productOptional = Optional.ofNullable(productService.findById(id, false));
+				productOptional = Optional.ofNullable(productService.getById(id, false));
 				
 				String input11;			
 				
@@ -616,7 +616,7 @@ public class Methods {
 							
 							case "1"://Eliminar/Recuperar				
 								
-								productService.deleteById(productOptional.get());
+								productService.softDelete(productOptional.get());
 								
 								System.out.println("\nCategoria Eliminada/Recuperada");
 								
@@ -629,7 +629,7 @@ public class Methods {
 			
 								if (input11.matches(Methods.getRegexAfirmativo())) {
 			
-									productService.forceDeleteById(productOptional.get());
+									productService.delete(productOptional.get());
 			
 								}					
 								

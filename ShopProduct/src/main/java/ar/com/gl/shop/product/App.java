@@ -24,7 +24,7 @@ public class App {
     	
 
     //	categoryService.create(2L, "comestible", "comestible3");
-    	Category category = categoryService.findById(2L, true);
+    	Category category = categoryService.getById(2L, true);
     	Product product = new Product(1L, "product10", "description1", 10.0, category);
     	
     	//product.setStock(new Stock(9, "MDZ"));

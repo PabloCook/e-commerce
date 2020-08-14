@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
 		newProduct.setStock(stockService.create(product.getStock()));
 
-		Product productFind = repositoryImpl.saveProduct(newProduct);
+		Product productFind = repositoryImpl.create(newProduct);
 
 		// Si no se crea el producto elimina el stock creado
 		if (productFind == null) {
@@ -53,9 +53,9 @@ public class ProductServiceImpl implements ProductService {
 
 		Product product = null;
 
-		for (int i = 0; i < repositoryImpl.findAllProduct().size(); i++) { //
+		for (int i = 0; i < repositoryImpl.findAll().size(); i++) { //
 
-			product = repositoryImpl.findAllProduct().get(i);
+			product = repositoryImpl.findAll().get(i);
 
 			if (product.getEnabled()) {
 
@@ -76,20 +76,20 @@ public class ProductServiceImpl implements ProductService {
 
 	public List<Product> findAllDisabled() {
 
-		return repositoryImpl.findAllProduct();
+		return repositoryImpl.findAll();
 	}
 
 	@Override
-	public Product findById(Long id, Boolean searchEnable) {
-		Product product = repositoryImpl.findProductById(id);
+	public Product getById(Long id, Boolean searchEnable) {
+		Product product = repositoryImpl.getBydId(id);
 
 		// try {
 		// if(product == null) {
 		// throw new ItemNotFound("No se encontró producto con este id");
 		// }
 		if (product != null && searchEnable) {
-			product.setStock(stockService.findById(product.getStock().getId(), true));
-			product.setCategory(categoryService.findById(product.getCategory().getId(), true));
+			product.setStock(stockService.getById(product.getStock().getId(), true));
+			product.setCategory(categoryService.getById(product.getCategory().getId(), true));
 			product = product.getEnabled() ? product : null;
 		}
 		// }catch (ItemNotFound e) {
@@ -99,26 +99,26 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product updateById(Product product) {
+	public Product update(Product product) {
 
-		product = repositoryImpl.updateProduct(product);
+		product = repositoryImpl.update(product);
 
 		return product;
 
 	}
 
 	@Override
-	public void deleteById(Product product) {
+	public void softDelete(Product product) {
 
 		product.setEnabled(!product.getEnabled());
-		repositoryImpl.updateProduct(product);
+		repositoryImpl.update(product);
 
 	}
 
 	@Override
-	public void forceDeleteById(Product product) {
+	public void delete(Product product) {
 
-		repositoryImpl.deleteProduct(product);
+		repositoryImpl.delete(product);
 
 	}
 

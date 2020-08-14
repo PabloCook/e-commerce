@@ -36,7 +36,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public Product saveProduct(Product product) {
+	public Product create(Product product) {
 
 		final String query = "INSERT INTO product (name, description, price, stock, category, enabled) VALUES (?,?,?,?,?,?);";
 
@@ -58,7 +58,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			rs = pst.getGeneratedKeys();
 
 			if (rs.next()) {
-				productSave = findProductById((long) rs.getInt(1));
+				productSave = getBydId((long) rs.getInt(1));
 			} else {
 				throw new SQLException("Registro no encontrado");
 			}
@@ -82,7 +82,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public List<Product> findAllProduct() {
+	public List<Product> findAll() {
 		final String query = "SELECT * FROM product;";
 		List<Product> products = new ArrayList<Product>();
 		try {
@@ -104,7 +104,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 					product.setPrice(rs.getDouble("price"));
 					product.setEnabled(rs.getBoolean("enabled"));
 					product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock")));
-					product.setCategory(CategoryRepositoryImpl.getInstance().findCategoryById(rs.getLong("category")));
+					product.setCategory(CategoryRepositoryImpl.getInstance().getById(rs.getLong("category")));
 
 					products.add(product);
 				}
@@ -124,7 +124,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public void deleteProduct(Product product) {
+	public void delete(Product product) {
 		final String query = "DELETE FROM product WHERE id=?;";
 		try {
 
@@ -150,7 +150,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public Product findProductById(Long id) {
+	public Product getBydId(Long id) {
 		final String query = "SELECT * FROM product WHERE id=?;";
 		Product product = null;
 		try {
@@ -177,7 +177,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 				product.setPrice(rs.getDouble("price"));
 				product.setEnabled(rs.getBoolean("enabled"));
 				product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock")));
-				product.setCategory(CategoryRepositoryImpl.getInstance().findCategoryById(rs.getLong("category")));
+				product.setCategory(CategoryRepositoryImpl.getInstance().getById(rs.getLong("category")));
 
 			}
 		} catch (SQLException e) {
@@ -195,7 +195,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public Product updateProduct(Product product) {
+	public Product update(Product product) {
 		final String query = "UPDATE product SET name=?, description=?, price=?, category=?, enabled=? where id=?;";
 		Product productSave = null;
 
@@ -215,7 +215,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			rs = pst.getGeneratedKeys();
 			
 			if (rs.next()) {
-				productSave = findProductById((long) rs.getInt(1));
+				productSave = getBydId((long) rs.getInt(1));
 			}else {
 				throw new SQLException("Registro no encontrados");
 			}

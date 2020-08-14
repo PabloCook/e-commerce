@@ -6,14 +6,14 @@ import ar.com.gl.shop.product.model.Product;
 
 public interface ProductRepository {
 	
-	public Product saveProduct(Product category);
+	public Product create(Product category);
 	
-	public Product updateProduct(Product category);
+	public Product update(Product category);
 
-	public List<Product> findAllProduct();
+	public List<Product> findAll();
 
-	public void deleteProduct(Product product);
+	public void delete(Product product);
 	
-	public Product findProductById(Long id);
+	public Product getBydId(Long id);
 
 }

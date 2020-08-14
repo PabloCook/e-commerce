@@ -31,7 +31,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	@Override
-	public Stock save(Stock stock) {
+	public Stock create(Stock stock) {
 		final String query = "INSERT INTO stock (quantity, locationCode, enabled) VALUES (?,?,?);";
 		Stock stockSave = null;
 		try {
@@ -70,7 +70,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	@Override
-	public Stock updateStock(Stock stock) {
+	public Stock update(Stock stock) {
 		final String query = "UPDATE stock SET quantity=?, locationCode=? where id=?;";
 
 		Stock stockSave = null;

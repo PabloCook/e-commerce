@@ -19,10 +19,10 @@ public interface ProductService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Product findById(Long id, Boolean bool);
-	public Product updateById(Product product);
-	public void deleteById(Product theProduct);
-	public void  forceDeleteById(Product theProduct);
+	public Product getById(Long id, Boolean bool);
+	public Product update(Product product);
+	public void softDelete(Product theProduct);
+	public void  delete(Product theProduct);
 	public ProductRepositoryImpl getRepositoryImpl();
 	public List<Product> findAllDisabled();
 
