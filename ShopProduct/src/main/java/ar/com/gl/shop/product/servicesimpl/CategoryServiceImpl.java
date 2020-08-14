@@ -22,11 +22,11 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void create(Long id, String name, String description) {
+	public Category create(String name, String description) {
 
-		Category category = new Category(id, name, description);
+		Category category = new Category(name, description);
 
-		repositoryImpl.create(category);
+		return repositoryImpl.create(category);
 
 	}
 

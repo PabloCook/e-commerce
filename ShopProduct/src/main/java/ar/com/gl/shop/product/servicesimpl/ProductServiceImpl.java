@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product create(Product product) {
 
-		Product newProduct = new Product(product.getId(), product.getName(), product.getDescription(),
+		Product newProduct = new Product(product.getName(), product.getDescription(),
 				product.getPrice(), product.getCategory());
 
 		newProduct.setStock(stockService.create(product.getStock()));

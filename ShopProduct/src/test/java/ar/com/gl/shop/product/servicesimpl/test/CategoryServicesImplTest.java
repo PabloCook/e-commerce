@@ -43,12 +43,12 @@ class CategoryServicesImplTest {
 	@BeforeEach
 	void setUp() {
 		
-		categoryService.create(1l,"category1","descripcion");
-		categoryService.create(2l,"category2" , "descripcion2");
-		categoryService.create(3l, "category3", "descripcion3");
-		category1= new Category(1l,"category1","descripcion");
-		category2= new Category(2l,"category2" , "descripcion2");
-		category3= new Category(3l,"category3", "descripcion3");
+		categoryService.create("category1","descripcion");
+		categoryService.create("category2" , "descripcion2");
+		categoryService.create("category3", "descripcion3");
+		category1= new Category("category1","descripcion");
+		category2= new Category("category2" , "descripcion2");
+		category3= new Category("category3", "descripcion3");
 		
 		
 		lenient().when(categoryRepositoryImpl.getById(1l)).thenReturn(category1);
