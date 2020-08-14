@@ -3,10 +3,7 @@ package ar.com.gl.shop.product.servicesimpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.com.gl.shop.product.exceptions.ItemNotFound;
-import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repositoryimpl.CategoryRepositoryImpl;
 import ar.com.gl.shop.product.repositoryimpl.ProductRepositoryImpl;
 import ar.com.gl.shop.product.services.ProductService;
 
@@ -22,7 +19,7 @@ public class ProductServiceImpl implements ProductService {
 		stockService = new StockServiceImpl();
 		categoryService = new CategoryServiceImpl();
 	}
-
+ 
 	@Override
 	public ProductRepositoryImpl getRepositoryImpl() {
 
@@ -50,12 +47,14 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> findAll() {
 
 		List<Product> products = new ArrayList<>();
+		
+		List<Product> productsRepo = repositoryImpl.findAllProduct();
 
 		Product product = null;
 
-		for (int i = 0; i < repositoryImpl.findAllProduct().size(); i++) { //
+		for (int i = 0; i < productsRepo.size(); i++) { //
 
-			product = repositoryImpl.findAllProduct().get(i);
+			product = productsRepo.get(i);
 
 			if (product.getEnabled()) {
 
@@ -63,13 +62,6 @@ public class ProductServiceImpl implements ProductService {
 			}
 
 		}
-
-		/*
-		 * if (bool) { return repositoryImpl.findAllProduct().stream()
-		 * .filter(Product->Product.getEnabled()) .collect(Collectors.toList()); }
-		 * 
-		 * return repositoryImpl.findAllProduct();
-		 */
 
 		return products;
 	}
@@ -83,18 +75,12 @@ public class ProductServiceImpl implements ProductService {
 	public Product findById(Long id, Boolean searchEnable) {
 		Product product = repositoryImpl.findProductById(id);
 
-		// try {
-		// if(product == null) {
-		// throw new ItemNotFound("No se encontró producto con este id");
-		// }
 		if (product != null && searchEnable) {
 			product.setStock(stockService.findById(product.getStock().getId(), true));
 			product.setCategory(categoryService.findById(product.getCategory().getId(), true));
 			product = product.getEnabled() ? product : null;
 		}
-		// }catch (ItemNotFound e) {
-		// System.out.println(e.getMessage());
-		// }
+		
 		return product;
 	}
 

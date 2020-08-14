@@ -9,12 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.repository.datasources.ProductDatasource;
-import ar.com.gl.shop.product.services.StockService;
 
 public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
@@ -22,8 +19,8 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	private static ProductRepositoryImpl INSTANCE;
 
 	private Connection con;
-	private Statement st;
 	private ResultSet rs;
+	private PreparedStatement pst;
 
 	private ProductRepositoryImpl() {
 	}
@@ -44,7 +41,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
 		try {
 			con = ProductDatasource.getProductDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setString(1, product.getName());
 			pst.setString(2, product.getDescription());
@@ -70,8 +67,8 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 		} finally {
 			try {
 				con.close();
-				// st.close();
-				// rs.close();
+				pst.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				e.getMessage();
@@ -87,34 +84,33 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 		List<Product> products = new ArrayList<Product>();
 		try {
 			con = ProductDatasource.getProductDatasource().getConnection();
-			st = con.createStatement();
-			rs = st.executeQuery(query);
-			
-			if (!rs.first()) {
+			pst = con.prepareStatement(query);
+
+			rs = pst.executeQuery();
+			if (!rs.next()) {
 				throw new SQLException("Registros no encontrados");
-			} else {
-				while (rs.next()) {
-					Product product = new Product();
-					product.setStock(new Stock());
-					product.setCategory(new Category());
-
-					product.setId(rs.getLong("id"));
-					product.setName(rs.getString("name"));
-					product.setDescription(rs.getString("description"));
-					product.setPrice(rs.getDouble("price"));
-					product.setEnabled(rs.getBoolean("enabled"));
-					product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock")));
-					product.setCategory(CategoryRepositoryImpl.getInstance().findCategoryById(rs.getLong("category")));
-
-					products.add(product);
-				}
 			}
-		} catch (SQLException e) {
+			do {
+				Product product = new Product();
+
+				product.setId(rs.getLong("id"));
+				product.setName(rs.getString("name"));
+				product.setDescription(rs.getString("description"));
+				product.setPrice(rs.getDouble("price"));
+				product.setEnabled(rs.getBoolean("enabled"));
+				product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock")));
+				product.setCategory(CategoryRepositoryImpl.getInstance().findCategoryById(rs.getLong("category")));
+
+				products.add(product);
+			} while (rs.next());
+		} catch (
+
+		SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				con.close();
-				st.close();
+				pst.close();
 				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -129,9 +125,8 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 		try {
 
 			con = ProductDatasource.getProductDatasource().getConnection();
-			st = con.createStatement();
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pst.setLong(1, product.getId());
 
 			pst.executeUpdate();
@@ -141,8 +136,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 		} finally {
 			try {
 				con.close();
-				st.close();
-				// rs.close();
+				pst.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -155,9 +149,8 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 		Product product = null;
 		try {
 			con = ProductDatasource.getProductDatasource().getConnection();
-			st = con.createStatement();
 
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setLong(1, id);
 
@@ -168,8 +161,6 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			} else {
 
 				product = new Product();
-				product.setStock(new Stock());
-				product.setCategory(new Category());
 
 				product.setId(rs.getLong("id"));
 				product.setName(rs.getString("name"));
@@ -185,7 +176,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 		} finally {
 			try {
 				con.close();
-				st.close();
+				pst.close();
 				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -201,7 +192,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
 		try {
 			con = ProductDatasource.getProductDatasource().getConnection();
-			PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			pst.setString(1, product.getName());
 			pst.setString(2, product.getDescription());
@@ -213,10 +204,10 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			pst.executeUpdate();
 
 			rs = pst.getGeneratedKeys();
-			
+
 			if (rs.next()) {
 				productSave = findProductById((long) rs.getInt(1));
-			}else {
+			} else {
 				throw new SQLException("Registro no encontrados");
 			}
 
@@ -225,8 +216,8 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 		} finally {
 			try {
 				con.close();
-				st.close();
-				// rs.close();
+				pst.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
