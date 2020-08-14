@@ -55,16 +55,10 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Category getById(Long id, Boolean searchEnable) {
 		Category category = repositoryImpl.getById(id);
-		// try {
-		// if(category == null) {
-		// throw new ItemNotFound("No se encontró categoria con este id");
-		// }
 		if (category != null && searchEnable) {
 			category = category.getEnabled() ? category : null;
 		}
-		// }catch (ItemNotFound e) {
-		// System.out.println(e.getMessage());
-		// }
+
 		return category;
 	}
 

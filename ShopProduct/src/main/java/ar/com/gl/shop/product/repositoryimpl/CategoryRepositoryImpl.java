@@ -9,11 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
-import ar.com.gl.shop.product.repository.Repository;
+import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.repository.datasources.CategoryDatasource;
 
-public class CategoryRepositoryImpl implements Serializable, Repository {
+public class CategoryRepositoryImpl implements Serializable, CategoryRepository {
 
 	private static final long serialVersionUID = 3876426318410983253L;
 	private static CategoryRepositoryImpl INSTANCE;
@@ -46,13 +47,13 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 			pst.setBoolean(3, category.getEnabled());
 
 			pst.executeUpdate();
-
+			
+			rs = pst.getGeneratedKeys();
+		
 			if (!rs.next()) {
 				throw new SQLException("Registro no encontrado");	
 			} 
 			
-			rs = pst.getGeneratedKeys();
-
 			categorySave = getById((long) rs.getInt(1));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -80,7 +81,6 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 
 			pst.setLong(1, category.getId());
 			
-
 			pst.executeQuery();
 
 		} catch (SQLException e) {
@@ -102,7 +102,6 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 		final String query = "UPDATE category SET name=?, description=?, enabled=? where id=?;";
 		Category categorySave = null;
 		try {
-
 			con = CategoryDatasource.getCategoryDatasource().getConnection();
 			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -112,8 +111,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 			pst.setLong(4, category.getId());
 
 			pst.executeUpdate();
-
-
+			
 			if (!rs.next()) {
 				throw new SQLException("Registro no encontrado");	
 			}
@@ -183,7 +181,7 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 			rs = pst.executeQuery();
 
 			if (!rs.next()) {
-				throw new SQLException("Registro no encontrado");
+				throw new itemNotFound("Registro no encontrado");
 			} 
 			
 			category = new Category();
@@ -194,7 +192,10 @@ public class CategoryRepositoryImpl implements Serializable, Repository {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
+		} catch (ItemNotFound e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
 			try {
 				con.close();
 				pst.close();

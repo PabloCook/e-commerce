@@ -6,7 +6,7 @@ import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
 
-public interface Repository {
+public interface CategoryRepository {
 
 	public Category create(Category category);
 	
