@@ -2,8 +2,11 @@ package ar.com.gl.shop.product.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.nonNull;
+import static java.util.Objects.isNull;
 
 import ar.com.gl.shop.product.exceptions.CannotDelete;
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.impl.CategoryRepositoryImpl;
@@ -25,8 +28,12 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category create(String name, String description) {
 
 		Category category = new Category(name, description);
-
-		return repositoryImpl.create(category);
+		try {
+			return repositoryImpl.create(category);
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -34,28 +41,43 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> findAll() {
 
 		List<Category> categoriesEnabled = new ArrayList<>();
-
-		for (Category category : repositoryImpl.findAll()) {
-
-			if (category.getEnabled()) {
-				categoriesEnabled.add(category);
+		try {
+			for (Category category : repositoryImpl.findAll()) {
+				if (category.getEnabled()) {
+					categoriesEnabled.add(category);
+				}
 			}
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
 		}
-
 		return categoriesEnabled;
 	}
 
 	@Override
 	public List<Category> findAllDisabled() {
 
-		return repositoryImpl.findAll();
+		try {
+			return repositoryImpl.findAll();
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
 	@Override
 	public Category getById(Long id, Boolean searchEnable) {
-		Category category = repositoryImpl.getById(id);
-		if (category != null && searchEnable) {
+		if(isNull(id)){
+			return null;
+		}
+		Category category;
+		try {
+			category = repositoryImpl.getById(id);
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
+		if (nonNull(category) && searchEnable) {
 			category = category.getEnabled() ? category : null;
 		}
 
@@ -65,18 +87,28 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Category update(Category category) {
 
-		repositoryImpl.update(category);
+		try {
+			repositoryImpl.update(category);
+			return category;
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
 
-		return category;
+		
 
 	}
 
 	@Override
-	public Category softDelete(Category category) {
-		productRepositoryImpl = productRepositoryImpl.getInstance();
+	public Category softDelete(Long id) {
+		if(isNull(id)){
+			return null;
+		}
+		productRepositoryImpl = ProductRepositoryImpl.getInstance();
+		
 		try {
 			for (Product product : productRepositoryImpl.findAll()) {
-				if (product.getCategory().getId().equals(category.getId())) {
+				if (product.getCategory().getId().equals(repositoryImpl.getById(id).getId())) {
 					throw new CannotDelete("No se puede eliminar una categoria asociada a un producto");
 				}
 			}
@@ -84,19 +116,25 @@ public class CategoryServiceImpl implements CategoryService {
 			e.getMessage();
 			return null;
 		}
-
-		category.setEnabled(!category.getEnabled());
-
-		return repositoryImpl.update(category);
-
+		try {
+			repositoryImpl.getById(id).setEnabled(!repositoryImpl.getById(id).getEnabled());
+			return repositoryImpl.update(repositoryImpl.getById(id));
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 	@Override
-	public Category delete(Category category) {
-		productRepositoryImpl = productRepositoryImpl.getInstance();
+	public Category delete(Long id) {
+		if(isNull(id)){
+			return null;
+		}
+		productRepositoryImpl = ProductRepositoryImpl.getInstance();
 		try {
 			for (Product product : productRepositoryImpl.findAll()) {
-				if (product.getCategory().getId().equals(category.getId())) {
+				if (product.getCategory().getId().equals(repositoryImpl.getById(id).getId())) {
 					throw new CannotDelete("No se puede eliminar una categoria asociada a un producto");
 				}
 			}
@@ -106,7 +144,12 @@ public class CategoryServiceImpl implements CategoryService {
 			return null;
 		}
 
-		return repositoryImpl.delete(category);
+		try {
+			return repositoryImpl.delete(repositoryImpl.getById(id));
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 

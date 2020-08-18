@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import static java.util.Objects.isNull;
 
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.repository.StockRepository;
 import ar.com.gl.shop.product.repository.datasources.StockDatasource;
@@ -24,14 +26,14 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	public static StockRepositoryImpl getInstance() {
-		if (INSTANCE == null) {
+		if (isNull(INSTANCE)) {
 			INSTANCE = new StockRepositoryImpl();
 		}
 		return INSTANCE;
 	}
 
 	@Override
-	public Stock create(Stock stock) {
+	public Stock create(Stock stock) throws ItemNotFound {
 		final String query = "INSERT INTO stock (quantity, locationCode, enabled) VALUES (?,?,?);";
 		Stock stockSave = null;
 		try {
@@ -45,7 +47,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 			pst.executeUpdate();
 			rs = pst.getGeneratedKeys();
 			if (!rs.next()) {
-				throw new SQLException("Registro no encontrado");
+				throw new ItemNotFound();
 			}
 			
 			
@@ -68,7 +70,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	@Override
-	public Stock update(Stock stock) {
+	public Stock update(Stock stock) throws ItemNotFound {
 		final String query = "UPDATE stock SET quantity=?, locationCode=? where id=?;";
 
 		Stock stockSave = null;
@@ -84,7 +86,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 			pst.executeUpdate();
 
 			if (!rs.next()) {
-				throw new SQLException("Registro no encontrado");
+				throw new ItemNotFound();
 			}
 			
 			stockSave = getById((long) rs.getInt(1));
@@ -104,15 +106,19 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	@Override
-	public void delete(Stock stock) {
+	public void delete(Stock stock) throws ItemNotFound {
 		final String query = "DELETE FROM stock WHERE id=?;";
 		try {
 			con = StockDatasource.getStockDatasource().getConnection();
 			pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-			pst.setLong(6, stock.getId());
+			pst.setLong(1, stock.getId());
 
-			rs = pst.executeQuery();
+			Integer rs = pst.executeUpdate();
+			
+			if(rs.equals(0)) {
+				throw new ItemNotFound();
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -128,7 +134,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 	}
 
 	@Override
-	public Stock getById(Long id) {
+	public Stock getById(Long id) throws ItemNotFound {
 		final String query = "SELECT * FROM stock WHERE id=?;";
 		Stock stock = null;
 		try {
@@ -140,7 +146,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 			rs = pst.executeQuery();
 			
 			if (!rs.next()) {
-				throw new SQLException("Registros no encontrado");
+				throw new ItemNotFound();
 			}else {
 			
 			stock = new Stock();

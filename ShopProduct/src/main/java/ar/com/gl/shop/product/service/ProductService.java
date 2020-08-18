@@ -21,8 +21,8 @@ public interface ProductService {
 	public Product getById(Long id, Boolean bool);
 	public List<Product> findAll();
 
-	public Product softDelete(Product theProduct);
-	public Product  delete(Product theProduct);
+	public Product softDelete(Long id);
+	public Product  delete(Long id);
 	public Product update(Product product);
 	
 	public ProductRepositoryImpl getRepositoryImpl();

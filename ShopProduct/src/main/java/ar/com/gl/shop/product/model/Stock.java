@@ -1,6 +1,6 @@
 package ar.com.gl.shop.product.model;
 
-import java.util.concurrent.atomic.AtomicLong;
+
 
 public class Stock {
 
@@ -9,7 +9,6 @@ public class Stock {
 	private String locationCode;
 	private Boolean enabled;
 	
-	private static final AtomicLong count = new AtomicLong(0);
 	
 	public Stock() {
 		enabled = true;

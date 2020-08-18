@@ -251,7 +251,7 @@ public class Methods {
 				
 				case "1": //Eliminar/Recuperar		
 					
-					category = categoryService.softDelete(categoryOptional.get());
+					category = categoryService.softDelete(categoryOptional.get().getId());
 					
 					if (Objects.isNull(category)) {
 						break;
@@ -268,7 +268,7 @@ public class Methods {
 
 					if (input1.matches(Methods.getRegexAfirmativo())) {
 
-						category = categoryService.delete(categoryOptional.get());
+						category = categoryService.delete(categoryOptional.get().getId());
 						
 						if (Objects.isNull(category)) {
 							break;
@@ -542,7 +542,7 @@ public class Methods {
 							
 							case "1"://Eliminar/Recuperar				
 								
-								productService.softDelete(productOptional.get());
+								productService.softDelete(productOptional.get().getId());
 								
 								System.out.println("\nCategoria Eliminada/Recuperada");
 								
@@ -555,7 +555,7 @@ public class Methods {
 			
 								if (input.matches(Methods.getRegexAfirmativo())) {
 			
-									productService.delete(productOptional.get());
+									productService.delete(productOptional.get().getId());
 			
 								}					
 								

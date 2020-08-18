@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.isNull;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
@@ -28,14 +29,14 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 	}
 
 	public static CategoryRepositoryImpl getInstance() {
-		if (INSTANCE == null) {
+		if (isNull(INSTANCE)) {
 			INSTANCE = new CategoryRepositoryImpl();
 		}
 		return INSTANCE;
 	}
 
 	@Override
-	public Category create(Category category) {
+	public Category create(Category category) throws ItemNotFound {
 		final String query = "INSERT INTO category (name, description, enabled) VALUES (?,?,?);";
 		Category categorySave = null;
 		try {
@@ -58,8 +59,6 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-		}catch (ItemNotFound e) {
-			System.out.println(e.getMessage());
 		}
 		finally {
 			try {
@@ -75,7 +74,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 	}
 
 	@Override
-	public Category delete(Category category) {
+	public Category delete(Category category) throws ItemNotFound {
 		final String query = "DELETE FROM category WHERE id=? ;";
 		try {
 
@@ -84,11 +83,14 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 
 			pst.setLong(1, category.getId());
 			
-			pst.executeUpdate();
+			Integer rs = pst.executeUpdate();
+			
+			if (rs.equals(0)) {
+				throw new ItemNotFound();	
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		} finally {
 			try {
 				con.close();
@@ -101,7 +103,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 	}
 
 	@Override
-	public Category update(Category category) {
+	public Category update(Category category) throws ItemNotFound{
 		final String query = "UPDATE category SET name=?, description=?, enabled=? where id=?;";
 		Category categorySave = null;
 		try {
@@ -123,9 +125,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}catch (ItemNotFound e) {
-			System.out.println(e.getMessage());
-		} 
+		}
 		finally {
 			try {
 				con.close();
@@ -139,7 +139,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 	}
 
 	@Override
-	public List<Category> findAll() {
+	public List<Category> findAll() throws ItemNotFound {
 		final String query = "SELECT * FROM category;";
 		List<Category> categories = new ArrayList<Category>();
 		try {
@@ -161,9 +161,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}catch (ItemNotFound e) {
-			System.out.println(e.getMessage());
-		} finally {
+		}finally {
 			try {
 				con.close();
 				st.close();
@@ -176,7 +174,7 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 	}
 
 	@Override
-	public Category getById(Long id) {
+	public Category getById(Long id) throws ItemNotFound {
 		final String query = "SELECT * FROM category WHERE id=?;";
 		Category category = null;
 		try {
@@ -200,8 +198,6 @@ public class CategoryRepositoryImpl implements Serializable, CategoryRepository 
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (ItemNotFound e) {
-			System.out.println(e.getMessage());
 		}
 		finally {
 			try {

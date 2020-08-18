@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.isNull;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Product;
@@ -27,14 +28,14 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	public static ProductRepositoryImpl getInstance() {
-		if (INSTANCE == null) {
+		if (isNull(INSTANCE)) {
 			INSTANCE = new ProductRepositoryImpl();
 		}
 		return INSTANCE;
 	}
 
 	@Override
-	public Product create(Product product) {
+	public Product create(Product product) throws ItemNotFound {
 
 		final String query = "INSERT INTO product (name, description, price, stock, category, enabled) VALUES (?,?,?,?,?,?);";
 
@@ -58,7 +59,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			if (rs.next()) {
 				productSave = getById((long) rs.getInt(1));
 			} else {
-				throw new SQLException("Registro no encontrado");
+				throw new ItemNotFound();
 			}
 
 		} catch (SQLException e) {
@@ -80,7 +81,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public List<Product> findAll() {
+	public List<Product> findAll() throws ItemNotFound {
 		final String query = "SELECT * FROM product;";
 		List<Product> products = new ArrayList<Product>();
 		try {
@@ -89,7 +90,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
 			rs = pst.executeQuery();
 			if (!rs.next()) {
-				throw new SQLException("Registros no encontrados");
+				throw new ItemNotFound();
 
 			}
 			do {
@@ -105,9 +106,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
 				products.add(product);
 			} while (rs.next());
-		} catch (
-
-		SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
@@ -122,7 +121,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public void delete(Product product) {
+	public void delete(Product product) throws ItemNotFound {
 		final String query = "DELETE FROM product WHERE id=?;";
 		try {
 
@@ -131,7 +130,11 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
 			pst.setLong(1, product.getId());
 
-			pst.executeUpdate();
+			Integer rs = pst.executeUpdate();
+			
+			if (rs.equals(0)) {
+				throw new ItemNotFound();
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -146,7 +149,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public Product getById(Long id) {
+	public Product getById(Long id) throws ItemNotFound {
 		final String query = "SELECT * FROM product WHERE id=?;";
 		Product product = null;
 		try {
@@ -159,7 +162,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 			rs = pst.executeQuery();
 
 			if (!rs.next()) {
-				throw new SQLException("Registro no encontrado");
+				throw new ItemNotFound();
 			} else {
 
 				product = new Product();
@@ -188,7 +191,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	}
 
 	@Override
-	public Product update(Product product) {
+	public Product update(Product product) throws ItemNotFound {
 		final String query = "UPDATE product SET name=?, description=?, price=?, category=?, enabled=? where id=?;";
 		Product productSave = null;
 
@@ -214,9 +217,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}catch (ItemNotFound e) {
-			System.out.println(e.getMessage());
-		}  finally {
+		} finally {
 			try {
 				con.close();
 				pst.close();
