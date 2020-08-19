@@ -42,7 +42,7 @@ public class ProductController {
 		return new ResponseEntity<>(productServiceImpl.getById(id, true),HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/products/{name}")
+	@GetMapping(value="/products/name/{name}")
 	public ResponseEntity<Object> getByName(@PathVariable(name = "name") String name){
 		
 		return new ResponseEntity<>(productServiceImpl.getByName(name),HttpStatus.OK);
