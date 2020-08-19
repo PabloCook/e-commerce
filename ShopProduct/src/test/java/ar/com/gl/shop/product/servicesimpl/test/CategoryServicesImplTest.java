@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.repository.impl.CategoryRepositoryImpl;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
@@ -38,7 +39,7 @@ class CategoryServicesImplTest {
 	
 	
 	@BeforeEach
-	void setUp() {
+	void setUp() throws ItemNotFound {
 		
 		categoryService.create("category1","descripcion");
 		categoryService.create("category2" , "descripcion2");
@@ -46,8 +47,9 @@ class CategoryServicesImplTest {
 		category1= new Category("category1","descripcion");
 		category2= new Category("category2" , "descripcion2");
 		category3= new Category("category3", "descripcion3");
-		
-		
+		category3.setId(3L);
+		category2.setId(2L);
+		category1.setId(1L);
 		lenient().when(categoryRepositoryImpl.getById(1l)).thenReturn(category1);
 		lenient().when(categoryRepositoryImpl.getById(2l)).thenReturn(category2);
 		lenient().when(categoryRepositoryImpl.getById(3l)).thenReturn(category3);
@@ -58,7 +60,7 @@ class CategoryServicesImplTest {
 	}
 	@Test
 	@DisplayName("testFindAll")
-	void testCase_1() {
+	void testCase_1() throws ItemNotFound {
 		Category[] theCategories = {
 				
 				categoryService.getById(1l, true),
@@ -76,7 +78,7 @@ class CategoryServicesImplTest {
 	
 	@Test
 	@DisplayName("testFindByIdNotNull")
-	void testCase_2()
+	void testCase_2() throws ItemNotFound
 	{	
 		when(categoryRepositoryImpl.getById(3L)).thenReturn(category3);
 		assertNotNull(categoryService.getById(3L, true));
@@ -84,7 +86,7 @@ class CategoryServicesImplTest {
 
 	@Test
 	@DisplayName("testFindByIdNull")
-	void testCase_3()
+	void testCase_3() throws ItemNotFound
 	{	when(categoryRepositoryImpl.getById(3L)).thenReturn(null);
 		assertNull(categoryService.getById(3L, true));
 	}
@@ -103,8 +105,8 @@ class CategoryServicesImplTest {
 		
 	@Test
 	@DisplayName("testDeleteById")
-	void testCase_4()
-	{	categoryService.softDelete(category1);
+	void testCase_4() throws ItemNotFound
+	{	categoryService.softDelete(category1.getId());
 		when(categoryRepositoryImpl.getById(1l)).thenReturn(null);
 		assertNull(categoryService.getById(1l, true));
 		assertNull(categoryService.getById(1l, false));
@@ -112,7 +114,7 @@ class CategoryServicesImplTest {
 
 	@Test
 	@DisplayName("test FindAllDisabled")
-	void testCase_5() {
+	void testCase_5() throws ItemNotFound {
 		
 		category1.setEnabled(false);
 		category2.setEnabled(false);
@@ -128,21 +130,22 @@ class CategoryServicesImplTest {
 	
 	@Test
 	@DisplayName("test recover category")
-	void testCase_7()
+	void testCase_7() throws ItemNotFound
 	{
-		Category  category = categoryService.getById(3L, true);
-		category.setEnabled(false);
-		categoryService.softDelete(category);
-		Category  recoveredCategory = categoryService.getById(3L, true);
+		category1.setEnabled(false);
+		lenient().when(categoryRepositoryImpl.getById(category1.getId())).thenReturn(category1);
+		lenient().when(categoryRepositoryImpl.update(category1)).thenReturn(category1);
+		Category  recoveredCategory = categoryService.softDelete(category1.getId());
+		
 		assertNotNull(recoveredCategory);
 	}
 	
 	@Test
 	@DisplayName("test ForceDelete")
-	void testCase_8()
+	void testCase_8() throws ItemNotFound
 	{
 		
-		categoryService.delete(category1);
+		categoryService.delete(category1.getId());
 		when(categoryRepositoryImpl.getById(category1.getId())).thenReturn(null);
 		assertNull(categoryService.getById(1l, true));
 		assertNull(categoryService.getById(1l, false));

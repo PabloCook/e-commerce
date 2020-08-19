@@ -73,6 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 		Category category;
 		try {
 			category = repositoryImpl.getById(id);
+			
 		} catch (ItemNotFound e) {
 			e.printStackTrace();
 			return null;
@@ -80,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
 		if (nonNull(category) && searchEnable) {
 			category = category.getEnabled() ? category : null;
 		}
-
+		
 		return category;
 	}
 
