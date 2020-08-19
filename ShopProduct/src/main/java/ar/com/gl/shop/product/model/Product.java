@@ -1,5 +1,10 @@
 package ar.com.gl.shop.product.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Product {
 	
 	private Long id;
@@ -25,51 +30,6 @@ public class Product {
 		this.enabled = true;
 	}
 	
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}	
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public Double getPrice() {
-		return price;
-	}
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-	public Stock getStock() {
-		return stock;
-	}
-	public void setStock(Stock stock) {
-		this.stock = stock;
-	}
-	public Category getCategory() {
-		return category;
-	}
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
 	@Override
 	public String toString() {
 		return  "Producto ---> ID: "+ id +"\n"

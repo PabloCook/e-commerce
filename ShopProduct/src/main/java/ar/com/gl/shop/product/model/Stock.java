@@ -1,7 +1,10 @@
 package ar.com.gl.shop.product.model;
 
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 public class Stock {
 
 	private Long id;
@@ -19,35 +22,6 @@ public class Stock {
 		this.locationCode = locationCode;
 		this.enabled = true;
 	}	
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-	public String getLocationCode() {
-		return locationCode;
-	}
-	public void setLocationCode(String locationCode) {
-		this.locationCode = locationCode;
-	}
 	
 	@Override
 	public String toString() {
