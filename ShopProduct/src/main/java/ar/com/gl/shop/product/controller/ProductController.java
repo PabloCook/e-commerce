@@ -1,5 +1,6 @@
 package ar.com.gl.shop.product.controller;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
+import ar.com.gl.shop.product.utils.impl.ProdutcDtoConverter;
 
 @RestController
 public class ProductController {
@@ -30,22 +33,25 @@ public class ProductController {
 	@Autowired
 	CategoryServiceImpl categoryServiceImpl;
 	
+	@Autowired
+	ProdutcDtoConverter produtcDtoConverter;
+	
 	@GetMapping(value="/products")
 	public ResponseEntity<Object> findAll(){
 		
-		return new ResponseEntity<>(productServiceImpl.findAll(),HttpStatus.OK);
+		return new ResponseEntity<>(produtcDtoConverter.toDtoList(productServiceImpl.findAll()),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/products/{id}")
 	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id){
 		
-		return new ResponseEntity<>(productServiceImpl.getById(id, true),HttpStatus.OK);
+		return new ResponseEntity<>(produtcDtoConverter.toDto(productServiceImpl.getById(id, true)),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/products/{name}")
 	public ResponseEntity<Object> getByName(@PathVariable(name = "name") String name){
 		
-		return new ResponseEntity<>(productServiceImpl.getByName(name),HttpStatus.OK);
+		return new ResponseEntity<>(produtcDtoConverter.toDto(productServiceImpl.getByName(name)),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/products/category/{id}")
@@ -60,15 +66,15 @@ public class ProductController {
 	@PostMapping(value="/products")
 	public ResponseEntity<Product> create(@Valid @RequestBody Product product){
 		
-		return new ResponseEntity<>(productServiceImpl.create(product),HttpStatus.CREATED);
+		return new ResponseEntity<>(produtcDtoConverter.toDto(productServiceImpl.create(product)),HttpStatus.CREATED);
 	}
 	
 	@PutMapping(value="/products/{id}")
-	public ResponseEntity<Product> update(@PathVariable(name="id")Long id, @Valid @RequestBody Product product){
+	public ResponseEntity<Product> update(@PathVariable(name="id")Long id, @Valid @RequestBody ProductDTO productDTO){
 		
-		product.setId(id);
+		productDTO.setId(id);
 		
-		return new ResponseEntity<>(productServiceImpl.update(product),HttpStatus.OK);
+		return new ResponseEntity<>(productServiceImpl.update(produtcDtoConverter.toEntity(productDTO)),HttpStatus.OK);
 	}
 	
 	@PatchMapping(value="/products/{id}/description")
