@@ -113,7 +113,11 @@ public class CategoryServiceImpl implements CategoryService {
 					throw new CannotDelete("No se puede eliminar una categoria asociada a un producto");
 				}
 			}
-		} catch (Exception e) {
+		} catch (CannotDelete e) {
+			e.getMessage();
+			return null;
+		}
+		catch (ItemNotFound e) {
 			e.getMessage();
 			return null;
 		}

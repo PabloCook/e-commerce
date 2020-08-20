@@ -34,7 +34,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 
 	@Override
 	public Stock create(Stock stock) throws ItemNotFound {
-		final String query = "INSERT INTO stock (quantity, locationCode, enabled) VALUES (?,?,?);";
+		final String query = "INSERT INTO stock (quantity, location_code, enabled) VALUES (?,?,?);";
 		Stock stockSave = null;
 		try {
 			con = StockDatasource.getStockDatasource().getConnection();
@@ -71,7 +71,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 
 	@Override
 	public Stock update(Stock stock) throws ItemNotFound {
-		final String query = "UPDATE stock SET quantity=?, locationCode=? where id=?;";
+		final String query = "UPDATE stock SET quantity=?, location_code=? where id=?;";
 
 		Stock stockSave = null;
 
@@ -151,7 +151,7 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 			
 			stock = new Stock();
 			stock.setId(rs.getLong("id"));
-			stock.setLocationCode(rs.getString("locationCode"));
+			stock.setLocationCode(rs.getString("location_code"));
 			stock.setQuantity(rs.getInt("quantity"));
 			}
 

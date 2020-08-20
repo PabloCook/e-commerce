@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,18 +22,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
+import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.impl.CategoryRepositoryImpl;
+import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServicesImplTest {
 
-	
-	@InjectMocks
-	CategoryServiceImpl categoryService ;
-	
 	@Mock
 	CategoryRepositoryImpl categoryRepositoryImpl;
+	
+	@Mock
+	ProductRepositoryImpl productRepositoryImpl;
+	
+	@InjectMocks
+	CategoryServiceImpl categoryService;
+	
+
 	
 	Category category1,category2,category3;
 	
@@ -53,10 +61,6 @@ class CategoryServicesImplTest {
 		lenient().when(categoryRepositoryImpl.getById(1l)).thenReturn(category1);
 		lenient().when(categoryRepositoryImpl.getById(2l)).thenReturn(category2);
 		lenient().when(categoryRepositoryImpl.getById(3l)).thenReturn(category3);
-		
-				
-		
-		
 	}
 	@Test
 	@DisplayName("testFindAll")
@@ -132,10 +136,14 @@ class CategoryServicesImplTest {
 	@DisplayName("test recover category")
 	void testCase_7() throws ItemNotFound
 	{
+		
+		List<Product> products = new ArrayList<>();
+		
 		category1.setEnabled(false);
-		lenient().when(categoryRepositoryImpl.getById(category1.getId())).thenReturn(category1);
-		lenient().when(categoryRepositoryImpl.update(category1)).thenReturn(category1);
-		Category  recoveredCategory = categoryService.softDelete(category1.getId());
+		lenient().when(productRepositoryImpl.findAll()).thenReturn(products);
+		lenient().when(categoryRepositoryImpl.getById(category2.getId())).thenReturn(category2);
+		lenient().when(categoryRepositoryImpl.update(category2)).thenReturn(category2);
+		Category  recoveredCategory = categoryService.softDelete(category2.getId());
 		
 		assertNotNull(recoveredCategory);
 	}

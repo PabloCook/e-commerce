@@ -37,7 +37,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 	@Override
 	public Product create(Product product) throws ItemNotFound {
 
-		final String query = "INSERT INTO product (name, description, price, stock, category, enabled) VALUES (?,?,?,?,?,?);";
+		final String query = "INSERT INTO product (name, description, price, stock_id, category_id, enabled) VALUES (?,?,?,?,?,?);";
 
 		Product productSave = null;
 
@@ -101,8 +101,8 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getDouble("price"));
 				product.setEnabled(rs.getBoolean("enabled"));
-				product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock")));
-				product.setCategory(CategoryRepositoryImpl.getInstance().getById(rs.getLong("category")));
+				product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock_id")));
+				product.setCategory(CategoryRepositoryImpl.getInstance().getById(rs.getLong("category_id")));
 
 				products.add(product);
 			} while (rs.next());
@@ -172,8 +172,8 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getDouble("price"));
 				product.setEnabled(rs.getBoolean("enabled"));
-				product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock")));
-				product.setCategory(CategoryRepositoryImpl.getInstance().getById(rs.getLong("category")));
+				product.setStock(StockRepositoryImpl.getInstance().getById(rs.getLong("stock_id")));
+				product.setCategory(CategoryRepositoryImpl.getInstance().getById(rs.getLong("category_id")));
 
 			}
 		} catch (SQLException e) {
@@ -192,7 +192,7 @@ public class ProductRepositoryImpl implements Serializable, ProductRepository {
 
 	@Override
 	public Product update(Product product) throws ItemNotFound {
-		final String query = "UPDATE product SET name=?, description=?, price=?, category=?, enabled=? where id=?;";
+		final String query = "UPDATE product SET name=?, description=?, price=?, category_id=?, enabled=? where id=?;";
 		Product productSave = null;
 
 		try {
