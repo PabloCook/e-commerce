@@ -3,152 +3,156 @@ package ar.com.gl.shop.product.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
-import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repository.impl.RepositoryImpl;
+import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
 import ar.com.gl.shop.product.service.ProductService;
 
 public class ProductServiceImpl implements ProductService {
-	
-	private RepositoryImpl repositoryImpl;
+
+	private ProductRepositoryImpl repositoryImpl;
 	private StockServiceImpl stockService;
-	
-	private Product theProduct;	
-	
-	
+	private CategoryServiceImpl categoryService;
+
 	public ProductServiceImpl() {
-		
-		repositoryImpl = new RepositoryImpl();
+
+		repositoryImpl = ProductRepositoryImpl.getInstance();
 		stockService = new StockServiceImpl();
-		
-		theProduct = new Product();
+		categoryService = new CategoryServiceImpl();
 	}
 
-	public RepositoryImpl getRepositoryImpl() {
+	@Override
+	public ProductRepositoryImpl getRepositoryImpl() {
 		return repositoryImpl;
 	}
 
-	public List<Product> getTheProducts() {
-		return repositoryImpl.findAllProduct();
-	}
+	@Override
+	public Product create(Product product) {
 
-	public Product getTheProduct() {
-		return theProduct;
-	}
+		Product newProduct = new Product(product.getName(), product.getDescription(),
+				product.getPrice(), product.getCategory());
+		
+		Product productFind = null;
+		
+		newProduct.setStock(stockService.create(product.getStock()));
 
-	@Override
-	public void create(Product product) {
-		
-		theProduct = new Product(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getCategory());		
-		
-		theProduct.setStock(stockService.create(product.getStock()));
-		repositoryImpl.saveProduct(theProduct);
-		
-		//ordernar por id
-		repositoryImpl.findAllProduct()
-		.sort((o1,o2)->o1.getId()
-		.compareTo(o2.getId()));
-		
-	}
-	@Override
-	public List<Product> findAll() {	
-		
-		List<Product> theProducts = new ArrayList<>();	
-		
-		int listSize = repositoryImpl.findAllProduct().size();
-		
-		
-		for (int i = 0; i < listSize; i++) {
-			
-			theProduct = repositoryImpl.findAllProduct().get(i);
-			
-			if (theProduct.getEnabled()) {
-				
-				theProducts.add(theProduct);
-			}
-			
-			
-		}
-		
-		/*if (bool) {
-			return repositoryImpl.findAllProduct().stream()
-					.filter(Product->Product.getEnabled())
-					.collect(Collectors.toList());
-		}
-		
-		return repositoryImpl.findAllProduct();*/
-		
-		return theProducts;
-	}
-	
-	public List<Product> findAllDisabled(){
-		
-		return repositoryImpl.findAllProduct();
-	}
-	
-	@Override
-	public Product findById(Long id, Boolean searchEnable){	
-		Product product = repositoryImpl.findProductById(id);	
 		try {
-			if(product == null) {
-				throw new ItemNotFound("No se encontró producto con este id");
-			}
-			if(searchEnable) {
-				product = product.getEnabled() ? product : null;
-			}			
-		}catch (ItemNotFound e) {
-			System.out.println(e.getMessage());	
+			productFind = repositoryImpl.create(newProduct);
+			stockService.delete(newProduct.getStock().getId());
+		} catch (ItemNotFound e) {
+			System.out.println(e.getMessage());
 		}
-		return product;		
+		return productFind;
 	}
-	
-	
 
 	@Override
-	public Product updateById(Product product){
-		
-		
-		Product theProduct = repositoryImpl.findProductById(product.getId());
-		
-		String newName = product.getName();
-		
-		theProduct.setName(newName);		
+	public List<Product> findAll() {
 
-		String newDescription = product.getDescription();
-		
-		theProduct.setDescription(newDescription);
-		
-		Double newPrice = product.getPrice();
-		
-		theProduct.setPrice(newPrice);
-		
-		Category newCategory = product.getCategory();
-		
-		theProduct.setCategory(newCategory);		
+		List<Product> products = new ArrayList<>();
 
-		theProduct.setStock(stockService.update(product.getStock()));
-		
-		return theProduct;		
-		
-	}
-	
+		List<Product> productsRepo = new ArrayList<>();
 
-	@Override
-	public void  deleteById(Product theProduct){
-		
-		if (theProduct.getEnabled()) {
-			theProduct.setEnabled(false);
-		}else {
-			theProduct.setEnabled(true);
+		try {
+			productsRepo = repositoryImpl.findAll();
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		for (int i = 0; i < productsRepo.size(); i++) { 
+
+			if (productsRepo.get(i).getEnabled()) {
+
+				products.add(productsRepo.get(i));
 			}
+
+		}
+
+		return products;
 	}
-	
-	@Override
-	public void  forceDeleteById(Product theProduct){
+
+	public List<Product> findAllDisabled() {
 		
-		repositoryImpl.deleteProduct(theProduct);
-				
+		List<Product> products = new ArrayList<Product>();
+		List<Product> productsRepo = new ArrayList<Product>();
+		try {
+			productsRepo = repositoryImpl.findAll();
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < productsRepo.size(); i++) { 
+			if (!productsRepo.get(i).getEnabled()) {
+				products.add(productsRepo.get(i));
+			}
+		}
+		return products;
+	}
+
+	@Override
+	public Product getById(Long id, Boolean searchEnable) {
+		if(isNull(id)){
+			return null;
+		}
+		Product product = null;
+		try {
+			product = repositoryImpl.getById(id);
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+		}
+
+		if (nonNull(product) && searchEnable) {
+			product.setStock(stockService.getById(product.getStock().getId(), true));
+			product.setCategory(categoryService.getById(product.getCategory().getId(), true));
+			product = product.getEnabled() ? product : null;
+		}
+
+		return product;
+	}
+
+	@Override
+	public Product update(Product product) {
+		
+		try {
+			return repositoryImpl.update(product);
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public Product softDelete(Long id) {
+		if(isNull(id)){
+			return null;
+		}
+		try {
+			repositoryImpl.getById(id).setEnabled(!repositoryImpl.getById(id).getEnabled());
+			return repositoryImpl.update(repositoryImpl.getById(id));
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+
+	}
+
+	@Override
+	public Product delete(Long id) {
+		if(isNull(id)){
+			return null;
+		}
+		Product product;
+		try {
+			product = repositoryImpl.getById(id);
+			repositoryImpl.delete(repositoryImpl.getById(id));
+			return product;
+		} catch (ItemNotFound e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

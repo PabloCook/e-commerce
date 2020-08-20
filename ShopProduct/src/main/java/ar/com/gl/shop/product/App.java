@@ -18,9 +18,7 @@ public class App {
     	CategoryService categoryService = new CategoryServiceImpl();
     	ProductService productService = new ProductServiceImpl();
     	StockService stockService = new StockServiceImpl();
-    	
-    	categoryService.agregarPrimerosObjetos();
-    	
+
     	do {
     		System.out.println("========Pagina de inicio========\n"
     				+ "Elige una opcion:\n"
@@ -53,8 +51,8 @@ public class App {
 				break;
 			}
 		} while (!input.equals("3"));
-    	
     	      
+ 
     }
 		
 }

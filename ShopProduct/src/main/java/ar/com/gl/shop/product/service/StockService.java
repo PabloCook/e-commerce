@@ -6,11 +6,11 @@ public interface StockService {
 
     public Stock create(Stock stock);
 
-    public Stock findById(Long id, Boolean searchEnable);
+    public Stock getById(Long id, Boolean searchEnable);
 
-    public void delete(Stock stock);
+    public Stock delete(Long id);
 
-    public void  softDelete(Stock stock);
+    public Stock  softDelete(Long id);
 
     public Stock update(Stock stock);
 }

@@ -16,14 +16,12 @@ public class Product {
 
 	}
 	
-	public Product(Long id, String name, String description, Double price, Category category) {
+	public Product(String name, String description, Double price, Category category) {
 		
-		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
-		this.category = category;
-		//this.stock= new Stock();		
+		this.category = category;		
 		this.enabled = true;
 	}
 	

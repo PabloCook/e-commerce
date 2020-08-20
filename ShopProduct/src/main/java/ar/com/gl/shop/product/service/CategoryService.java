@@ -5,8 +5,8 @@ import ar.com.gl.shop.product.model.Category;
 
 public interface CategoryService {
 	
-	public void agregarPrimerosObjetos();
-	public void create(Long id, String name, String description);
+	public Category create(String name, String description);
+
 	public List<Category> findAll();
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,
@@ -18,10 +18,10 @@ public interface CategoryService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Category findById(Long id, Boolean bool);
-	public Category updateById(Category theCategory);
-	public void deleteById(Category theCategory);
-	public void forceDeleteById(Category theCategory);
+	public Category getById(Long id, Boolean bool);
+	public Category update(Category theCategory);
+	public Category softDelete(Long id);
+	public Category delete(Long id);
 	public List<Category> findAllDisabled();
 
 

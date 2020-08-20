@@ -2,14 +2,12 @@ package ar.com.gl.shop.product.service;
 
 import java.util.List;
 
-import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repository.impl.RepositoryImpl;
+import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
 
 public interface ProductService {
 	
-	public void create(Product product);
-	public List<Product> findAll();
+	public Product create(Product product);
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,
 	 * el segundo parametro es la manera de buscar, si se pasa true va a hacer una busqueda
@@ -20,13 +18,15 @@ public interface ProductService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Product findById(Long id, Boolean bool);
-	public Product updateById(Product product);
-	public void deleteById(Product theProduct);
-	public void  forceDeleteById(Product theProduct);
-	public RepositoryImpl getRepositoryImpl();
-	public List<Product> getTheProducts();
-	public Product getTheProduct();
+	public Product getById(Long id, Boolean bool);
+	public List<Product> findAll();
+
+	public Product softDelete(Long id);
+	public Product  delete(Long id);
+	public Product update(Product product);
+	
+	public ProductRepositoryImpl getRepositoryImpl();
+
 	public List<Product> findAllDisabled();
 
 }
