@@ -25,9 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Category create(String name, String description) {
-
-		Category category = new Category(name, description);
+	public Category create(Category category) {
 		try {
 			return repositoryImpl.create(category);
 		} catch (ItemNotFound e) {

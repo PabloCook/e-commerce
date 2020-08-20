@@ -1,7 +1,5 @@
 package ar.com.gl.shop.product.controller;
 
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sun.el.stream.Optional;
-
+import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
+import ar.com.gl.shop.product.utils.ProdutcDtoConverter;
 
 @RestController
 public class ProductController {
@@ -32,46 +30,49 @@ public class ProductController {
 	@Autowired
 	CategoryServiceImpl categoryServiceImpl;
 	
+	@Autowired
+	ProdutcDtoConverter productDTOConverter;
+	
 	@GetMapping(value="/products")
 	public ResponseEntity<Object> findAll(){
 		
-		return new ResponseEntity<>(productServiceImpl.findAll(),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTOList(productServiceImpl.findAll()),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/products/{id}")
 	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id){
 		
-		return new ResponseEntity<>(productServiceImpl.getById(id, true),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.getById(id, true)),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/products/name/{name}")
 	public ResponseEntity<Object> getByName(@PathVariable(name = "name") String name){
 		
-		return new ResponseEntity<>(productServiceImpl.getByName(name),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.getByName(name)),HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/products/category/{id}")
 	public ResponseEntity<Object> getByCategoryId(@PathVariable(name = "id") Long id){
 		
-		return new ResponseEntity<>(productServiceImpl.findCategoryById(id),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTOList(productServiceImpl.findCategoryById(id)),HttpStatus.OK);
 	}
 	
 	@PostMapping(value="/products")
-	public ResponseEntity<Product> create(@Valid @RequestBody Product product){
+	public ResponseEntity<Object> create(@Valid @RequestBody ProductDTO productDTO){
 		
-		return new ResponseEntity<>(productServiceImpl.create(product),HttpStatus.CREATED);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO))),HttpStatus.CREATED);
 	}
 	
 	@PutMapping(value="/products/{id}")
-	public ResponseEntity<Product> update(@PathVariable(name="id")Long id, @Valid @RequestBody Product product){
+	public ResponseEntity<Object> update(@PathVariable(name="id")Long id, @Valid @RequestBody ProductDTO productDTO){
 		
-		product.setId(id);
+		productDTO.setId(id);
 		
-		return new ResponseEntity<>(productServiceImpl.update(product),HttpStatus.OK);
+		return new ResponseEntity<>(productServiceImpl.update(productDTOConverter.toEntity(productDTO)),HttpStatus.OK);
 	}
 	
 	@PatchMapping(value="/products/{id}/description")
-	public ResponseEntity<Product> patchDescription(@PathVariable(name="id")Long id,
+	public ResponseEntity<Object> patchDescription(@PathVariable(name="id")Long id,
 												    @RequestParam(name="description") String description){
 		
 		Product product = productServiceImpl.getById(id, true);
@@ -82,7 +83,7 @@ public class ProductController {
 	}
 	
 	@PatchMapping(value="/products/{id}/category/{categoryId}")
-	public ResponseEntity<Product> patchCategory(@PathVariable(name="id")Long id,
+	public ResponseEntity<Object> patchCategory(@PathVariable(name="id")Long id,
 												 @PathVariable(name="CategoryId") Long categoryId){
 		
 		Product product = productServiceImpl.getById(id, true);	
@@ -93,7 +94,7 @@ public class ProductController {
 	}
 	
 	@PatchMapping(value="/products/{id}/stock")
-	public ResponseEntity<Product> patchStock(@PathVariable(name="id")Long id,
+	public ResponseEntity<Object> patchStock(@PathVariable(name="id")Long id,
 											  @RequestParam(name="quantity") Integer quantity){
 		
 		Product product = productServiceImpl.getById(id, true);
@@ -104,7 +105,7 @@ public class ProductController {
 	}
 	
 	@PatchMapping(value="/products/{id}/location")
-	public ResponseEntity<Product> patccLocation(@PathVariable(name="id")Long id,
+	public ResponseEntity<Object> patchLocation(@PathVariable(name="id")Long id,
 											  @RequestParam(name="location") String location){
 		
 		Product product = productServiceImpl.getById(id, true);
@@ -115,20 +116,11 @@ public class ProductController {
 	}
 	
 	@DeleteMapping(value="/products/{id}")
-	public void delete(@PathVariable(name="id") Long id) {
+	public ResponseEntity<Object> delete(@PathVariable(name="id") Long id) {
 		productServiceImpl.delete(id);
-	}
-	
-	public Object isPresent(Optional optional) {
-		if (optional.isPresent()) {
-			return Object;
-		} else {
-			throw new ItemNotFound("No se encontró el Objeto");
-		}
+		return new ResponseEntity<>("Producto Eliminado", HttpStatus.OK);
 	}
 	
 
-
-	
 
 }
