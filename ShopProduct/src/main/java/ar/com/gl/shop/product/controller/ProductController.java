@@ -19,7 +19,7 @@ import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
-import ar.com.gl.shop.product.utils.ProdutcDtoConverter;
+import ar.com.gl.shop.product.utils.ProductDTOConverter;
 
 @RestController
 public class ProductController {
@@ -31,7 +31,7 @@ public class ProductController {
 	CategoryServiceImpl categoryServiceImpl;
 	
 	@Autowired
-	ProdutcDtoConverter productDTOConverter;
+	ProductDTOConverter productDTOConverter;
 	
 	@GetMapping(value="/products")
 	public ResponseEntity<Object> findAll(){

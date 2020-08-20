@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 
-public class ProdutcDtoConverter extends Converter{
+public class ProductDTOConverter extends Converter{
 
 	ModelMapper modelMapper = new ModelMapper();
 	
