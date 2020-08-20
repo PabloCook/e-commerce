@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sun.el.stream.Optional;
+
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
@@ -51,10 +53,7 @@ public class ProductController {
 	@GetMapping(value="/products/category/{id}")
 	public ResponseEntity<Object> getByCategoryId(@PathVariable(name = "id") Long id){
 		
-		return new ResponseEntity<>(productServiceImpl.findAll()
-									.stream()
-									.filter(p->p.getCategory().getId().equals(id))
-									.collect(Collectors.toList()),HttpStatus.OK);
+		return new ResponseEntity<>(productServiceImpl.findCategoryById(id),HttpStatus.OK);
 	}
 	
 	@PostMapping(value="/products")
@@ -118,6 +117,14 @@ public class ProductController {
 	@DeleteMapping(value="/products/{id}")
 	public void delete(@PathVariable(name="id") Long id) {
 		productServiceImpl.delete(id);
+	}
+	
+	public Object isPresent(Optional optional) {
+		if (optional.isPresent()) {
+			return Object;
+		} else {
+			throw new ItemNotFound("No se encontró el Objeto");
+		}
 	}
 	
 

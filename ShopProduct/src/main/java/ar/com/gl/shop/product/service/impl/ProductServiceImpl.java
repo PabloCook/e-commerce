@@ -1,10 +1,11 @@
 package ar.com.gl.shop.product.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Product;
@@ -154,6 +155,16 @@ public class ProductServiceImpl implements ProductService {
 			return null;
 		}
 		
+	}
+	
+	@Override
+	public List<Product> findCategoryById(Long id) {
+		 
+		
+		return 	findAll()
+				.stream()
+				.filter(p->p.getCategory().getId().equals(id))
+				.collect(Collectors.toList());
 	}
 
 }

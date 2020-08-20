@@ -27,5 +27,6 @@ public interface ProductService {
 	
 	public ProductRepositoryImpl getRepositoryImpl();
 	public List<Product> findAllDisabled();
+	public List<Product> findCategoryById(Long id);
 
 }
