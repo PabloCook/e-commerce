@@ -5,7 +5,7 @@ import ar.com.gl.shop.product.model.Category;
 
 public interface CategoryService {
 	
-	public Category create(String name, String description);
+	public Category create(Category category);
 	public List<Category> findAll();
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,
@@ -17,10 +17,10 @@ public interface CategoryService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Category getById(Long id, Boolean bool);
-	public Category update(Category theCategory);
+	public Category getById(Long id, Boolean enable);
+	public Category update(Category category);
 	public Category softDelete(Long id);
-	public Category delete(Long id);
+	public void delete(Long id);
 	public List<Category> findAllDisabled();
 
 

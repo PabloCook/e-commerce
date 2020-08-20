@@ -3,7 +3,6 @@ package ar.com.gl.shop.product.service;
 import java.util.List;
 
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
 
 public interface ProductService {
 	
@@ -18,14 +17,14 @@ public interface ProductService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Product getById(Long id, Boolean bool);
+	public Product getById(Long id, Boolean enabled);
 	public List<Product> findAll();
 
 	public Product softDelete(Long id);
-	public Product  delete(Long id);
+	public void delete(Long id);
 	public Product update(Product product);
-	
-	public ProductRepositoryImpl getRepositoryImpl();
 	public List<Product> findAllDisabled();
+	public Product getByName(String name);
+	public List<Product> getByCategoryId(Long id);
 
 }

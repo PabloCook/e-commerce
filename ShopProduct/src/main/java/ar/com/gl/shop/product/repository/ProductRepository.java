@@ -2,19 +2,14 @@ package ar.com.gl.shop.product.repository;
 
 import java.util.List;
 
-import ar.com.gl.shop.product.exceptions.ItemNotFound;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import ar.com.gl.shop.product.model.Product;
 
-public interface ProductRepository {
-	
-	public Product create(Product category) throws ItemNotFound;
-	
-	public Product update(Product category) throws ItemNotFound;
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-	public List<Product> findAll() throws ItemNotFound;
-
-	public void delete(Product product) throws ItemNotFound;
-	
-	public Product getById(Long id) throws ItemNotFound;
-
+	public Product findByName(String name);
+	public List<Product> findByCategoryId(Long id);
 }
