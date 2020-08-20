@@ -17,11 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.com.gl.shop.product.dto.CategoryDTO;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
+import ar.com.gl.shop.product.utils.CategoryDtoConverter;
 
 @RestController
 public class CatalogController {
+	
+	@Autowired
+	CategoryDtoConverter categoryDtoConverter;
 	
 	@Autowired
 	CategoryServiceImpl categoryServiceImpl;
@@ -33,25 +38,25 @@ public class CatalogController {
 		if(nonNull(name)) {
 			return new ResponseEntity<>(categoryServiceImpl.getByName(name),HttpStatus.OK);
 		}
-		return new ResponseEntity<>(categoryServiceImpl.findAll(),HttpStatus.OK);
+		return new ResponseEntity<>(categoryDtoConverter.toDtoList(categoryServiceImpl.findAll()),HttpStatus.OK);
 	}
 	
 	
 	
 	@GetMapping(value="/categories/{id}")
-	public ResponseEntity<Category> getById(@PathVariable(name = "id") Long id){
+	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id){
 		
-		return new ResponseEntity<>(categoryServiceImpl.getById(id, true),HttpStatus.OK);
+		return new ResponseEntity<>(categoryDtoConverter.toDto(categoryServiceImpl.getById(id, true)),HttpStatus.OK);
 	}
 	
 	
 	@PostMapping(value="/categories")
-	public ResponseEntity<Category> create(@Valid @RequestBody Category category){
-		return new ResponseEntity<>(categoryServiceImpl.create(category),HttpStatus.CREATED);
+	public ResponseEntity<Object> create(@Valid @RequestBody CategoryDTO categoryDTO){
+		return new ResponseEntity<>((categoryServiceImpl.create(categoryDtoConverter.toEntity(categoryDTO))),HttpStatus.CREATED);
 	}
 	
 	@PatchMapping(value="/categorie/{id}/description")
-	public ResponseEntity<Category> patchDescription(@PathVariable(name="id")Long id,
+	public ResponseEntity<Object> patchDescription(@PathVariable(name="id")Long id,
 												     @RequestParam(name="description") String description){
 		
 		Category category = categoryServiceImpl.getById(id, true);
@@ -62,8 +67,9 @@ public class CatalogController {
 	}
 	
 	@DeleteMapping(value="/categories/{id}")
-	public void delete(@PathVariable(name="id") Long id) {
+	public ResponseEntity<Object> delete(@PathVariable(name="id") Long id) {
 		categoryServiceImpl.delete(id);
+		return new ResponseEntity<>("Deleted Successfull",HttpStatus.OK);
 	}
 
 }

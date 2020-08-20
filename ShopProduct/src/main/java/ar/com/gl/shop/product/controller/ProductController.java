@@ -22,7 +22,7 @@ import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
-import ar.com.gl.shop.product.utils.impl.ProdutcDtoConverter;
+import ar.com.gl.shop.product.utils.ProdutcDtoConverter;
 
 @RestController
 public class ProductController {
@@ -64,9 +64,9 @@ public class ProductController {
 	}
 	
 	@PostMapping(value="/products")
-	public ResponseEntity<Product> create(@Valid @RequestBody Product product){
+	public ResponseEntity<Product> create(@Valid @RequestBody ProductDTO productDTO){
 		
-		return new ResponseEntity<>(produtcDtoConverter.toDto(productServiceImpl.create(product)),HttpStatus.CREATED);
+		return new ResponseEntity<>(productServiceImpl.create(produtcDtoConverter.toEntity(productDTO)),HttpStatus.CREATED);
 	}
 	
 	@PutMapping(value="/products/{id}")

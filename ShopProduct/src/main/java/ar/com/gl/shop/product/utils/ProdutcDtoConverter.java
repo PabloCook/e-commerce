@@ -1,4 +1,4 @@
-package ar.com.gl.shop.product.utils.impl;
+package ar.com.gl.shop.product.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,6 @@ import org.modelmapper.ModelMapper;
 
 import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.utils.Converter;
 
 public class ProdutcDtoConverter extends Converter{
 
