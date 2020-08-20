@@ -26,6 +26,7 @@ public interface ProductService {
 	public Product update(Product product);
 	
 	public ProductRepositoryImpl getRepositoryImpl();
+
 	public List<Product> findAllDisabled();
 
 }

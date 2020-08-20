@@ -166,5 +166,6 @@ public class StockRepositoryImpl implements Serializable, StockRepository {
 			}
 		}
 		return stock;
+
 	}
 }

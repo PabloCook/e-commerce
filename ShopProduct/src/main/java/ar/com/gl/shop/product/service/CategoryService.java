@@ -6,6 +6,7 @@ import ar.com.gl.shop.product.model.Category;
 public interface CategoryService {
 	
 	public Category create(String name, String description);
+
 	public List<Category> findAll();
 	/**
 	 * Este metodo sirve para buscar un elemento por id pasado por parametro,

@@ -96,7 +96,7 @@ class StockServiceImplTest {
 	@Test
 	@DisplayName("findById() - null")
 	void testCase_5() throws ItemNotFound {
-		when(repositoryMock.getById(6L)).thenReturn(null);//
+		when(repositoryMock.getById(6L)).thenReturn(null);
 		assertNull(stockService.getById(6L, true));
 		assertNull(stockService.getById(6L, false));
 	}
@@ -126,7 +126,6 @@ class StockServiceImplTest {
 	void testCase_8() throws ItemNotFound {
 		stock.setLocationCode("mza");
 		when(repositoryMock.update(stock)).thenReturn(stock);
-		
 		Stock stockNew = stockService.update(stock);
 		
 		assertEquals(stock, stockNew);
