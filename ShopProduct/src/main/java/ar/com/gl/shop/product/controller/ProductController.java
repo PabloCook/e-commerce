@@ -19,7 +19,9 @@ import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
+
 import ar.com.gl.shop.product.utils.ProductDTOConverter;
+
 
 @RestController
 public class ProductController {
@@ -61,6 +63,7 @@ public class ProductController {
 	public ResponseEntity<Object> create(@Valid @RequestBody ProductDTO productDTO){
 		
 		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO))),HttpStatus.CREATED);
+
 	}
 	
 	@PutMapping(value="/products/{id}")

@@ -20,13 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.com.gl.shop.product.dto.CategoryDTO;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
+
 import ar.com.gl.shop.product.utils.CategoryDTOConverter;
+
 
 @RestController
 public class CatalogController {
 	
 	@Autowired
 	CategoryDTOConverter categoryDTOConverter;
+
 	
 	@Autowired
 	CategoryServiceImpl categoryServiceImpl;
@@ -38,7 +41,9 @@ public class CatalogController {
 		if(nonNull(name)) {
 			return new ResponseEntity<>(categoryServiceImpl.getByName(name),HttpStatus.OK);
 		}
+		
 		return new ResponseEntity<>(categoryDTOConverter.toDTOList(categoryServiceImpl.findAll()),HttpStatus.OK);
+
 	}
 	
 	
@@ -47,12 +52,14 @@ public class CatalogController {
 	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id){
 		
 		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getById(id, true)),HttpStatus.OK);
+
 	}
 	
 	
 	@PostMapping(value="/categories")
 	public ResponseEntity<Object> create(@Valid @RequestBody CategoryDTO categoryDTO){
 		return new ResponseEntity<>((categoryServiceImpl.create(categoryDTOConverter.toEntity(categoryDTO))),HttpStatus.CREATED);
+
 	}
 	
 	@PatchMapping(value="/categorie/{id}/description")
