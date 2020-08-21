@@ -1,6 +1,5 @@
 package ar.com.gl.shop.product.controller;
 
-import java.util.Collection;
 import static java.util.Objects.nonNull;
 
 import javax.validation.Valid;
@@ -39,7 +38,7 @@ public class CatalogController {
 			@RequestParam(name="name",required = false) String name){
 		
 		if(nonNull(name)) {
-			return new ResponseEntity<>(categoryServiceImpl.getByName(name),HttpStatus.OK);
+			return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getByName(name)),HttpStatus.OK);
 		}
 		
 		return new ResponseEntity<>(categoryDTOConverter.toDTOList(categoryServiceImpl.findAll()),HttpStatus.OK);
@@ -58,11 +57,11 @@ public class CatalogController {
 	
 	@PostMapping(value="/categories")
 	public ResponseEntity<Object> create(@Valid @RequestBody CategoryDTO categoryDTO){
-		return new ResponseEntity<>((categoryServiceImpl.create(categoryDTOConverter.toEntity(categoryDTO))),HttpStatus.CREATED);
+		return new ResponseEntity<>((categoryDTOConverter.toDTO(categoryServiceImpl.create(categoryDTOConverter.toEntity(categoryDTO)))),HttpStatus.CREATED);
 
 	}
 	
-	@PatchMapping(value="/categorie/{id}/description")
+	@PatchMapping(value="/categories/{id}/description")
 	public ResponseEntity<Object> patchDescription(@PathVariable(name="id")Long id,
 												     @RequestParam(name="description") String description){
 		
@@ -70,7 +69,7 @@ public class CatalogController {
 		
 		category.setDescription(description);
 		
-		return new ResponseEntity<>(categoryServiceImpl.update(category),HttpStatus.OK);
+		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.update(category)),HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/categories/{id}")

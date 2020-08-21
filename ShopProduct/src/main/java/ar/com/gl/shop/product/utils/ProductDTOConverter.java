@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 
+@Component
 public class ProductDTOConverter extends Converter{
 
 	ModelMapper modelMapper = new ModelMapper();

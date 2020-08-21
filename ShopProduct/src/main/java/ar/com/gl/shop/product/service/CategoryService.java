@@ -2,6 +2,7 @@ package ar.com.gl.shop.product.service;
 
 import java.util.List;
 import ar.com.gl.shop.product.model.Category;
+import ar.com.gl.shop.product.model.Product;
 
 public interface CategoryService {
 	
@@ -18,6 +19,7 @@ public interface CategoryService {
 	 * @return Repository
 	 */
 	public Category getById(Long id, Boolean enable);
+	public Category getByName(String name);	
 	public Category update(Category category);
 	public Category softDelete(Long id);
 	public void delete(Long id);

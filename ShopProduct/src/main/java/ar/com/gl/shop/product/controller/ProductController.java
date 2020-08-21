@@ -2,6 +2,7 @@ package ar.com.gl.shop.product.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,8 +71,11 @@ public class ProductController {
 	public ResponseEntity<Object> update(@PathVariable(name="id")Long id, @Valid @RequestBody ProductDTO productDTO){
 		
 		productDTO.setId(id);
+		Product product = productServiceImpl.getById(id, true);
+		BeanUtils.copyProperties(productDTO, product);
+		System.out.println(product);
 		
-		return new ResponseEntity<>(productServiceImpl.update(productDTOConverter.toEntity(productDTO)),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.update(productDTOConverter.toEntity(productDTO))),HttpStatus.OK);
 	}
 	
 	@PatchMapping(value="/products/{id}/description")
@@ -82,7 +86,7 @@ public class ProductController {
 		
 		product.setDescription(description);
 		
-		return new ResponseEntity<>(productServiceImpl.update(product),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.update(product)),HttpStatus.OK);
 	}
 	
 	@PatchMapping(value="/products/{id}/category/{categoryId}")
@@ -93,7 +97,7 @@ public class ProductController {
 		
 		product.setCategory(categoryServiceImpl.getById(categoryId, true));
 		
-		return new ResponseEntity<>(productServiceImpl.update(product),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.update(product)),HttpStatus.OK);
 	}
 	
 	@PatchMapping(value="/products/{id}/stock")
@@ -104,7 +108,7 @@ public class ProductController {
 		
 		product.getStock().setQuantity(quantity);
 		
-		return new ResponseEntity<>(productServiceImpl.update(product),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.update(product)),HttpStatus.OK);
 	}
 	
 	@PatchMapping(value="/products/{id}/location")
@@ -115,7 +119,7 @@ public class ProductController {
 		
 		product.getStock().setLocationCode(location);
 		
-		return new ResponseEntity<>(productServiceImpl.update(product),HttpStatus.OK);
+		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.update(product)),HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/products/{id}")
