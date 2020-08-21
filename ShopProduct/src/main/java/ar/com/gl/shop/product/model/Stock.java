@@ -1,17 +1,35 @@
 package ar.com.gl.shop.product.model;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
+@Table(name= "stock")
 public class Stock {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Long id;
-	private Integer quantity;
-	private String locationCode;
-	private Boolean enabled;
 	
+	@Column(name="quantity")
+	private Integer quantity;
+	
+	@Column(name="locationCode")
+	private String locationCode;
+	
+	@Column(name="enabled")
+	private Boolean enabled;
 	
 	public Stock() {
 		enabled = true;

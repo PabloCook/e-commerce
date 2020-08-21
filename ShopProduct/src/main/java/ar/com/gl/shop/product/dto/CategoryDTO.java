@@ -1,7 +1,5 @@
 package ar.com.gl.shop.product.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
