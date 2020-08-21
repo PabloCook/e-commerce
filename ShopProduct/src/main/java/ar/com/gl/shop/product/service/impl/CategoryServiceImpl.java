@@ -9,13 +9,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.service.CategoryService;
 
-
+@Service
 public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	CategoryRepository repositoryImpl;

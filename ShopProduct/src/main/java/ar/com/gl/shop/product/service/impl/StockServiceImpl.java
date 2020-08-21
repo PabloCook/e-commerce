@@ -10,10 +10,11 @@ import static java.util.Objects.isNull;
 import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ar.com.gl.shop.product.service.StockService;
 
-
+@Service
 public class StockServiceImpl implements StockService {
 
 	@Autowired

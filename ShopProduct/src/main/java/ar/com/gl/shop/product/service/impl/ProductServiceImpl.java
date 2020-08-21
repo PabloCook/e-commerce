@@ -7,13 +7,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.service.ProductService;
-
+@Service
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
