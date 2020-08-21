@@ -25,11 +25,11 @@ public class ProdutcDtoConverter extends Converter{
 	
 	
 	public List<ProductDTO> toDTOList(List<Product> products) {
-		List<ProductDTO> productsDto = new ArrayList<ProductDTO>();
+		List<ProductDTO> productsDTO = new ArrayList<ProductDTO>();
 		for(Product product : products) {
-			productsDto.add(toDTO(product));
+			productsDTO.add(toDTO(product));
 		}
-		return productsDto;
+		return productsDTO;
 	}
 
 }
