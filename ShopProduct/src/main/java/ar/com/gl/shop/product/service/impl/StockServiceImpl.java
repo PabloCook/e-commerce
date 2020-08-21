@@ -1,67 +1,45 @@
 package ar.com.gl.shop.product.service.impl;
 
 import static java.util.Objects.nonNull;
+
+import java.util.Optional;
+
 import static java.util.Objects.isNull;
 
-import ar.com.gl.shop.product.exceptions.ItemNotFound;
+
 import ar.com.gl.shop.product.model.Stock;
-import ar.com.gl.shop.product.repository.impl.StockRepositoryImpl;
+import ar.com.gl.shop.product.repository.StockRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.gl.shop.product.service.StockService;
 
 public class StockServiceImpl implements StockService {
 
-	private StockRepositoryImpl repositoryImpl;
-
-	public StockServiceImpl() {
-
-		repositoryImpl = StockRepositoryImpl.getInstance();
-	}
+	@Autowired
+	private StockRepository repositoryImpl;
 
 	@Override
 	public Stock create(Stock stock) {
-		Stock stockFind;
-		try {
-			stockFind = repositoryImpl.create(new Stock(stock.getQuantity(), stock.getLocationCode()));
-			return stockFind;
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
-		}
+		return repositoryImpl.save(stock);
 		
 	}
 
 	@Override
 	public Stock getById(Long id, Boolean searchEnable) {
-
-		if (isNull(id)) {
+		
+		if (isNull(id)){
 			return null;
 		}
+		Optional<Stock> stock = repositoryImpl.findById(id);
 
-		Stock stock = null;
-		try {
-			stock = repositoryImpl.getById(id);
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
+		if (stock.isPresent() && searchEnable) {
+			return stock.get().getEnabled() ? stock.get() : null;
 		}
-		if (nonNull(stock) && searchEnable) {
-			stock = stock.getEnabled() ? stock : null;
-		}
-		return stock;
+		return null;
 	}
 
 	@Override
-	public Stock delete(Long id) {
-		if(isNull(id)){
-			return null;
-		}
-		try {
-			Stock stock = repositoryImpl.getById(id);
-			repositoryImpl.delete(repositoryImpl.getById(id));
-			return stock;
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
-		}
+	public Stock update(Stock stock) {
+		return repositoryImpl.save(stock);
 	}
 
 	@Override
@@ -69,25 +47,16 @@ public class StockServiceImpl implements StockService {
 		if (isNull(id)) {
 			return null;
 		}
-		try {
-			repositoryImpl.getById(id).setEnabled(!repositoryImpl.getById(id).getEnabled());
-			repositoryImpl.update(repositoryImpl.getById(id));
-			return repositoryImpl.getById(id);
-		} catch (ItemNotFound e) {
-			
-			e.printStackTrace();
-			return null;
-		}
+		Stock stock = repositoryImpl.findById(id).get();
+		stock.setEnabled(!stock.getEnabled());
+		return repositoryImpl.save(stock);
 		
 	}
 
 	@Override
-	public Stock update(Stock stock) {
-		try {
-			return repositoryImpl.update(stock);
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
+	public void delete(Long id) {
+		if (nonNull(id)) {
+			repositoryImpl.delete(repositoryImpl.findById(id).get());
 		}
 	}
 }

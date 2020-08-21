@@ -17,10 +17,10 @@ public interface CategoryService {
 	 * @param bool
 	 * @return Repository
 	 */
-	public Category getById(Long id, Boolean bool);
-	public Category update(Category theCategory);
+	public Category getById(Long id, Boolean enable);
+	public Category update(Category category);
 	public Category softDelete(Long id);
-	public Category delete(Long id);
+	public void delete(Long id);
 	public List<Category> findAllDisabled();
 
 
