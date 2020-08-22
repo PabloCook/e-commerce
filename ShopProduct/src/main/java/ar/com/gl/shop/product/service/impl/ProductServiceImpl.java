@@ -20,11 +20,12 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository repositoryImpl;
 
 	private CategoryService categoryService;
-	
+
+
 	@Autowired
-	public ProductServiceImpl(ProductRepository repositoryImpl, CategoryService categoryService){
-		this.repositoryImpl= repositoryImpl;
-		this.categoryService= categoryService;
+	public ProductServiceImpl(ProductRepository repositoryImpl, CategoryService categoryService) {
+		this.repositoryImpl = repositoryImpl;
+		this.categoryService = categoryService;
 	}
 
 	@Override
@@ -57,7 +58,8 @@ public class ProductServiceImpl implements ProductService {
 		if (product.isPresent()) {
 			if (searchEnable) {
 				return product.get().getEnabled() ? product.get() : null;
-			}else {
+
+			} else {
 				return product.get();
 			}
 		}
@@ -102,7 +104,11 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> findCategoryById(Long id) {
-		return findAll().stream().filter(p -> p.getCategory().getId().equals(id)).collect(Collectors.toList());
+		
+		return 	findAll()
+				.stream()
+				.filter(p->p.getCategory().getId().equals(id))
+				.collect(Collectors.toList());
 	}
 
 }

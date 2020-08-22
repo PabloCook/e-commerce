@@ -25,9 +25,9 @@ import ar.com.gl.shop.product.utils.CategoryDTOConverter;
 @RestController
 public class CatalogController {
 
-	CategoryDTOConverter categoryDTOConverter;
-
-	CategoryServiceImpl categoryServiceImpl;
+	private CategoryDTOConverter categoryDTOConverter;
+		
+	private CategoryServiceImpl categoryServiceImpl;
 
 	@Autowired
 	public CatalogController(CategoryDTOConverter categoryDTOConverter, CategoryServiceImpl categoryServiceImpl) {
@@ -35,11 +35,13 @@ public class CatalogController {
 		this.categoryServiceImpl = categoryServiceImpl;
 	}
 
-	@GetMapping(value = "/categories")
-	public ResponseEntity<Object> findAll(@RequestParam(name = "name", required = false) String name) {
 
-		if (nonNull(name)) {
-			return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getByName(name)), HttpStatus.OK);
+	@GetMapping(value="/categories")
+	public ResponseEntity<Object> findAll(
+			@RequestParam(name="name",required = false) String name){
+		
+		if(nonNull(name)) {
+			return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getByName(name)),HttpStatus.OK);
 		}
 
 		return new ResponseEntity<>(categoryDTOConverter.toDTOList(categoryServiceImpl.findAll()), HttpStatus.OK);
