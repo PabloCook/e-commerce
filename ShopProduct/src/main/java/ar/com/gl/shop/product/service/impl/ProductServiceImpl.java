@@ -1,5 +1,8 @@
 package ar.com.gl.shop.product.service.impl;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,12 +10,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
+import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.service.CategoryService;
 import ar.com.gl.shop.product.service.ProductService;
+import ar.com.gl.shop.product.utils.ProductDTOConverter;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -20,12 +23,14 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository repositoryImpl;
 
 	private CategoryService categoryService;
-
+	
+	private ProductDTOConverter productDTOConverter;
 
 	@Autowired
-	public ProductServiceImpl(ProductRepository repositoryImpl, CategoryService categoryService) {
+	public ProductServiceImpl(ProductRepository repositoryImpl, CategoryService categoryService, ProductDTOConverter productDTOConverter) {
 		this.repositoryImpl = repositoryImpl;
 		this.categoryService = categoryService;
+		this.productDTOConverter = productDTOConverter;
 	}
 
 	@Override
@@ -68,10 +73,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product update(Product product) {
-
-		product.setCategory(categoryService.getById(product.getCategory().getId(), true));
-		return repositoryImpl.save(product);
+	public Product update(ProductDTO productDTO, Product product) {
+		
+		if (nonNull(productDTO.getCategoryId())) {
+			product.setCategory(categoryService.getById(productDTO.getCategoryId(), true));
+			productDTO.setCategoryId(null);
+		}
+		
+		productDTO.setCategoryId(null);
+		productDTO.setId(product.getId());
+		
+		Product convertedProduct = productDTOConverter.toEntity(productDTO, product);
+		
+		convertedProduct.setCategory(categoryService.getById(product.getCategory().getId(), true));
+		
+		return repositoryImpl.save(convertedProduct);
 	}
 
 	@Override

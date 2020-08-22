@@ -2,6 +2,7 @@ package ar.com.gl.shop.product.service;
 
 import java.util.List;
 
+import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 
 public interface ProductService {
@@ -22,7 +23,7 @@ public interface ProductService {
 
 	public Product softDelete(Long id);
 	public void delete(Long id);
-	public Product update(Product product);
+	public Product update(ProductDTO productDTO,Product product);
 	public List<Product> findAllDisabled();
 	public Product getByName(String name);
 	public List<Product> findCategoryById(Long id);

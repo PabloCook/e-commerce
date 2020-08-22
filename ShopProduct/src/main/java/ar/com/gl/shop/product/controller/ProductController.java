@@ -87,11 +87,9 @@ public class ProductController {
 			productDTO = productDTOConverter
 					.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO)));
 		} else {
-			product.setCategory(categoryService.getById(productDTO.getCategoryId(), true));
-			productDTO.setCategoryId(null);
-			productDTO.setId(id);
+
 			productDTO = productDTOConverter
-					.toDTO(productServiceImpl.update(productDTOConverter.toEntity(productDTO, product)));
+					.toDTO(productServiceImpl.update(productDTO, product));
 		}
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
@@ -102,14 +100,8 @@ public class ProductController {
 
 			Product product = productServiceImpl.getById(id, false);
 			
-			if (nonNull(productDTO.getCategoryId())) {
-				product.setCategory(categoryService.getById(productDTO.getCategoryId(), true));
-				productDTO.setCategoryId(null);
-			}
-			
-			productDTO.setId(id);
 			productDTO = productDTOConverter
-					.toDTO(productServiceImpl.update(productDTOConverter.toEntity(productDTO, product)));
+					.toDTO(productServiceImpl.update(productDTO, product));
 		
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
