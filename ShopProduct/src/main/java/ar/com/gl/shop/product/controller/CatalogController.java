@@ -26,9 +26,9 @@ import ar.com.gl.shop.product.utils.CategoryDTOConverter;
 @RestController
 public class CatalogController {
 
-	CategoryDTOConverter categoryDTOConverter;
+	private CategoryDTOConverter categoryDTOConverter;
 		
-	CategoryServiceImpl categoryServiceImpl;
+	private CategoryServiceImpl categoryServiceImpl;
 
 	@Autowired
 	public CatalogController(CategoryDTOConverter categoryDTOConverter, CategoryServiceImpl categoryServiceImpl) {
