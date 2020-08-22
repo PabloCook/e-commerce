@@ -35,7 +35,7 @@ class CategoryServicesImplTest {
 	@Mock
 	CategoryRepository categoryRepositoryMock;
 
-	Category category1, category2, category3,category4;
+	Category category1, category2, category3, category4;
 	Optional<Category> oCategory3;
 
 	List<Category> theCategoriesMock = new ArrayList<>();
@@ -74,7 +74,7 @@ class CategoryServicesImplTest {
 	void testCase_2() {
 		theCategoriesMock.remove(category4);
 		when(categoryRepositoryMock.findAll()).thenReturn((theCategoriesMock));
-		assertEquals(theCategoriesMock,categoryService.findAll());
+		assertEquals(theCategoriesMock, categoryService.findAll());
 	}
 
 	@Test
@@ -86,7 +86,6 @@ class CategoryServicesImplTest {
 		assertTrue(categoryService.getById(3L, true).equals(category3));
 	}
 
-	
 	@Test
 	@DisplayName("testUpdateById")
 	void testCase_6() {
@@ -97,9 +96,9 @@ class CategoryServicesImplTest {
 		assertEquals(category1, categoryService.update(category1));
 	}
 
-	@Test 
+	@Test
 	@DisplayName("testDeleteById")
-	void testCase_5()  {
+	void testCase_5() {
 		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
 		categoryService.softDelete(category3.getId());
 		oCategory3.get().setEnabled(false);
@@ -112,32 +111,31 @@ class CategoryServicesImplTest {
 	@DisplayName("test FindAllDisabled")
 	void testCase_51() {
 
-	
 		when(categoryRepositoryMock.findAll()).thenReturn(theCategoriesMock);
 		assertTrue(categoryService.findAllDisabled().size() == 4);
-		assertEquals(theCategoriesMock,categoryService.findAllDisabled());
+		assertEquals(theCategoriesMock, categoryService.findAllDisabled());
 	}
 
 	@Test
 	@DisplayName("test recover category")
-	void testCase_7()  {
+	void testCase_7() {
 		oCategory3.get().setEnabled(false);
-		when(categoryRepositoryMock.findById(category1.getId())).thenReturn(oCategory3);
-		category1.setEnabled(false);
-		lenient().when(categoryRepositoryMock.update(category1)).thenReturn(category1);
-		Category recoveredCategory = categoryService.softDelete(category1.getId());
+		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
+		oCategory3.get().setEnabled(true);
+		when(categoryRepositoryMock.save(oCategory3.get())).thenReturn(oCategory3.get());
 
-		assertNotNull(recoveredCategory);
+		assertEquals(oCategory3.get(), categoryService.softDelete(oCategory3.get().getId()));
+		
 	}
 
 	@Test
 	@DisplayName("test ForceDelete")
-	void testCase_8() throws ItemNotFound {
-
-		categoryService.delete(category1.getId());
-		when(categoryRepositoryImpl.getById(category1.getId())).thenReturn(null);
-		assertNull(categoryService.getById(1l, true));
-		assertNull(categoryService.getById(1l, false));
+	void testCase_8() {
+		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
+		categoryService.delete(oCategory3.get().getId());
+		
+		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(Optional.ofNullable(null));
+		assertNull(categoryService.getById(oCategory3.get().getId(), false));
 	}
 
 }
