@@ -18,11 +18,14 @@ import ar.com.gl.shop.product.service.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-	
+
+	private CategoryRepository repositoryImpl;
+
 	@Autowired
-	CategoryRepository repositoryImpl;
-	@Autowired
-	ProductRepository productRepositoryImpl;
+	public CategoryServiceImpl(CategoryRepository repositoryImpl, ProductRepository productRepositoryImpl) {
+		this.repositoryImpl = repositoryImpl;
+
+	}
 
 	@Override
 	public Category create(Category category) {
@@ -33,10 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> findAll() {
 
-		return repositoryImpl.findAll()
-							 .stream()
-						 	 .filter(category -> category.getEnabled())
-						 	 .collect(Collectors.toList());
+		return repositoryImpl.findAll().stream().filter(category -> category.getEnabled()).collect(Collectors.toList());
 	}
 
 	@Override
