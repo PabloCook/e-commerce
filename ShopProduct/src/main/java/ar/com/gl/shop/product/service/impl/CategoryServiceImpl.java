@@ -18,6 +18,7 @@ import ar.com.gl.shop.product.service.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+	
 	@Autowired
 	CategoryRepository repositoryImpl;
 	@Autowired
