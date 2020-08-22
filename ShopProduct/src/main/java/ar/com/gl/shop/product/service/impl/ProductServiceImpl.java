@@ -1,38 +1,42 @@
 package ar.com.gl.shop.product.service.impl;
 
 
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.ProductRepository;
+import ar.com.gl.shop.product.service.CategoryService;
 import ar.com.gl.shop.product.service.ProductService;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
-	@Autowired
 	private ProductRepository repositoryImpl;
 
-	
+	private CategoryService categoryService;
+
+	@Autowired
+	public ProductServiceImpl(ProductRepository repositoryImpl, CategoryService categoryService) {
+		this.repositoryImpl = repositoryImpl;
+		this.categoryService = categoryService;
+	}
+
 	@Override
 	public Product create(Product product) {
-
 		return repositoryImpl.save(product);
 	}
 
 	@Override
 	public List<Product> findAll() {
-		
-		return repositoryImpl.findAll()
-							 .stream()
-						 	 .filter(product -> product.getEnabled())
-						 	 .collect(Collectors.toList());
+
+		return repositoryImpl.findAll().stream().filter(product -> product.getEnabled()).collect(Collectors.toList());
 
 	}
 
@@ -51,8 +55,12 @@ public class ProductServiceImpl implements ProductService {
 
 		Optional<Product> product = repositoryImpl.findById(id);
 
-		if (product.isPresent() && searchEnable) {
-			return product.get().getEnabled() ? product.get() : null;
+		if (product.isPresent()) {
+			if (searchEnable) {
+				return product.get().getEnabled() ? product.get() : null;
+			} else {
+				return product.get();
+			}
 		}
 
 		return null;
@@ -61,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product update(Product product) {
 
+		product.setCategory(categoryService.getById(product.getCategory().getId(), true));
 		return repositoryImpl.save(product);
 	}
 
@@ -81,7 +90,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void delete(Long id) {
-
 		if (nonNull(id)) {
 			repositoryImpl.delete(repositoryImpl.findById(id).get());
 		}
@@ -89,13 +97,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product getByName(String name){
+	public Product getByName(String name) {
 		return repositoryImpl.findByName(name);
 	}
 	
 	@Override
 	public List<Product> findCategoryById(Long id) {
-		 
 		
 		return 	findAll()
 				.stream()
