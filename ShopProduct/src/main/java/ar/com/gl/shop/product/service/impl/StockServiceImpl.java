@@ -14,8 +14,12 @@ import ar.com.gl.shop.product.service.StockService;
 
 public class StockServiceImpl implements StockService {
 
+private StockRepository repositoryImpl;
+	
 	@Autowired
-	private StockRepository repositoryImpl;
+	public StockServiceImpl(StockRepository repositoryImpl) {
+		this.repositoryImpl= repositoryImpl;
+	}
 
 	@Override
 	public Stock create(Stock stock) {

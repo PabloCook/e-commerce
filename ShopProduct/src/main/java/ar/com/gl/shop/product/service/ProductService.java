@@ -25,6 +25,6 @@ public interface ProductService {
 	public Product update(Product product);
 	public List<Product> findAllDisabled();
 	public Product getByName(String name);
-	public List<Product> getByCategoryId(Long id);
+	public List<Product> findCategoryById(Long id);
 
 }
