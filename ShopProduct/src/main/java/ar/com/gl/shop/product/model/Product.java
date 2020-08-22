@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,7 +42,7 @@ public class Product {
 	@Column(name = "enabled")
 	private Boolean enabled;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name = "category_id")
 	private Category category;
 

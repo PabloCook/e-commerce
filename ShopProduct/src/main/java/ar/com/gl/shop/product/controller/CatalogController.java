@@ -22,60 +22,60 @@ import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
 import ar.com.gl.shop.product.utils.CategoryDTOConverter;
 
-
 @RestController
 public class CatalogController {
-	
-	@Autowired
+
 	CategoryDTOConverter categoryDTOConverter;
 
-	
-	@Autowired
 	CategoryServiceImpl categoryServiceImpl;
-	
-	@GetMapping(value="/categories")
-	public ResponseEntity<Object> findAll(
-			@RequestParam(name="name",required = false) String name){
-		
-		if(nonNull(name)) {
-			return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getByName(name)),HttpStatus.OK);
+
+	@Autowired
+	public CatalogController(CategoryDTOConverter categoryDTOConverter, CategoryServiceImpl categoryServiceImpl) {
+		this.categoryDTOConverter = categoryDTOConverter;
+		this.categoryServiceImpl = categoryServiceImpl;
+	}
+
+	@GetMapping(value = "/categories")
+	public ResponseEntity<Object> findAll(@RequestParam(name = "name", required = false) String name) {
+
+		if (nonNull(name)) {
+			return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getByName(name)), HttpStatus.OK);
 		}
-		
-		return new ResponseEntity<>(categoryDTOConverter.toDTOList(categoryServiceImpl.findAll()),HttpStatus.OK);
+
+		return new ResponseEntity<>(categoryDTOConverter.toDTOList(categoryServiceImpl.findAll()), HttpStatus.OK);
 
 	}
-	
-	
-	
-	@GetMapping(value="/categories/{id}")
-	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id){
-		
-		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getById(id, true)),HttpStatus.OK);
+
+	@GetMapping(value = "/categories/{id}")
+	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id) {
+
+		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getById(id, true)), HttpStatus.OK);
 
 	}
-	
-	
-	@PostMapping(value="/categories")
-	public ResponseEntity<Object> create(@Valid @RequestBody CategoryDTO categoryDTO){
-		return new ResponseEntity<>((categoryDTOConverter.toDTO(categoryServiceImpl.create(categoryDTOConverter.toEntity(categoryDTO)))),HttpStatus.CREATED);
+
+	@PostMapping(value = "/categories")
+	public ResponseEntity<Object> create(@Valid @RequestBody CategoryDTO categoryDTO) {
+		return new ResponseEntity<>(
+				(categoryDTOConverter.toDTO(categoryServiceImpl.create(categoryDTOConverter.toEntity(categoryDTO)))),
+				HttpStatus.CREATED);
 
 	}
-	
-	@PatchMapping(value="/categories/{id}/description")
-	public ResponseEntity<Object> patchDescription(@PathVariable(name="id")Long id,
-												     @RequestParam(name="description") String description){
-		
+
+	@PatchMapping(value = "/categories/{id}/description")
+	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id,
+			@RequestParam(name = "description") String description) {
+
 		Category category = categoryServiceImpl.getById(id, true);
-		
+
 		category.setDescription(description);
-		
-		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.update(category)),HttpStatus.OK);
+
+		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.update(category)), HttpStatus.OK);
 	}
-	
-	@DeleteMapping(value="/categories/{id}")
-	public ResponseEntity<Object> delete(@PathVariable(name="id") Long id) {
+
+	@DeleteMapping(value = "/categories/{id}")
+	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id) {
 		categoryServiceImpl.delete(id);
-		return new ResponseEntity<>("Deleted Successfull",HttpStatus.OK);
+		return new ResponseEntity<>("Deleted Successfull", HttpStatus.OK);
 	}
 
 }
