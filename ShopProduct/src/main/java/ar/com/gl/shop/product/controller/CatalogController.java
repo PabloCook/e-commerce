@@ -25,14 +25,17 @@ import ar.com.gl.shop.product.utils.CategoryDTOConverter;
 
 @RestController
 public class CatalogController {
-	
-	@Autowired
-	CategoryDTOConverter categoryDTOConverter;
 
-	
+	private CategoryDTOConverter categoryDTOConverter;
+		
+	private CategoryServiceImpl categoryServiceImpl;
+
 	@Autowired
-	CategoryServiceImpl categoryServiceImpl;
-	
+	public CatalogController(CategoryDTOConverter categoryDTOConverter, CategoryServiceImpl categoryServiceImpl) {
+		this.categoryDTOConverter = categoryDTOConverter;
+		this.categoryServiceImpl = categoryServiceImpl;
+	}
+
 	@GetMapping(value="/categories")
 	public ResponseEntity<Object> findAll(
 			@RequestParam(name="name",required = false) String name){
