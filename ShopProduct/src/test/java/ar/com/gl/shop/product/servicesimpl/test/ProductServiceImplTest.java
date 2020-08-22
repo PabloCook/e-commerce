@@ -10,6 +10,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,46 +24,53 @@ import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
-import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
-import ar.com.gl.shop.product.repository.impl.StockRepositoryImpl;
+import ar.com.gl.shop.product.repository.ProductRepository;
+import ar.com.gl.shop.product.repository.CategoryRepository;
+import ar.com.gl.shop.product.repository.StockRepository;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
 import ar.com.gl.shop.product.service.impl.StockServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
+	
 	@InjectMocks
 	ProductServiceImpl productService;
 
 	@Mock
-	ProductRepositoryImpl productRepositoryImpl;
+	ProductRepository productRepository;
+
+	@Mock
+	CategoryRepository categoryRepository;
+
+	@Mock
+	StockRepository stockRepository;
 		
 	Product product1, product2;
 	
 	@BeforeEach
-	void setUp() throws ItemNotFound{
+	void setUp() {
 		product1 = new Product("Test product", "Product for testing", 500.0, new Category());
 		product1.setStock(new Stock(30, "SJ"));
 		product2 = new Product("Test product2", "Second product for testing", 500.0, new Category());
 		product2.setStock(new Stock(50, "MDZ"));
-		productService.create(product1);
-		productService.create(product2);
-		
-		lenient().when(productRepositoryImpl.getById(2L)).thenReturn(product2);
-		lenient().when(productRepositoryImpl.getById(1L)).thenReturn(product1);
 	}
 
 	@Test
 	@DisplayName("test find all")
-	void testCase_1() throws ItemNotFound {	
-		Product[] theProducts = {
-				productService.getById(1l, true),
-				productService.getById(2l, true)
-		};	
-			
-		when(productRepositoryImpl.findAll()).thenReturn(Arrays.asList(theProducts));
+	void testCase_1() {	
+
+		Product[] theProducts = {product1, product2};
+
+		when(productRepository.findAll()).thenReturn(Arrays.asList(theProducts));
 		
 		assertArrayEquals(theProducts, productService.findAll().toArray());		
+	}
+
+	@Test
+	@DisplayName("test find By id")
+	void tesCase_2(){
+
 	}
 
 	

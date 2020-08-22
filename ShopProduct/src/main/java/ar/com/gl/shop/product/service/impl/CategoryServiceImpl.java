@@ -48,11 +48,18 @@ public class CategoryServiceImpl implements CategoryService {
 		if (isNull(id)) {
 			return null;
 		}
+
 		Optional<Category> category = repositoryImpl.findById(id);
 
-		if (category.isPresent() && searchEnable) {
-			return category.get().getEnabled() ? category.get() : null;
+		if (category.isPresent()) {
+			if (searchEnable) {
+				return category.get().getEnabled() ? category.get() : null;
+
+			} else {
+				return category.get();
+			}
 		}
+
 		return null;
 
 	}
