@@ -24,8 +24,6 @@ import ar.com.gl.shop.product.service.CategoryService;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
 import ar.com.gl.shop.product.utils.ProductDTOConverter;
 
-import ar.com.gl.shop.product.utils.ProductDTOConverter;
-
 @RestController
 public class ProductController {
 
@@ -82,13 +80,14 @@ public class ProductController {
 			@Valid @RequestBody ProductDTO productDTO) {
 
 		Product product = productServiceImpl.getById(id, false);
-
 		if (isNull(product)) {
 			productDTO = productDTOConverter
 					.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO)));
 		} else {
-			product.setCategory(categoryService.getById(productDTO.getCategoryId(), true));
-			productDTO.setCategoryId(null);
+			if (nonNull(productDTO.getCategoryId())) {
+				product.setCategory(categoryService.getById(productDTO.getCategoryId(), true));
+				productDTO.setCategoryId(null);
+			}
 			productDTO.setId(id);
 			productDTO = productDTOConverter
 					.toDTO(productServiceImpl.update(productDTOConverter.toEntity(productDTO, product)));
