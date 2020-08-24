@@ -11,7 +11,7 @@
 	<groupId>ar.com.gl.shop.product</groupId>
 	<artifactId>ShopProduct</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0-DEFINITIVO</version>
 	<name>ShopProduct Celula09</name>
 	<url>http://maven.apache.org</url>
 	<properties>
