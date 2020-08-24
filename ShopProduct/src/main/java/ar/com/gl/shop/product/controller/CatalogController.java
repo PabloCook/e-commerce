@@ -61,6 +61,7 @@ public class CatalogController {
 				(categoryDTOConverter.toDTO(categoryServiceImpl.create(categoryDTOConverter.toEntity(categoryDTO)))),
 				HttpStatus.CREATED);
 
+
 	}
 
 	@PatchMapping(value = "/categories/{id}/description")

@@ -2,8 +2,6 @@ package ar.com.gl.shop.product.controller;
 
 import static java.util.Objects.isNull;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +59,7 @@ public class ProductController {
 	}
 
 	@PostMapping(value = "/products")
-	public ResponseEntity<Object> create(@Valid @RequestBody ProductDTO productDTO) {
+	public ResponseEntity<Object> create(@RequestBody ProductDTO productDTO) {
 
 		return new ResponseEntity<>(
 				productDTOConverter.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO))),
@@ -71,10 +69,9 @@ public class ProductController {
 
 	@PutMapping(value = "/products/{id}")
 	public ResponseEntity<Object> update(@PathVariable(name = "id") Long id,
-			@Valid @RequestBody ProductDTO productDTO) {
+			@RequestBody ProductDTO productDTO) {
 
 		Product product = productServiceImpl.getById(id, false);
-
 		if (isNull(product)) {
 			productDTO = productDTOConverter
 					.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO)));
@@ -88,7 +85,7 @@ public class ProductController {
 
 	@PatchMapping(value = "/products/{id}")
 	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id,
-												   @Valid @RequestBody ProductDTO productDTO) {
+												   @RequestBody ProductDTO productDTO) {
 
 			Product product = productServiceImpl.getById(id, false);
 			
