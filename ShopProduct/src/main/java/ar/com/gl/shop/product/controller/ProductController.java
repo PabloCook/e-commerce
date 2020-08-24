@@ -20,8 +20,10 @@ import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
 import ar.com.gl.shop.product.utils.ProductDTOConverter;
+import io.swagger.annotations.Api;
 
 @RestController
+@Api(value="Product Controller",description="all product operations")
 public class ProductController {
 
 	private ProductServiceImpl productServiceImpl;

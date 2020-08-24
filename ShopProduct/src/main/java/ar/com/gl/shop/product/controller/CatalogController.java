@@ -21,10 +21,13 @@ import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
 import ar.com.gl.shop.product.utils.CategoryDTOConverter;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
+@Api(value="Catalog Controller",description="all category operations")
 public class CatalogController {
-
+ 
 	private CategoryDTOConverter categoryDTOConverter;
 		
 	private CategoryServiceImpl categoryServiceImpl;
@@ -35,7 +38,7 @@ public class CatalogController {
 		this.categoryServiceImpl = categoryServiceImpl;
 	}
 
-
+	@ApiOperation(value="return all cateogries",response=CategoryDTO.class)
 	@GetMapping(value="/categories")
 	public ResponseEntity<Object> findAll(
 			@RequestParam(name="name",required = false) String name){
@@ -48,6 +51,7 @@ public class CatalogController {
 
 	}
 
+	@ApiOperation(value="return category by ID",response=CategoryDTO.class)
 	@GetMapping(value = "/categories/{id}")
 	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id) {
 
@@ -55,6 +59,7 @@ public class CatalogController {
 
 	}
 
+	@ApiOperation(value="create category",response=CategoryDTO.class)
 	@PostMapping(value = "/categories")
 	public ResponseEntity<Object> create(@Valid @RequestBody CategoryDTO categoryDTO) {
 		return new ResponseEntity<>(
@@ -63,6 +68,7 @@ public class CatalogController {
 
 	}
 
+	@ApiOperation(value="update description of category",response=CategoryDTO.class)
 	@PatchMapping(value = "/categories/{id}/description")
 	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id,
 			@RequestParam(name = "description") String description) {
@@ -74,6 +80,7 @@ public class CatalogController {
 		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.update(category)), HttpStatus.OK);
 	}
 
+	@ApiOperation(value="delete category")
 	@DeleteMapping(value = "/categories/{id}")
 	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id) {
 		categoryServiceImpl.delete(id);
