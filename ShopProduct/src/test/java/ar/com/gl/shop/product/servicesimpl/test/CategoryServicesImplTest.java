@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -19,8 +22,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import ar.com.gl.shop.product.exceptions.CannotDelete;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
+import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
@@ -127,18 +132,40 @@ class CategoryServicesImplTest {
 		assertEquals(oCategory3.get(), categoryService.softDelete(oCategory3.get().getId()));
 		
 	}
-
+	
+	@Test
+	@DisplayName("test getByName")
+	void testCase_8() {
+		String name="name";
+		when(categoryRepositoryMock.findByName(name)).thenReturn(oCategory3);
+		
+		assertEquals(oCategory3.get(), categoryService.getByName(name));
+		
+	}
+	
+	
+	@Test
+	@DisplayName("test ForceDelete")
+	void testCase_9() {
+		
+		List<Product> products = new ArrayList<>();
+		category3.setProducts(products);
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
+		categoryService.delete(oCategory3.get().getId());
+		
+		verify(categoryRepositoryMock).delete(oCategory3.get());
+	}
 	
 	@Test
 	@DisplayName("testFindByIdNull")
-	void testCase_9() {
+	void testCase_10() {
 
 		assertNull(categoryService.getById(null, true));
 	}
 	
 	@Test
 	@DisplayName("getById ItemNotFound")
-	void testCase_10() {
+	void testCase_11() {
 		
 		when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
 		
@@ -146,4 +173,64 @@ class CategoryServicesImplTest {
 		
 	}
 	
+		
+	@Test
+	@DisplayName("softDelete ItemNotFound")
+	void testCase_12() {
+		
+		when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.softDelete(1l));
+		
+	}
+	
+	@Test
+	@DisplayName("delete CannotDelete")
+	void testCase_20() {
+		List<Product> products = new ArrayList<>();
+		
+		products.add(new Product());
+		category3.setProducts(products);
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
+		assertThrows(CannotDelete.class, ()->categoryService.delete(3L));
+		
+	}
+	
+	@Test
+	@DisplayName("getByName ItemNotFound")
+	void testCase_21() {
+		
+		lenient().when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.getByName("name"));
+		
+	}
+	
+	@Test
+	@DisplayName("testSoftDelete Id = null")
+	void testCase_323333() {
+		
+		assertNull(categoryService.softDelete(null));
+	}
+	@Test
+	@DisplayName("delete id = null")
+	void testCase_17() {
+		
+		categoryService.delete(null);
+		
+		verifyNoInteractions(categoryRepositoryMock);
+		
+	}
+	
+	@Test
+	@DisplayName("test recover category")
+	void testCase_847() {
+		oCategory3.get().setEnabled(true);
+		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
+		oCategory3.get().setEnabled(false);
+		when(categoryRepositoryMock.save(oCategory3.get())).thenReturn(oCategory3.get());
+
+		assertEquals(oCategory3.get(), categoryService.softDelete(oCategory3.get().getId()));
+		
+	}
 }
