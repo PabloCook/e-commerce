@@ -19,7 +19,7 @@ public class Converter {
 	
 	public Object fromTo(Object object, Type objectClass) {
 		modelMapper.getConfiguration().setSkipNullEnabled(true);
-		return modelMapper.map(object, objectClass);
+		return  modelMapper.map(object, objectClass);
 	}
 	
 	public Object fromTo(Object objectDTO, Object object) {
