@@ -85,7 +85,7 @@ class CategoryServicesImplTest {
 
 	@Test
 	@DisplayName("testUpdateById")
-	void testCase_6() {
+	void testCase_4() {
 		category1.setName("Consumables");
 
 		when(categoryRepositoryMock.save(category1)).thenReturn(category1);
@@ -106,7 +106,7 @@ class CategoryServicesImplTest {
 
 	@Test
 	@DisplayName("test FindAllDisabled")
-	void testCase_51() {
+	void testCase_6() {
 
 		when(categoryRepositoryMock.findAll()).thenReturn(theCategoriesMock);
 		assertTrue(categoryService.findAllDisabled().size() == 4);
@@ -134,5 +134,5 @@ class CategoryServicesImplTest {
 		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(Optional.ofNullable(null));
 		assertNull(categoryService.getById(oCategory3.get().getId(), false));
 	}
-
+	
 }

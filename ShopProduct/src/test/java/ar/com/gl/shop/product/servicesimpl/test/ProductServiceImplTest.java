@@ -269,7 +269,7 @@ class ProductServiceImplTest {
 		
 		String name = product1.getName();
 		
-		when(productRepository.findByName(name)).thenReturn(product1);
+		when(productRepository.findByName(name)).thenReturn(oProduct1);
 		
 		assertEquals(product1, productService.getByName(name));
 		
