@@ -128,15 +128,6 @@ class CategoryServicesImplTest {
 		
 	}
 
-	/*@Test
-	@DisplayName("test ForceDelete")
-	void testCase_8() {
-		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
-		categoryService.delete(oCategory3.get().getId());
-		
-		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(Optional.ofNullable(null));
-		assertNull(categoryService.getById(oCategory3.get().getId(), false));
-	}*/
 	
 	@Test
 	@DisplayName("testFindByIdNull")
