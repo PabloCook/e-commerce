@@ -17,7 +17,7 @@ public class CategoryDTOConverter extends Converter{
 	}
 	
 	public Category toEntity(CategoryDTO categoryDTO) {
-		Category category = (Category) super.fromTo(categoryDTO, Category.class);
+		Category category =  (Category) super.fromTo(categoryDTO, Category.class);
 		return category;
 	}
 	

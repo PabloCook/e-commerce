@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.com.gl.shop.product.exceptions.CannotDelete;
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.service.CategoryService;
@@ -50,10 +52,15 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		Optional<Category> category = repositoryImpl.findById(id);
 
-		if (category.isPresent() && searchEnable) {
-			return category.get().getEnabled() ? category.get() : null;
+		if (category.isPresent()) {
+			if(Boolean.TRUE.equals(searchEnable))
+				return category.get().getEnabled() ? category.get() : null;
+			else
+				return category.get();
+		}else
+		{
+			throw new ItemNotFound();
 		}
-		return null;
 
 	}
 
@@ -68,23 +75,39 @@ public class CategoryServiceImpl implements CategoryService {
 		if (isNull(id)) {
 			return null;
 		}
-		Category category = repositoryImpl.findById(id).get();
-		category.setEnabled(!category.getEnabled());
-		return repositoryImpl.save(category);
-
+		Optional<Category> categoryO = repositoryImpl.findById(id);
+		if(categoryO.isPresent()) {
+			Category category = categoryO.get();
+			category.setEnabled(!category.getEnabled());
+			return repositoryImpl.save(category);
+		}else {
+			throw new ItemNotFound();
+		}
 	}
 
 	@Override
 	public void delete(Long id) {
 
 		if (nonNull(id)) {
-			repositoryImpl.delete(repositoryImpl.findById(id).get());
+			if(repositoryImpl.findById(id).get().getProducts().isEmpty()) 
+			{
+				repositoryImpl.delete(repositoryImpl.findById(id).get());
+			}else
+			{
+				throw new CannotDelete();
+			}
 		}
 	}
 
 	@Override
 	public Category getByName(String name) {
-		return repositoryImpl.findByName(name);
-	}
+		
+		Optional<Category> category = repositoryImpl.findByName(name);
+		if(category.isPresent()) {
+			return category.get();
+			}else {
+			throw new ItemNotFound();
+			}
+		}
 
 }

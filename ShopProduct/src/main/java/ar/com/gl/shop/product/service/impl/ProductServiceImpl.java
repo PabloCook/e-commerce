@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.service.CategoryService;
@@ -62,9 +64,10 @@ public class ProductServiceImpl implements ProductService {
 			} else {
 				return product.get();
 			}
+		}else
+		{
+			throw new ItemNotFound();
 		}
-
-		return null;
 	}
 
 	@Override
@@ -81,27 +84,38 @@ public class ProductServiceImpl implements ProductService {
 			return null;
 		}
 
-		Product product = repositoryImpl.findById(id).get();
-
-		product.setEnabled(!product.getEnabled());
-
-		return repositoryImpl.save(product);
-
+		Optional<Product> productO = repositoryImpl.findById(id);
+		if(productO.isPresent()) {
+			Product product = productO.get();
+			product.setEnabled(!product.getEnabled());
+			return repositoryImpl.save(product);
+		}else {
+			throw new ItemNotFound();
+		}
 	}
 
 	@Override
 	public void delete(Long id) {
 		if (nonNull(id)) {
-			repositoryImpl.delete(repositoryImpl.findById(id).get());
+			Optional<Product> productO = repositoryImpl.findById(id);
+			if(productO.isPresent())
+				repositoryImpl.delete(productO.get());
+			else
+				throw new ItemNotFound();
 		}
 
 	}
 
 	@Override
 	public Product getByName(String name) {
-		return repositoryImpl.findByName(name);
-	}
-
+		Optional<Product> product = repositoryImpl.findByName(name);
+		if(product.isPresent()) {
+			return product.get();
+			}else {
+			throw new ItemNotFound();
+			}
+		}
+	
 	@Override
 	public List<Product> findCategoryById(Long id) {
 		
