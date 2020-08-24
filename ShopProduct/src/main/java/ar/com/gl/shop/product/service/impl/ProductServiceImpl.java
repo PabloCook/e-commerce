@@ -57,23 +57,19 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product getById(Long id, Boolean searchEnable) {
 
-		if (isNull(id)) {
-			return null;
-		}
+		if (isNull(id))	return null;
 
 		Optional<Product> product = repositoryImpl.findById(id);
 
 		if (product.isPresent()) {
+			
 			if (Boolean.TRUE.equals(searchEnable)) {
+				
 				return Boolean.TRUE.equals(product.get().getEnabled()) ? product.get() : null;
 
-			} else {
-				return product.get();
-			}
-		}else
-		{
-			throw new ItemNotFound();
-		}
+			} else	return product.get();
+			
+		}	else	throw new ItemNotFound();
 	}
 
 	@Override
@@ -97,19 +93,16 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product softDelete(Long id) {
 
-		if (isNull(id)) {
-			return null;
-		}
-
+		if (isNull(id))	return null;
 
 		Optional<Product> productO = repositoryImpl.findById(id);
+		
 		if(productO.isPresent()) {
 			Product product = productO.get();
 			product.setEnabled(!product.getEnabled());
 			return repositoryImpl.save(product);
-		}else {
-			throw new ItemNotFound();
-		}
+			
+		}else	throw new ItemNotFound();
 	}
 
 	@Override
@@ -117,10 +110,10 @@ public class ProductServiceImpl implements ProductService {
 		if (nonNull(id)) {
 
 			Optional<Product> productO = repositoryImpl.findById(id);
-			if(productO.isPresent())
-				repositoryImpl.delete(productO.get());
-			else
-				throw new ItemNotFound();
+			
+			if(productO.isPresent())	repositoryImpl.delete(productO.get());	
+			
+				else	throw new ItemNotFound();
 		}
 
 	}
@@ -128,11 +121,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product getByName(String name) {
 		Optional<Product> product = repositoryImpl.findByName(name);
-		if(product.isPresent()) {
-			return product.get();
-			}else {
-			throw new ItemNotFound();
-			}
+		
+		if(product.isPresent())	return product.get();
+			
+			else	throw new ItemNotFound();
 		}
 	
 	@Override

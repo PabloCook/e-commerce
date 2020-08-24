@@ -35,21 +35,18 @@ private StockRepository repositoryImpl;
 	@Override
 	public Stock getById(Long id, Boolean searchEnable) {
 
-		if (isNull(id)) {
-			return null;
-		}
+		if (isNull(id))	return null;
+		
 		Optional<Stock> stock = repositoryImpl.findById(id);
 
 		if (stock.isPresent()) {
 			
 			if (Boolean.TRUE.equals(searchEnable)) {
 				return Boolean.TRUE.equals(stock.get().getEnabled()) ? stock.get() : null;
-			} else {
-				return stock.get();
-			}
-		}else {
-			throw new ItemNotFound();
-		}
+				
+			}	else	return stock.get();
+			
+		}	else	throw new ItemNotFound();
 
 	}
 
@@ -60,17 +57,17 @@ private StockRepository repositoryImpl;
 
 	@Override
 	public Stock softDelete(Long id) {
-		if (isNull(id)) {
-			return null;
-		}
+		
+		if (isNull(id))	return null;
 
 		Optional<Stock> stockO = repositoryImpl.findById(id);
+		
 		if(stockO.isPresent()) {
 			Stock stock = stockO.get();
 			stock.setEnabled(!stock.getEnabled());
 			return repositoryImpl.save(stock);
-		}else
-			throw new ItemNotFound();
+			
+		}	else	throw new ItemNotFound();
 	}
 
 	@Override
@@ -78,10 +75,10 @@ private StockRepository repositoryImpl;
 		if (nonNull(id)) {
 
 			Optional<Stock> stockO = repositoryImpl.findById(id);
-			if(stockO.isPresent())
-				repositoryImpl.delete(stockO.get());
-			else
-				throw new ItemNotFound();
+			
+			if(stockO.isPresent())	repositoryImpl.delete(stockO.get());
+			
+				else	throw new ItemNotFound();
 		}
 	}
 }

@@ -46,20 +46,19 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category getById(Long id, Boolean searchEnable) {
-		if (isNull(id)) {
-			return null;
-		}
+		
+		if (isNull(id))	return null;
 
 		Optional<Category> category = repositoryImpl.findById(id);
 
 		if (category.isPresent()) {
+			
 			if (Boolean.TRUE.equals(searchEnable)) {
 				return Boolean.TRUE.equals(category.get().getEnabled()) ? category.get() : null;
-			} else
-				return category.get();
-		} else {
-			throw new ItemNotFound();
-		}
+				
+			}	else return category.get();
+			
+		}	else throw new ItemNotFound();
 
 	}
 
@@ -71,30 +70,30 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category softDelete(Long id) {
-		if (isNull(id)) {
-			return null;
-		}
+		
+		if (isNull(id))	return null;
 
 		Optional<Category> categoryO = repositoryImpl.findById(id);
+		
 		if (categoryO.isPresent()) {
 			Category category = categoryO.get();
 			category.setEnabled(!category.getEnabled());
 			return repositoryImpl.save(category);
-		} else {
-			throw new ItemNotFound();
-		}
+			
+		} else	throw new ItemNotFound();
 	}
 
 	@Override
 	public void delete(Long id) {
+		
+		Optional<Category> category = repositoryImpl.findById(id);
 
-		if (nonNull(id)) {
+		if (category.isPresent() && nonNull(id)) {
 
-			if (repositoryImpl.findById(id).get().getProducts().isEmpty()) {
-				repositoryImpl.delete(repositoryImpl.findById(id).get());
-			} else {
-				throw new CannotDelete();
-			}
+			if (category.get().getProducts().isEmpty()) {
+				repositoryImpl.delete(category.get());
+				
+			} else	throw new CannotDelete();
 		}
 	}
 
@@ -102,11 +101,11 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category getByName(String name) {
 
 		Optional<Category> category = repositoryImpl.findByName(name);
+		
 		if (category.isPresent()) {
 			return category.get();
-		} else {
-			throw new ItemNotFound();
-		}
+			
+		} else	throw new ItemNotFound();
 	}
 
 }

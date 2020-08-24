@@ -52,7 +52,7 @@ public class Category {
 	@Override
 	public String toString() {
 		return "Categoria ---> ID: " + id + "" + "\n               Nombre: " + name + ""
-				+ "\n               Descripci�n: " + description + "\n";
+				+ "\n               Descripcion: " + description + "\n";
 	}
 
 }
