@@ -1,8 +1,12 @@
 package ar.com.gl.shop.product.servicesimpl.test;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -16,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.repository.StockRepository;
 import ar.com.gl.shop.product.service.impl.StockServiceImpl;
@@ -102,6 +108,80 @@ class StockServiceImplTest {
 		verify(stockRepositoryMock).delete(stock1);
 		
 		}	
+	
+	@Test
+	@DisplayName("getById ItemNotFound")
+	void testCase_5(){
+		when(stockRepositoryMock.findById(stock1.getId())).thenReturn(Optional.empty());
 		
+		assertThrows(ItemNotFound.class, ()->stockService.getById(stock1.getId(), true));
+		
+		}	
+	
+	
+	@Test
+	@DisplayName("softDelete ItemNotFound")
+	void testCase_6(){
+		when(stockRepositoryMock.findById(stock1.getId())).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->stockService.softDelete(stock1.getId()));
+		
+		}	
+	
+	
+	@Test
+	@DisplayName("delete ItemNotFound")
+	void testCase_7(){
+		when(stockRepositoryMock.findById(stock1.getId())).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->stockService.delete(stock1.getId()));
+		
+		}	
+	
+	
+	@Test
+	@DisplayName("getById id = null")
+	void testCase_8(){
+		assertNull(stockService.getById(null, true));
+		
+		}	
+	
+	
+	@Test
+	@DisplayName("softDelete id = null")
+	void testCase_9(){
+		assertNull(stockService.softDelete(null));
+		
+		}	
+	
+	
+	@Test
+	@DisplayName("getById enabled = false")
+	void testCase_10(){
+		when(stockRepositoryMock.findById(3l)).thenReturn(oStock3);		
+		assertEquals(stock3, stockService.getById(3l, false));
+		
+		}
+	
+	
+	@Test
+	@DisplayName("delete id != null")
+	void testCase_11() {
+		
+		stockService.delete(null);
+		
+		verifyNoInteractions(stockRepositoryMock);
+		
+	}
+	
+	
+	@Test
+	@DisplayName("getById getEnabled =false")
+	void testCase_12() {
+		oStock3.get().setEnabled(false);
+		when(stockRepositoryMock.findById(3l)).thenReturn(oStock3);		
+		assertNull(stockService.getById(3l, true));
+		
+	}
 	
 }
