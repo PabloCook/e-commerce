@@ -2,6 +2,7 @@ package ar.com.gl.shop.product.servicesimpl.test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -97,6 +98,10 @@ class StockServiceImplTest {
 	void testCase_4(){
 		when(stockRepositoryMock.findById(stock1.getId())).thenReturn(oStock1);
 		stockService.delete(stock1.getId());
+		
+		verify(stockRepositoryMock).delete(stock1);
+		
 		}	
+		
 	
 }

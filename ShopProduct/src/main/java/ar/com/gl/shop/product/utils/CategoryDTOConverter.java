@@ -12,17 +12,17 @@ import ar.com.gl.shop.product.model.Category;
 public class CategoryDTOConverter extends Converter{
 	
 	public CategoryDTO toDTO(Category category) {
-		CategoryDTO categoryDTO = (CategoryDTO) super.fromTo(category, CategoryDTO.class);
-		return categoryDTO;
+		
+		return (CategoryDTO) super.fromTo(category, CategoryDTO.class);
 	}
 	
 	public Category toEntity(CategoryDTO categoryDTO) {
-		Category category = (Category) super.fromTo(categoryDTO, Category.class);
-		return category;
+		
+		return (Category) super.fromTo(categoryDTO, Category.class);
 	}
 	
 	public List<CategoryDTO> toDTOList(List<Category> categories) {
-		List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>();
+		List<CategoryDTO> categoriesDTO = new ArrayList<>();
 		for(Category category : categories) {
 			categoriesDTO.add(toDTO(category));
 		}

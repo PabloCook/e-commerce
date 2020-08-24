@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> findAll() {
 
-		return repositoryImpl.findAll().stream().filter(product -> product.getEnabled()).collect(Collectors.toList());
+		return repositoryImpl.findAll().stream().filter(Product::getEnabled).collect(Collectors.toList());
 
 	}
 
@@ -61,8 +61,8 @@ public class ProductServiceImpl implements ProductService {
 		Optional<Product> product = repositoryImpl.findById(id);
 
 		if (product.isPresent()) {
-			if (searchEnable) {
-				return product.get().getEnabled() ? product.get() : null;
+			if (Boolean.TRUE.equals(searchEnable)) {
+				return Boolean.TRUE.equals(product.get().getEnabled()) ? product.get() : null;
 
 			} else {
 				return product.get();
@@ -96,8 +96,8 @@ public class ProductServiceImpl implements ProductService {
 		if (isNull(id)) {
 			return null;
 		}
-
-		Product product = repositoryImpl.findById(id).get();
+		
+		Product product = getById(id, false);
 
 		product.setEnabled(!product.getEnabled());
 
@@ -108,7 +108,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void delete(Long id) {
 		if (nonNull(id)) {
-			repositoryImpl.delete(repositoryImpl.findById(id).get());
+			repositoryImpl.delete(getById(id, true));
 		}
 
 	}

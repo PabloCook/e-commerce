@@ -38,9 +38,15 @@ private StockRepository repositoryImpl;
 		}
 		Optional<Stock> stock = repositoryImpl.findById(id);
 
-		if (stock.isPresent() && searchEnable) {
-			return stock.get().getEnabled() ? stock.get() : null;
+		if (stock.isPresent()) {
+			
+			if (Boolean.TRUE.equals(searchEnable)) {
+				return Boolean.TRUE.equals(stock.get().getEnabled()) ? stock.get() : null;
+			} else {
+				return stock.get();
+			}
 		}
+		
 		return null;
 	}
 
@@ -54,7 +60,8 @@ private StockRepository repositoryImpl;
 		if (isNull(id)) {
 			return null;
 		}
-		Stock stock = repositoryImpl.findById(id).get();
+		
+		Stock stock = getById(id, false);
 		stock.setEnabled(!stock.getEnabled());
 		return repositoryImpl.save(stock);
 
@@ -63,7 +70,7 @@ private StockRepository repositoryImpl;
 	@Override
 	public void delete(Long id) {
 		if (nonNull(id)) {
-			repositoryImpl.delete(repositoryImpl.findById(id).get());
+			repositoryImpl.delete(getById(id, false));
 		}
 	}
 }

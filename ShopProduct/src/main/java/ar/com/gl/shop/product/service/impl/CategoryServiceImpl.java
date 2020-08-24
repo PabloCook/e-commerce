@@ -17,7 +17,6 @@ import ar.com.gl.shop.product.service.CategoryService;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-
 	private CategoryRepository repositoryImpl;
 
 	@Autowired
@@ -34,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> findAll() {
 
-		return repositoryImpl.findAll().stream().filter(category -> category.getEnabled()).collect(Collectors.toList());
+		return repositoryImpl.findAll().stream().filter(Category::getEnabled).collect(Collectors.toList());
 	}
 
 	@Override
@@ -52,8 +51,8 @@ public class CategoryServiceImpl implements CategoryService {
 		Optional<Category> category = repositoryImpl.findById(id);
 
 		if (category.isPresent()) {
-			if (searchEnable) {
-				return category.get().getEnabled() ? category.get() : null;
+			if (Boolean.TRUE.equals(searchEnable)) {
+				return Boolean.TRUE.equals(category.get().getEnabled()) ? category.get() : null;
 
 			} else {
 				return category.get();
@@ -75,9 +74,13 @@ public class CategoryServiceImpl implements CategoryService {
 		if (isNull(id)) {
 			return null;
 		}
-		Category category = repositoryImpl.findById(id).get();
+		
+		Category category = getById(id, false);
+		
 		category.setEnabled(!category.getEnabled());
+		
 		return repositoryImpl.save(category);
+		
 
 	}
 
@@ -85,7 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public void delete(Long id) {
 
 		if (nonNull(id)) {
-			repositoryImpl.delete(repositoryImpl.findById(id).get());
+			repositoryImpl.delete(getById(id, false));
 		}
 	}
 

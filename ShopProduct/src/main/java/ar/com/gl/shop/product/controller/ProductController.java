@@ -1,7 +1,6 @@
 package ar.com.gl.shop.product.controller;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 import javax.validation.Valid;
 
@@ -19,28 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.service.CategoryService;
-
 import ar.com.gl.shop.product.service.impl.ProductServiceImpl;
-import ar.com.gl.shop.product.utils.ProductDTOConverter;
-
 import ar.com.gl.shop.product.utils.ProductDTOConverter;
 
 @RestController
 public class ProductController {
 
-
 	private ProductServiceImpl productServiceImpl;
 	
 	private ProductDTOConverter productDTOConverter;
 	
-	private CategoryService categoryService;
 	
 	@Autowired
-	public ProductController(ProductServiceImpl productServiceImpl, ProductDTOConverter productDTOConverter, CategoryService categoryService) {
+	public ProductController(ProductServiceImpl productServiceImpl, ProductDTOConverter productDTOConverter) {
 		this.productServiceImpl = productServiceImpl;
 		this.productDTOConverter = productDTOConverter;
-		this.categoryService = categoryService;
 	}
 
 	@GetMapping(value = "/products")
