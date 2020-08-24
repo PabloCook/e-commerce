@@ -86,15 +86,19 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void delete(Long id) {
 		
-		Optional<Category> category = repositoryImpl.findById(id);
+		if (nonNull(id)) {
+			
+			Optional<Category> category = repositoryImpl.findById(id);
 
-		if (category.isPresent() && nonNull(id)) {
+			if (category.isPresent()) {
 
-			if (category.get().getProducts().isEmpty()) {
-				repositoryImpl.delete(category.get());
-				
-			} else	throw new CannotDelete();
+				if (category.get().getProducts().isEmpty()) {
+					repositoryImpl.delete(category.get());
+					
+				} else	throw new CannotDelete();
+			}
 		}
+		
 	}
 
 	@Override

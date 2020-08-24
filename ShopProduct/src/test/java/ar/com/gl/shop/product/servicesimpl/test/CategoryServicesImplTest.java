@@ -186,7 +186,7 @@ class CategoryServicesImplTest {
 	
 	@Test
 	@DisplayName("delete CannotDelete")
-	void testCase_20() {
+	void testCase_13() {
 		List<Product> products = new ArrayList<>();
 		
 		products.add(new Product());
@@ -198,7 +198,7 @@ class CategoryServicesImplTest {
 	
 	@Test
 	@DisplayName("getByName ItemNotFound")
-	void testCase_21() {
+	void testCase_14() {
 		
 		lenient().when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
 		
@@ -208,13 +208,14 @@ class CategoryServicesImplTest {
 	
 	@Test
 	@DisplayName("testSoftDelete Id = null")
-	void testCase_323333() {
+	void testCase_15() {
 		
 		assertNull(categoryService.softDelete(null));
 	}
+	
 	@Test
 	@DisplayName("delete id = null")
-	void testCase_17() {
+	void testCase_16() {
 		
 		categoryService.delete(null);
 		
@@ -224,7 +225,7 @@ class CategoryServicesImplTest {
 	
 	@Test
 	@DisplayName("test recover category")
-	void testCase_847() {
+	void testCase_17() {
 		oCategory3.get().setEnabled(true);
 		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
 		oCategory3.get().setEnabled(false);
