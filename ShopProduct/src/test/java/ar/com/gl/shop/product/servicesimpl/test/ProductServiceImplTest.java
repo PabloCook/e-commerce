@@ -126,16 +126,6 @@ class ProductServiceImplTest {
 		assertEquals(product1, productService.getById(1l, false));
 	}
 
-	/*@Test
-	@DisplayName("test service get By id with, id != null, oProduct.isPresent()=false")
-	void tesCase_5(){
-		
-		oProduct1 = Optional.empty();
-
-		when(productRepository.findById(1l)).thenReturn(oProduct1);
-
-		assertNull(productService.getById(1l, true));
-	}*/
 
 	@Test
 	@DisplayName("test find all")

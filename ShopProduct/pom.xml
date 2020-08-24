@@ -21,7 +21,8 @@
 		<jacoco.version>0.7.7.201606060606</jacoco.version>
 		<sonar.coverage.exclusions>
 		**/dto/**,
-		**/model/**
+		**/model/**,
+		**/test/**
 		</sonar.coverage.exclusions>
 		
 	</properties>

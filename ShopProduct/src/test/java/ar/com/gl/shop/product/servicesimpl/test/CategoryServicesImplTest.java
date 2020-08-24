@@ -3,6 +3,7 @@ package ar.com.gl.shop.product.servicesimpl.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -82,6 +83,8 @@ class CategoryServicesImplTest {
 		assertNotNull(categoryService.getById(3L, true));
 		assertTrue(categoryService.getById(3L, true).equals(category3));
 	}
+	
+
 
 	@Test
 	@DisplayName("testUpdateById")
@@ -134,5 +137,22 @@ class CategoryServicesImplTest {
 		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(Optional.ofNullable(null));
 		assertNull(categoryService.getById(oCategory3.get().getId(), false));
 	}*/
+	
+	@Test
+	@DisplayName("testFindByIdNull")
+	void testCase_9() {
+
+		assertNull(categoryService.getById(null, true));
+	}
+	
+	@Test
+	@DisplayName("getById ItemNotFound")
+	void testCase_10() {
+		
+		when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.getById(1l, true));
+		
+	}
 	
 }
