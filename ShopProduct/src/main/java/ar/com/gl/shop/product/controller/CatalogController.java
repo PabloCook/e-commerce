@@ -1,7 +1,5 @@
 package ar.com.gl.shop.product.controller;
 
-import static java.util.Objects.nonNull;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value="Catalog Controller",description="all category operations")
+@Api(value = "Catalog Controller",description = "all category operations")
 public class CatalogController {
  
 	private CategoryDTOConverter categoryDTOConverter;
@@ -38,20 +36,23 @@ public class CatalogController {
 		this.categoryServiceImpl = categoryServiceImpl;
 	}
 
-	@ApiOperation(value="return all cateogries",response=CategoryDTO.class)
+	@ApiOperation(value = "return all cateogries", response = CategoryDTO.class, responseContainer = "List")
 	@GetMapping(value="/categories")
-	public ResponseEntity<Object> findAll(
-			@RequestParam(name="name",required = false) String name){
+	public ResponseEntity<Object> findAll(){
 		
-		if(nonNull(name)) {
-			return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getByName(name)),HttpStatus.OK);
-		}
-
 		return new ResponseEntity<>(categoryDTOConverter.toDTOList(categoryServiceImpl.findAll()), HttpStatus.OK);
 
 	}
+	
+	@ApiOperation(value = "return category by name", response = CategoryDTO.class)
+	@GetMapping(value="/categories/name/{name}")
+	public ResponseEntity<Object> findbyName(@PathVariable(name = "name") String name) {
 
-	@ApiOperation(value="return category by ID",response=CategoryDTO.class)
+		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.getByName(name)), HttpStatus.OK);
+
+	}
+
+	@ApiOperation(value = "return category by ID", response = CategoryDTO.class)
 	@GetMapping(value = "/categories/{id}")
 	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id) {
 
@@ -59,7 +60,7 @@ public class CatalogController {
 
 	}
 
-	@ApiOperation(value="create category",response=CategoryDTO.class)
+	@ApiOperation(value = "create category", response = CategoryDTO.class)
 	@PostMapping(value = "/categories")
 	public ResponseEntity<Object> create(@Valid @RequestBody CategoryDTO categoryDTO) {
 		return new ResponseEntity<>(
@@ -68,7 +69,7 @@ public class CatalogController {
 
 	}
 
-	@ApiOperation(value="update description of category",response=CategoryDTO.class)
+	@ApiOperation(value = "update description of category", response = CategoryDTO.class)
 	@PatchMapping(value = "/categories/{id}/description")
 	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id,
 			@RequestParam(name = "description") String description) {
@@ -80,11 +81,11 @@ public class CatalogController {
 		return new ResponseEntity<>(categoryDTOConverter.toDTO(categoryServiceImpl.update(category)), HttpStatus.OK);
 	}
 
-	@ApiOperation(value="delete category")
+	@ApiOperation(value = "delete category")
 	@DeleteMapping(value = "/categories/{id}")
 	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id) {
 		categoryServiceImpl.delete(id);
-		return new ResponseEntity<>("Deleted Successfull", HttpStatus.OK);
+		return new ResponseEntity<>("Deleted Successful", HttpStatus.OK);
 	}
 
 }

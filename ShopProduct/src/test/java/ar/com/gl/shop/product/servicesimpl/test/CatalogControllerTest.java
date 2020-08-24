@@ -78,11 +78,11 @@ public class CatalogControllerTest {
 	}
 
 	@Test
-	@DisplayName("findAll_ByName succesfull")
+	@DisplayName("find_ByName_succesfull")
 	void testCase_1() throws Exception {
 		when(categoryService.getByName("category1")).thenReturn(category1);
 		when(productConverter.toDTO(category1)).thenReturn(categoryDTO1);
-		this.mockMvc.perform(get("/categories?name=category1")).andExpect(status().isOk())
+		this.mockMvc.perform(get("/categories/name/category1")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.name", is(categoryDTO1.getName())));
 	}
 
@@ -137,7 +137,7 @@ public class CatalogControllerTest {
 
 	  this.mockMvc.perform(delete("/categories/1")) 
 	  	.andExpect(status().isOk())
-		.andExpect(jsonPath("$",is("Deleted Successfull")));
+		.andExpect(jsonPath("$",is("Deleted Successful")));
 	  
 	  }
 	
