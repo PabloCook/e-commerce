@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
@@ -22,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ar.com.gl.shop.product.dto.ProductDTO;
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.model.Stock;
@@ -124,16 +126,6 @@ class ProductServiceImplTest {
 		assertEquals(product1, productService.getById(1l, false));
 	}
 
-	@Test
-	@DisplayName("test service get By id with, id != null, oProduct.isPresent()=false")
-	void tesCase_5(){
-		
-		oProduct1 = Optional.empty();
-
-		when(productRepository.findById(1l)).thenReturn(oProduct1);
-
-		assertNull(productService.getById(1l, true));
-	}
 
 	@Test
 	@DisplayName("test find all")
@@ -269,7 +261,7 @@ class ProductServiceImplTest {
 		
 		String name = product1.getName();
 		
-		when(productRepository.findByName(name)).thenReturn(product1);
+		when(productRepository.findByName(name)).thenReturn(oProduct1);
 		
 		assertEquals(product1, productService.getByName(name));
 		
@@ -314,6 +306,48 @@ class ProductServiceImplTest {
 		productService.delete(null);
 		
 		verifyNoInteractions(productRepository);
+		
+	}
+	
+	
+	@Test
+	@DisplayName("getById ItemNotFound")
+	void testCase_18() {
+		
+		when(productRepository.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->productService.getById(1l, true));
+		
+	}
+	
+	
+	@Test
+	@DisplayName("softDelete ItemNotFound")
+	void testCase_19() {
+		
+		when(productRepository.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->productService.softDelete(1l));
+		
+	}
+	
+	@Test
+	@DisplayName("delete ItemNotFound")
+	void testCase_20() {
+		
+		when(productRepository.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->productService.delete(1l));
+		
+	}
+	
+	@Test
+	@DisplayName("getByName ItemNotFound")
+	void testCase_21() {
+		
+		lenient().when(productRepository.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->productService.getByName("name"));
 		
 	}
 }

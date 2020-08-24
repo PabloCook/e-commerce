@@ -67,6 +67,7 @@ public class CatalogController {
 				(categoryDTOConverter.toDTO(categoryServiceImpl.create(categoryDTOConverter.toEntity(categoryDTO)))),
 				HttpStatus.CREATED);
 
+
 	}
 
 	@ApiOperation(value = "update description of category", response = CategoryDTO.class)

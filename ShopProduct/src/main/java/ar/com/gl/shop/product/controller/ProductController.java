@@ -2,7 +2,6 @@ package ar.com.gl.shop.product.controller;
 
 import static java.util.Objects.isNull;
 
-import java.util.ArrayList;
 
 import javax.validation.Valid;
 
@@ -89,7 +88,6 @@ public class ProductController {
 			@Valid @RequestBody ProductDTO productDTO) {
 
 		Product product = productServiceImpl.getById(id, false);
-
 		if (isNull(product)) {
 			productDTO = productDTOConverter
 					.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO)));

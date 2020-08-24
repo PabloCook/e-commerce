@@ -10,13 +10,14 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.com.gl.shop.product.exceptions.CannotDelete;
+import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.service.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
 
 	private CategoryRepository repositoryImpl;
 
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> findAll() {
 
-		return repositoryImpl.findAll().stream().filter(category -> category.getEnabled()).collect(Collectors.toList());
+		return repositoryImpl.findAll().stream().filter(Category::getEnabled).collect(Collectors.toList());
 	}
 
 	@Override
@@ -45,22 +46,19 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category getById(Long id, Boolean searchEnable) {
-		if (isNull(id)) {
-			return null;
-		}
+		
+		if (isNull(id))	return null;
 
 		Optional<Category> category = repositoryImpl.findById(id);
 
 		if (category.isPresent()) {
-			if (searchEnable) {
-				return category.get().getEnabled() ? category.get() : null;
-
-			} else {
-				return category.get();
-			}
-		}
-
-		return null;
+			
+			if (Boolean.TRUE.equals(searchEnable)) {
+				return Boolean.TRUE.equals(category.get().getEnabled()) ? category.get() : null;
+				
+			}	else return category.get();
+			
+		}	else throw new ItemNotFound();
 
 	}
 
@@ -72,26 +70,46 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category softDelete(Long id) {
-		if (isNull(id)) {
-			return null;
-		}
-		Category category = repositoryImpl.findById(id).get();
-		category.setEnabled(!category.getEnabled());
-		return repositoryImpl.save(category);
+		
+		if (isNull(id))	return null;
 
+		Optional<Category> categoryO = repositoryImpl.findById(id);
+		
+		if (categoryO.isPresent()) {
+			Category category = categoryO.get();
+			category.setEnabled(!category.getEnabled());
+			return repositoryImpl.save(category);
+			
+		} else	throw new ItemNotFound();
 	}
 
 	@Override
 	public void delete(Long id) {
-
+		
 		if (nonNull(id)) {
-			repositoryImpl.delete(repositoryImpl.findById(id).get());
+			
+			Optional<Category> category = repositoryImpl.findById(id);
+
+			if (category.isPresent()) {
+
+				if (category.get().getProducts().isEmpty()) {
+					repositoryImpl.delete(category.get());
+					
+				} else	throw new CannotDelete();
+			}
 		}
+		
 	}
 
 	@Override
 	public Category getByName(String name) {
-		return repositoryImpl.findByName(name);
+
+		Optional<Category> category = repositoryImpl.findByName(name);
+		
+		if (category.isPresent()) {
+			return category.get();
+			
+		} else	throw new ItemNotFound();
 	}
 
 }

@@ -3,7 +3,11 @@ package ar.com.gl.shop.product.servicesimpl.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -18,8 +22,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import ar.com.gl.shop.product.exceptions.CannotDelete;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
+import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
@@ -82,6 +88,8 @@ class CategoryServicesImplTest {
 		assertNotNull(categoryService.getById(3L, true));
 		assertTrue(categoryService.getById(3L, true).equals(category3));
 	}
+	
+
 
 	@Test
 	@DisplayName("testUpdateById")
@@ -124,15 +132,106 @@ class CategoryServicesImplTest {
 		assertEquals(oCategory3.get(), categoryService.softDelete(oCategory3.get().getId()));
 		
 	}
-
+	
+	@Test
+	@DisplayName("test getByName")
+	void testCase_8() {
+		String name="name";
+		when(categoryRepositoryMock.findByName(name)).thenReturn(oCategory3);
+		
+		assertEquals(oCategory3.get(), categoryService.getByName(name));
+		
+	}
+	
+	
 	@Test
 	@DisplayName("test ForceDelete")
-	void testCase_8() {
-		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
+	void testCase_9() {
+		
+		List<Product> products = new ArrayList<>();
+		category3.setProducts(products);
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
 		categoryService.delete(oCategory3.get().getId());
 		
-		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(Optional.ofNullable(null));
-		assertNull(categoryService.getById(oCategory3.get().getId(), false));
+		verify(categoryRepositoryMock).delete(oCategory3.get());
 	}
+	
+	@Test
+	@DisplayName("testFindByIdNull")
+	void testCase_10() {
 
+		assertNull(categoryService.getById(null, true));
+	}
+	
+	@Test
+	@DisplayName("getById ItemNotFound")
+	void testCase_11() {
+		
+		when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.getById(1l, true));
+		
+	}
+	
+		
+	@Test
+	@DisplayName("softDelete ItemNotFound")
+	void testCase_12() {
+		
+		when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.softDelete(1l));
+		
+	}
+	
+	@Test
+	@DisplayName("delete CannotDelete")
+	void testCase_13() {
+		List<Product> products = new ArrayList<>();
+		
+		products.add(new Product());
+		category3.setProducts(products);
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
+		assertThrows(CannotDelete.class, ()->categoryService.delete(3L));
+		
+	}
+	
+	@Test
+	@DisplayName("getByName ItemNotFound")
+	void testCase_14() {
+		
+		lenient().when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.getByName("name"));
+		
+	}
+	
+	@Test
+	@DisplayName("testSoftDelete Id = null")
+	void testCase_15() {
+		
+		assertNull(categoryService.softDelete(null));
+	}
+	
+	@Test
+	@DisplayName("delete id = null")
+	void testCase_16() {
+		
+		categoryService.delete(null);
+		
+		verifyNoInteractions(categoryRepositoryMock);
+		
+	}
+	
+	@Test
+	@DisplayName("test recover category")
+	void testCase_17() {
+		oCategory3.get().setEnabled(true);
+		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
+		oCategory3.get().setEnabled(false);
+		when(categoryRepositoryMock.save(oCategory3.get())).thenReturn(oCategory3.get());
+
+		assertEquals(oCategory3.get(), categoryService.softDelete(oCategory3.get().getId()));
+		
+	}
 }
