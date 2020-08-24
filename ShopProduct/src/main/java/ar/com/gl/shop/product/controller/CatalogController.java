@@ -23,7 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Catalog Controller",description = "all category operations")
+@Api(value = "Catalog Controller")
 public class CatalogController {
  
 	private CategoryDTOConverter categoryDTOConverter;

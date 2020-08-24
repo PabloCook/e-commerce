@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 
 @RestController
-@Api(value="Product Controller",description="all product operations")
+@Api(value="Product Controller")
 public class ProductController {
 
 	private ProductServiceImpl productServiceImpl;
