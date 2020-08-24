@@ -23,13 +23,13 @@ public class Stock {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "quantity")
+	@Column(name = "quantity" , nullable = false)
 	private Integer quantity;
 
-	@Column(name = "locationCode")
+	@Column(name = "locationCode" , nullable = false)
 	private String locationCode;
 
-	@Column(name = "enabled")
+	@Column(name = "enabled" , nullable = false)
 	private Boolean enabled;
 
 	public Stock() {

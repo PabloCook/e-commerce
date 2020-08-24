@@ -28,24 +28,24 @@ public class Product {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "name" , nullable = false)
 	private String name;
 
-	@Column(name = "description")
+	@Column(name = "description" , nullable = false)
 	private String description;
 
-	@Column(name = "price")
+	@Column(name = "price" , nullable = false)
 	private Double price;
 
 	@OneToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "stock_id", unique = true)
+	@JoinColumn(name = "stock_id", unique = true , nullable = false)
 	private Stock stock;
 
-	@Column(name = "enabled")
+	@Column(name = "enabled" , nullable = false)
 	private Boolean enabled;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "category_id")
+	@JoinColumn(name = "category_id" , nullable = false)
 	private Category category;
 
 	public Product() {

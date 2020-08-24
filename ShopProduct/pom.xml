@@ -22,7 +22,8 @@
 		<sonar.coverage.exclusions>
 		**/dto/**,
 		**/model/**,
-		**/test/**
+		**/test/**,
+		**/configuration/**
 		</sonar.coverage.exclusions>
 		
 	</properties>
