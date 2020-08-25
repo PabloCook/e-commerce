@@ -14,11 +14,13 @@ import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-@Entity
 @EqualsAndHashCode
+@ToString
+@Entity
 @Table(name = "category")
 public class Category {
 
@@ -47,12 +49,6 @@ public class Category {
 		this.name = name;
 		this.description = description;
 		this.enabled = true;
-	}
-
-	@Override
-	public String toString() {
-		return "Categoria ---> ID: " + id + "" + "\n               Nombre: " + name + ""
-				+ "\n               Descripcion: " + description + "\n";
 	}
 
 }

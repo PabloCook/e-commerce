@@ -15,11 +15,13 @@ import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-@Entity
 @EqualsAndHashCode
+@ToString
+@Entity
 @Table(name = "product")
 public class Product {
 
@@ -60,14 +62,6 @@ public class Product {
 		this.price = price;
 		this.category = category;
 		this.enabled = true;
-	}
-
-	@Override
-	public String toString() {
-		return "Producto ---> ID: " + id + "\n" + "              Nombre: " + name + "\n" + "              Descripcion: "
-				+ description + "\n" + "              Precio: $" + price + "\n" + "              Stock: "
-				+ stock.getQuantity() + "\n" + "              Locacion: " + stock.getLocationCode() + "\n"
-				+ "              Categoria: " + category.getName();
 	}
 
 }

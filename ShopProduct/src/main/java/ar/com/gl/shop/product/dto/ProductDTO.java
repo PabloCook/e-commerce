@@ -1,7 +1,5 @@
 package ar.com.gl.shop.product.dto;
 
-import org.springframework.stereotype.Component;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 public class ProductDTO {
 	
 	private Long id;

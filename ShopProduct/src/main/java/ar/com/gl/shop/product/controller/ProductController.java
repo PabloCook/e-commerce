@@ -5,7 +5,6 @@ import static java.util.Objects.isNull;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,7 +35,6 @@ public class ProductController {
 	private ProductDTOConverter productDTOConverter;
 	
 	
-	@Autowired
 	public ProductController(ProductServiceImpl productServiceImpl, ProductDTOConverter productDTOConverter) {
 		this.productServiceImpl = productServiceImpl;
 		this.productDTOConverter = productDTOConverter;

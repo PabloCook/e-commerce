@@ -10,10 +10,12 @@ import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "stock")
 public class Stock {
@@ -40,11 +42,6 @@ public class Stock {
 		this.quantity = quantity;
 		this.locationCode = locationCode;
 		this.enabled = true;
-	}
-
-	@Override
-	public String toString() {
-		return "Stock [id=" + id + ", quantity=" + quantity + ", locationCode=" + locationCode + "]";
 	}
 
 }
