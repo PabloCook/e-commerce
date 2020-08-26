@@ -1,11 +1,12 @@
 package ar.com.gl.shop.product.exceptions;
 
-public class CannotDelete extends Exception {
+public class CannotDelete extends RuntimeException {
 	
 	private static final long serialVersionUID = 2L;
 	
-	private String message ;
+	private final String message ;
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

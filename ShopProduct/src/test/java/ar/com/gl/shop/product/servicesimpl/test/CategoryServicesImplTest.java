@@ -1,16 +1,18 @@
 package ar.com.gl.shop.product.servicesimpl.test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,146 +22,217 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import ar.com.gl.shop.product.exceptions.CannotDelete;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
 import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repository.impl.CategoryRepositoryImpl;
-import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
+import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.service.impl.CategoryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServicesImplTest {
 
-	@Mock
-	CategoryRepositoryImpl categoryRepositoryImpl;
-	
-	@Mock
-	ProductRepositoryImpl productRepositoryImpl;
-	
 	@InjectMocks
 	CategoryServiceImpl categoryService;
-	
 
-	
-	Category category1,category2,category3;
-	
-	
-	
-	
+	@Mock
+	CategoryRepository categoryRepositoryMock;
+
+	Category category1, category2, category3, category4;
+	Optional<Category> oCategory3;
+
+	List<Category> theCategoriesMock = new ArrayList<>();
+
 	@BeforeEach
 	void setUp() throws ItemNotFound {
-		
-		categoryService.create("category1","descripcion");
-		categoryService.create("category2" , "descripcion2");
-		categoryService.create("category3", "descripcion3");
-		category1= new Category("category1","descripcion");
-		category2= new Category("category2" , "descripcion2");
-		category3= new Category("category3", "descripcion3");
-		category3.setId(3L);
-		category2.setId(2L);
+
+		category1 = new Category("category1", "descripcion");
+		category2 = new Category("category2", "descripcion2");
+		category3 = new Category("category3", "descripcion3");
+		category4 = new Category("category4", "description4");
+		category4.setEnabled(false);
+		oCategory3 = Optional.of(category3);
 		category1.setId(1L);
-		lenient().when(categoryRepositoryImpl.getById(1l)).thenReturn(category1);
-		lenient().when(categoryRepositoryImpl.getById(2l)).thenReturn(category2);
-		lenient().when(categoryRepositoryImpl.getById(3l)).thenReturn(category3);
+		category2.setId(2L);
+		category3.setId(3L);
+		category4.setId(4L);
+
+		theCategoriesMock.add(category1);
+		theCategoriesMock.add(category2);
+		theCategoriesMock.add(category3);
+		theCategoriesMock.add(category4);
+
 	}
+
+	@Test
+	@DisplayName("testCreate")
+	void testCase_1() {
+
+		when(categoryRepositoryMock.save(category1)).thenReturn(category1);
+		assertTrue(categoryService.create(category1).equals(category1));
+
+	}
+
 	@Test
 	@DisplayName("testFindAll")
-	void testCase_1() throws ItemNotFound {
-		Category[] theCategories = {
-				
-				categoryService.getById(1l, true),
-				categoryService.getById(2l, true),
-				categoryService.getById(3l, true)
-				
-		};
-		
-		lenient().when(categoryRepositoryImpl.findAll()).thenReturn(Arrays.asList(theCategories));
-		assertArrayEquals(categoryService.findAll().toArray(), theCategories);
+	void testCase_2() {
+		theCategoriesMock.remove(category4);
+		when(categoryRepositoryMock.findAll()).thenReturn((theCategoriesMock));
+		assertEquals(theCategoriesMock, categoryService.findAll());
 	}
-	
 
-
-	
 	@Test
 	@DisplayName("testFindByIdNotNull")
-	void testCase_2() throws ItemNotFound
-	{	
-		when(categoryRepositoryImpl.getById(3L)).thenReturn(category3);
+	void testCase_3() {
+
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
 		assertNotNull(categoryService.getById(3L, true));
+		assertTrue(categoryService.getById(3L, true).equals(category3));
+	}
+	
+
+
+	@Test
+	@DisplayName("testUpdateById")
+	void testCase_4() {
+		category1.setName("Consumables");
+
+		when(categoryRepositoryMock.save(category1)).thenReturn(category1);
+
+		assertEquals(category1, categoryService.update(category1));
 	}
 
 	@Test
-	@DisplayName("testFindByIdNull")
-	void testCase_3() throws ItemNotFound
-	{	when(categoryRepositoryImpl.getById(3L)).thenReturn(null);
-		assertNull(categoryService.getById(3L, true));
-	}
-	
-		
-	@Test
-	@DisplayName("testUpdateById")
-	void testCase_6()
-	{
-		category1.setName("Consumables");
-		
-		Category categoryUpdated = categoryService.update(category1);
-		
-		assertEquals(category1, categoryUpdated);
-	}
-		
-	@Test
 	@DisplayName("testDeleteById")
-	void testCase_4() throws ItemNotFound
-	{	categoryService.softDelete(category1.getId());
-		when(categoryRepositoryImpl.getById(1l)).thenReturn(null);
-		assertNull(categoryService.getById(1l, true));
-		assertNull(categoryService.getById(1l, false));
+	void testCase_5() {
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
+		categoryService.softDelete(category3.getId());
+		oCategory3.get().setEnabled(false);
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
+		assertNull(categoryService.getById(3L, true));
+		assertNotNull(categoryService.getById(3L, false));
 	}
 
 	@Test
 	@DisplayName("test FindAllDisabled")
-	void testCase_5() throws ItemNotFound {
-		
-		category1.setEnabled(false);
-		category2.setEnabled(false);
-		category3.setEnabled(false);
-		
-		Category[] theCategories = {category1, category2, category3};
-		
-		
-		when(categoryRepositoryImpl.findAll()).thenReturn(Arrays.asList(theCategories));		
-		assertTrue(categoryService.findAllDisabled().size() ==3 );
+	void testCase_6() {
+
+		when(categoryRepositoryMock.findAll()).thenReturn(theCategoriesMock);
+		assertTrue(categoryService.findAllDisabled().size() == 4);
+		assertEquals(theCategoriesMock, categoryService.findAllDisabled());
 	}
 
-	
 	@Test
 	@DisplayName("test recover category")
-	void testCase_7() throws ItemNotFound
-	{
+	void testCase_7() {
+		oCategory3.get().setEnabled(false);
+		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
+		oCategory3.get().setEnabled(true);
+		when(categoryRepositoryMock.save(oCategory3.get())).thenReturn(oCategory3.get());
+
+		assertEquals(oCategory3.get(), categoryService.softDelete(oCategory3.get().getId()));
 		
-		List<Product> products = new ArrayList<>();
-		
-		category1.setEnabled(false);
-		lenient().when(productRepositoryImpl.findAll()).thenReturn(products);
-		lenient().when(categoryRepositoryImpl.getById(category2.getId())).thenReturn(category2);
-		lenient().when(categoryRepositoryImpl.update(category2)).thenReturn(category2);
-		Category  recoveredCategory = categoryService.softDelete(category2.getId());
-		
-		assertNotNull(recoveredCategory);
 	}
+	
+	@Test
+	@DisplayName("test getByName")
+	void testCase_8() {
+		String name="name";
+		when(categoryRepositoryMock.findByName(name)).thenReturn(oCategory3);
+		
+		assertEquals(oCategory3.get(), categoryService.getByName(name));
+		
+	}
+	
 	
 	@Test
 	@DisplayName("test ForceDelete")
-	void testCase_8() throws ItemNotFound
-	{
+	void testCase_9() {
 		
-		categoryService.delete(category1.getId());
-		when(categoryRepositoryImpl.getById(category1.getId())).thenReturn(null);
-		assertNull(categoryService.getById(1l, true));
-		assertNull(categoryService.getById(1l, false));
+		List<Product> products = new ArrayList<>();
+		category3.setProducts(products);
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
+		categoryService.delete(oCategory3.get().getId());
+		
+		verify(categoryRepositoryMock).delete(oCategory3.get());
 	}
 	
+	@Test
+	@DisplayName("testFindByIdNull")
+	void testCase_10() {
+
+		assertNull(categoryService.getById(null, true));
+	}
 	
+	@Test
+	@DisplayName("getById ItemNotFound")
+	void testCase_11() {
+		
+		when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.getById(1l, true));
+		
+	}
 	
+		
+	@Test
+	@DisplayName("softDelete ItemNotFound")
+	void testCase_12() {
+		
+		when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.softDelete(1l));
+		
+	}
 	
+	@Test
+	@DisplayName("delete CannotDelete")
+	void testCase_13() {
+		List<Product> products = new ArrayList<>();
+		
+		products.add(new Product());
+		category3.setProducts(products);
+		when(categoryRepositoryMock.findById(3L)).thenReturn(oCategory3);
+		assertThrows(CannotDelete.class, ()->categoryService.delete(3L));
+		
+	}
+	
+	@Test
+	@DisplayName("getByName ItemNotFound")
+	void testCase_14() {
+		
+		lenient().when(categoryRepositoryMock.findById(1l)).thenReturn(Optional.empty());
+		
+		assertThrows(ItemNotFound.class, ()->categoryService.getByName("name"));
+		
+	}
+	
+	@Test
+	@DisplayName("testSoftDelete Id = null")
+	void testCase_15() {
+		
+		assertNull(categoryService.softDelete(null));
+	}
+	
+	@Test
+	@DisplayName("delete id = null")
+	void testCase_16() {
+		
+		categoryService.delete(null);
+		
+		verifyNoInteractions(categoryRepositoryMock);
+		
+	}
+	
+	@Test
+	@DisplayName("test recover category")
+	void testCase_17() {
+		oCategory3.get().setEnabled(true);
+		when(categoryRepositoryMock.findById(oCategory3.get().getId())).thenReturn(oCategory3);
+		oCategory3.get().setEnabled(false);
+		when(categoryRepositoryMock.save(oCategory3.get())).thenReturn(oCategory3.get());
+
+		assertEquals(oCategory3.get(), categoryService.softDelete(oCategory3.get().getId()));
+		
+	}
 }

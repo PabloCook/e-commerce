@@ -1,161 +1,115 @@
 package ar.com.gl.shop.product.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import static java.util.Objects.nonNull;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ar.com.gl.shop.product.exceptions.CannotDelete;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Category;
-import ar.com.gl.shop.product.model.Product;
-import ar.com.gl.shop.product.repository.impl.CategoryRepositoryImpl;
-import ar.com.gl.shop.product.repository.impl.ProductRepositoryImpl;
+import ar.com.gl.shop.product.repository.CategoryRepository;
 import ar.com.gl.shop.product.service.CategoryService;
 
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
-	CategoryRepositoryImpl repositoryImpl;
-	
-	ProductRepositoryImpl productRepositoryImpl;
+	private CategoryRepository repositoryImpl;
 
-	public CategoryServiceImpl() {
-
-		repositoryImpl = CategoryRepositoryImpl.getInstance();
+	@Autowired
+	public CategoryServiceImpl(CategoryRepository repositoryImpl) {
+		this.repositoryImpl = repositoryImpl;
 	}
 
 	@Override
-	public Category create(String name, String description) {
+	public Category create(Category category) {
 
-		Category category = new Category(name, description);
-		try {
-			return repositoryImpl.create(category);
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
-		}
-
+		return repositoryImpl.save(category);
 	}
 
 	@Override
 	public List<Category> findAll() {
 
-		List<Category> categoriesEnabled = new ArrayList<>();
-		try {
-			for (Category category : repositoryImpl.findAll()) {
-				if (category.getEnabled()) {
-					categoriesEnabled.add(category);
-				}
-			}
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-		}
-		return categoriesEnabled;
+		return repositoryImpl.findAll().stream().filter(Category::getEnabled).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Category> findAllDisabled() {
-
-		try {
-			return repositoryImpl.findAll();
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
-		}
+		return repositoryImpl.findAll();
 
 	}
 
 	@Override
 	public Category getById(Long id, Boolean searchEnable) {
-		if(isNull(id)){
-			return null;
-		}
-		Category category;
-		try {
-			category = repositoryImpl.getById(id);
-			
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
-		}
-		if (nonNull(category) && searchEnable) {
-			category = category.getEnabled() ? category : null;
-		}
 		
-		return category;
+		if (isNull(id))	return null;
+
+		Optional<Category> category = repositoryImpl.findById(id);
+
+		if (category.isPresent()) {
+			
+			if (Boolean.TRUE.equals(searchEnable)) {
+				return Boolean.TRUE.equals(category.get().getEnabled()) ? category.get() : null;
+				
+			}	else return category.get();
+			
+		}	else throw new ItemNotFound();
+
 	}
 
 	@Override
 	public Category update(Category category) {
 
-		try {
-			repositoryImpl.update(category);
-			return category;
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		
-
+		return repositoryImpl.save(category);
 	}
 
 	@Override
 	public Category softDelete(Long id) {
-		if(isNull(id)){
-			return null;
-		}
-		productRepositoryImpl = ProductRepositoryImpl.getInstance();
 		
-		try {
-			for (Product product : productRepositoryImpl.findAll()) {
-				if (product.getCategory().getId().equals(repositoryImpl.getById(id).getId())) {
-					throw new CannotDelete("No se puede eliminar una categoria asociada a un producto");
-				}
+		if (isNull(id))	return null;
+
+		Optional<Category> categoryO = repositoryImpl.findById(id);
+		
+		if (categoryO.isPresent()) {
+			Category category = categoryO.get();
+			category.setEnabled(!category.getEnabled());
+			return repositoryImpl.save(category);
+			
+		} else	throw new ItemNotFound();
+	}
+
+	@Override
+	public void delete(Long id) {
+		
+		if (nonNull(id)) {
+			
+			Optional<Category> category = repositoryImpl.findById(id);
+
+			if (category.isPresent()) {
+
+				if (category.get().getProducts().isEmpty()) {
+					repositoryImpl.delete(category.get());
+					
+				} else	throw new CannotDelete();
 			}
-		} catch (CannotDelete e) {
-			e.getMessage();
-			return null;
-		}
-		catch (ItemNotFound e) {
-			e.getMessage();
-			return null;
-		}
-		try {
-			repositoryImpl.getById(id).setEnabled(!repositoryImpl.getById(id).getEnabled());
-			return repositoryImpl.update(repositoryImpl.getById(id));
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
 		}
 		
 	}
 
 	@Override
-	public Category delete(Long id) {
-		if(isNull(id)){
-			return null;
-		}
-		productRepositoryImpl = ProductRepositoryImpl.getInstance();
-		try {
-			for (Product product : productRepositoryImpl.findAll()) {
-				if (product.getCategory().getId().equals(repositoryImpl.getById(id).getId())) {
-					throw new CannotDelete("No se puede eliminar una categoria asociada a un producto");
-				}
-			}
-		} catch (Exception e) {
+	public Category getByName(String name) {
+
+		Optional<Category> category = repositoryImpl.findByName(name);
+		
+		if (category.isPresent()) {
+			return category.get();
 			
-			e.getMessage();
-			return null;
-		}
-
-		try {
-			return repositoryImpl.delete(repositoryImpl.getById(id));
-		} catch (ItemNotFound e) {
-			e.printStackTrace();
-			return null;
-		}
-
+		} else	throw new ItemNotFound();
 	}
 
 }
