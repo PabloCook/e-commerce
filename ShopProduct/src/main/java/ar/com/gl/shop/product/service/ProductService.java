@@ -20,7 +20,6 @@ public interface ProductService {
 	 */
 	public Product getById(Long id, Boolean enabled);
 	public List<Product> findAll();
-
 	public Product softDelete(Long id);
 	public void delete(Long id);
 	public Product update(ProductDTO productDTO,Product product);

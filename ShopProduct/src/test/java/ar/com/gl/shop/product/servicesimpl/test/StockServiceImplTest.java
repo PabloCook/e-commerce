@@ -143,15 +143,13 @@ class StockServiceImplTest {
 	@DisplayName("getById id = null")
 	void testCase_8(){
 		assertNull(stockService.getById(null, true));
-		
 		}	
 	
 	
 	@Test
 	@DisplayName("softDelete id = null")
 	void testCase_9(){
-		assertNull(stockService.softDelete(null));
-		
+		assertNull(stockService.softDelete(null));		
 		}	
 	
 	
@@ -160,7 +158,6 @@ class StockServiceImplTest {
 	void testCase_10(){
 		when(stockRepositoryMock.findById(3l)).thenReturn(oStock3);		
 		assertEquals(stock3, stockService.getById(3l, false));
-		
 		}
 	
 	
@@ -169,7 +166,6 @@ class StockServiceImplTest {
 	void testCase_11() {
 		
 		stockService.delete(null);
-		
 		verifyNoInteractions(stockRepositoryMock);
 		
 	}

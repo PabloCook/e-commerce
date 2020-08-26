@@ -61,6 +61,7 @@ class CategoryServicesImplTest {
 		theCategoriesMock.add(category2);
 		theCategoriesMock.add(category3);
 		theCategoriesMock.add(category4);
+
 	}
 
 	@Test
