@@ -8,10 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients("com.ar.gl.feign.shop.product")
 @EnableDiscoveryClient
-public class FeignApplication {
+public class OrderApplication {
 
 	public static void main(final String[] args) {
-		SpringApplication.run(FeignApplication.class);
+		SpringApplication.run(OrderApplication.class);
 	}
 
 }
