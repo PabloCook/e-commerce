@@ -32,3 +32,6 @@ dockerfile
 ocal
 
 bin/*
+
+/.mvn/
+mvn*
