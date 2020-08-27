@@ -10,37 +10,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name="shop-product", url="http://localhost:9099/products/v1")
+import com.ar.gl.feign.dto.ProductDTO;
+import com.ar.gl.feign.model.Product;
+
+@FeignClient(name="SHOP-PRODUCT", fallback = ProductHystrixFallBackFactory.class)
 public interface FeignProduct {
 	
 	@GetMapping(value = "/products")
-	public ResponseEntity<Object> findAll();
+	public ResponseEntity<Product> findAll();
 	
 	@GetMapping(value = "/products/{id}")
-	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id);
+	public ResponseEntity<Product> getById(@PathVariable(name = "id") Long id);
 	
 	@GetMapping(value = "/products/name/{name}")
-	public ResponseEntity<Object> getByName(@PathVariable(name = "name") String name);
+	public ResponseEntity<Product> getByName(@PathVariable(name = "name") String name);
 	
 	@GetMapping(value = "/products/category/{id}")
-	public ResponseEntity<Object> getByCategoryId(@PathVariable(name = "id") Long id);
+	public ResponseEntity<Product> getByCategoryId(@PathVariable(name = "id") Long id);
 	
 	@PostMapping(value = "/products")
-	public ResponseEntity<Object> create(@RequestBody Object object);
+	public ResponseEntity<Product> create(@RequestBody ProductDTO productDTO);
 	
 	@PutMapping(value = "/products/{id}")
-	public ResponseEntity<Object> update(@PathVariable(name = "id") Long id, @RequestBody Object object);
+	public ResponseEntity<Product> update(@PathVariable(name = "id") Long id, @RequestBody Object object);
 	
 	@PatchMapping(value = "/products/{id}")
-	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id);
+	public ResponseEntity<Product> patchDescription(@PathVariable(name = "id") Long id);
 	
 	@DeleteMapping(value = "/products/{id}")
-	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id);
-
-
-
-
-
-
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id);
 
 }

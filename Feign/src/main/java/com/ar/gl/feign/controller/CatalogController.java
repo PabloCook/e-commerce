@@ -9,44 +9,47 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ar.gl.feign.dto.CategoryDTO;
+import com.ar.gl.feign.model.Category;
 import com.ar.gl.feign.shop.product.FeignCatalog;
 
 @RestController
 public class CatalogController {
 	
-	FeignCatalog catalog;
+	private FeignCatalog catalog;
 	
 	public CatalogController(FeignCatalog catalog) {
 		this.catalog = catalog;
 	}
 	
 	@GetMapping(value="/categories")
-	public ResponseEntity<Object> findAll(){
+	public ResponseEntity<Category> findAll(){
+		
 		return catalog.findAll();
 	}
 	
 	@GetMapping(value="/categories/name/{name}")
-	public ResponseEntity<Object> findbyName(@PathVariable(name = "name") String name){
+	public ResponseEntity<Category> findbyName(@PathVariable(name = "name") String name){
 		return catalog.findAll();
 	}
 	
 	@GetMapping(value = "/categories/{id}")
-	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id){
+	public ResponseEntity<Category> getById(@PathVariable(name = "id") Long id){
 		return catalog.getById(id);
 	}
 	
 	@PostMapping(value = "/categories")
-	public ResponseEntity<Object> create(@RequestBody Object Object){
-		return catalog.create(Object);
+	public ResponseEntity<Category> create(@RequestBody CategoryDTO categoryDTO){
+		return catalog.create(categoryDTO);
 	}
 	
 	@PatchMapping(value = "/categories/{id}/description")
-	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id){
+	public ResponseEntity<Category> patchDescription(@PathVariable(name = "id") Long id){
 		return catalog.patchDescription(id);
 	}
 	
 	@DeleteMapping(value = "/categories/{id}")
-	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id){
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id){
 		return catalog.delete(id);
 	}
 

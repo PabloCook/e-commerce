@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ar.gl.feign.dto.ProductDTO;
+import com.ar.gl.feign.model.Product;
 import com.ar.gl.feign.shop.product.FeignProduct;
 
 @RestController
@@ -22,43 +24,43 @@ public class ProductController {
 	}
 	
 	@GetMapping(value = "/products")
-	public ResponseEntity<Object> findAll(){
+	public ResponseEntity<Product> findAll(){
 		return product.findAll();
 	}
 	
 	@GetMapping(value = "/products/{id}")
-	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id){
+	public ResponseEntity<Product> getById(@PathVariable(name = "id") Long id){
 		return product.getById(id);
 	}
 	
 	@GetMapping(value = "/products/name/{name}")
-	public ResponseEntity<Object> getByName(@PathVariable(name = "name") String name){
+	public ResponseEntity<Product> getByName(@PathVariable(name = "name") String name){
 		return product.getByName(name);
 	}
 	
 	@GetMapping(value = "/products/category/{id}")
-	public ResponseEntity<Object> getByCategoryId(@PathVariable(name = "id") Long id){
+	public ResponseEntity<Product> getByCategoryId(@PathVariable(name = "id") Long id){
 		return product.getByCategoryId(id);
 	}
 	
 	@PostMapping(value = "/products")
-	public ResponseEntity<Object> create(@RequestBody Object object){
-		return product.create(object);
+	public ResponseEntity<Product> create(@RequestBody ProductDTO productDTO){
+		return product.create(productDTO);
 	}
 	
 	@PutMapping(value = "/products/{id}")
-	public ResponseEntity<Object> update(@PathVariable(name = "id") Long id,
+	public ResponseEntity<Product> update(@PathVariable(name = "id") Long id,
 			@RequestBody Object object){
 		return product.update(id, object);
 	}
 	
 	@PatchMapping(value = "/products/{id}")
-	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id){
+	public ResponseEntity<Product> patchDescription(@PathVariable(name = "id") Long id){
 		return product.patchDescription(id);
 	}
 	
 	@DeleteMapping(value = "/products/{id}")
-	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id){
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id){
 		return product.delete(id);
 	}
 }

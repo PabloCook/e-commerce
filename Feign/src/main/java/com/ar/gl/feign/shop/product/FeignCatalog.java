@@ -9,26 +9,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.ar.gl.feign.dto.CategoryDTO;
+import com.ar.gl.feign.model.Category;
 
-@FeignClient(name="shop-product", url="http://localhost:9099/products/v1")
+
+//@FeignClient(name="catalog", url="http://localhost:9099/products/v1", fallback = (CatalogHystrixFallBackFactory.class))
 public interface FeignCatalog {
 	
 	@GetMapping(value="/categories")
-	public ResponseEntity<Object> findAll();
+	public ResponseEntity<Category> findAll();
 	
 	@GetMapping(value="/categories/name/{name}")
-	public ResponseEntity<Object> findbyName(@PathVariable(name = "name") String name);
+	public ResponseEntity<Category> findbyName(@PathVariable(name = "name") String name);
 	
 	@GetMapping(value = "/categories/{id}")
-	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id);
+	public ResponseEntity<Category> getById(@PathVariable(name = "id") Long id);
 	
 	@PostMapping(value = "/categories")
-	public ResponseEntity<Object> create(@RequestBody Object Object);
+	public ResponseEntity<Category> create(@RequestBody CategoryDTO categoryDTO);
 	
 	@PatchMapping(value = "/categories/{id}/description")
-	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id);
+	public ResponseEntity<Category> patchDescription(@PathVariable(name = "id") Long id);
 	
 	@DeleteMapping(value = "/categories/{id}")
-	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id);
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id);
 
 }
