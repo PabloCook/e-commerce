@@ -1,19 +1,14 @@
 package com.ar.gl.customer.shop.Customershop.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 @Entity
 public class Customer {
 
@@ -22,6 +17,27 @@ public class Customer {
 	private Long id;
 	
 	private String name;
+	
+	private String surname;
+	
+	private String dni;
+	
+	@Column(nullable = false)
+	private Boolean enabled;
 
-	public Customer() {}
+	public Customer() {
+		this.enabled = true;
+	}
+
+	public Customer(Long id, String name, String surname, String dni) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.dni = dni;
+		this.enabled = true;
+	}
+	
+	
+	
 }
