@@ -2,6 +2,8 @@ package com.ar.gl.customer.shop.Customershop.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +39,8 @@ public class CustomerController {
 	}
 	
 	@PostMapping(value = "")
-	public ResponseEntity<CustomerDTO> save(@RequestBody CustomerDTO customerDTO){
+	public ResponseEntity<CustomerDTO> save(@Valid @RequestBody CustomerDTO customerDTO){
+		System.out.println(customerDTO);
 		return new ResponseEntity<>(customerService.save(customerDTO),HttpStatus.CREATED);
 	}
 	
