@@ -6,6 +6,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 
+import ar.com.gl.zuul.filter.ErrorFilter;
 import ar.com.gl.zuul.filter.PostFilter;
 import ar.com.gl.zuul.filter.PreFilter;
 
@@ -30,6 +31,11 @@ public class ZuulGatewayApplication {
 	@Bean
 	public PostFilter postFilter() {
 		return new PostFilter();
+	}
+	
+	@Bean
+	public ErrorFilter errorFilter() {
+		return new ErrorFilter();
 	}
 
 }
