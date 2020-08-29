@@ -61,7 +61,7 @@ public class HystrixProductFallbackFactory implements FeignProduct {
 	}
 
 	@Override
-	public ResponseEntity<ProductDTO> patch(Long id) {
+	public ResponseEntity<ProductDTO> patch(Long id, ProductDTO productDTO) {
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
 

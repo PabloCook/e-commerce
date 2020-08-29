@@ -51,11 +51,12 @@ public class ProductController implements FeignProduct{
 	@Override
 	@PostMapping(value = "/products")
 	public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO productDTO){
+
 		return product.create(productDTO);
 	}
 	
 	@Override
-	@PutMapping(value = "/productos/{id}")
+	@PutMapping(value = "/products/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") Long id,
 			@RequestBody ProductDTO productDTO){
 		return product.update(id, productDTO);
@@ -63,8 +64,8 @@ public class ProductController implements FeignProduct{
 	
 	@Override
 	@PatchMapping(value = "/products/{id}")
-	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id){
-		return product.patch(id);
+	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id, ProductDTO productDTO){
+		return product.patch(id, productDTO);
 	}
 	
 	@Override

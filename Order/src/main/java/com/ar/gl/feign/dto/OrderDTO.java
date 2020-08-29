@@ -17,4 +17,5 @@ public class OrderDTO {
 	private Integer quantity;
 	private Double totalPrice;
 	private Boolean disable;
+	
 }
