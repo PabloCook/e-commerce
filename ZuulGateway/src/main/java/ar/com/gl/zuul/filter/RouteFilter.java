@@ -1,26 +1,31 @@
 package ar.com.gl.zuul.filter;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
-public class RouteFilter extends ZuulFilter{
+public class RouteFilter extends ZuulFilter {
 
-	Logger log = LoggerFactory.getLogger(PreFilter.class);
-	
+	Logger log = LoggerFactory.getLogger(RouteFilter.class);
+
 	@Override
 	public boolean shouldFilter() {
-
-		return false;
+		return true;
 	}
 
 	@Override
 	public Object run() throws ZuulException {
-		// TODO Auto-generated method stub
+		RequestContext ctx = RequestContext.getCurrentContext();
+		HttpServletRequest request = ctx.getRequest();
+
+		log.info("RouteFilter: "
+				+ String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
+
 		return null;
 	}
 
@@ -31,7 +36,7 @@ public class RouteFilter extends ZuulFilter{
 
 	@Override
 	public int filterOrder() {
-		return FilterConstants.SEND_RESPONSE_FILTER_ORDER;
+		return 1;
 	}
 
 }
