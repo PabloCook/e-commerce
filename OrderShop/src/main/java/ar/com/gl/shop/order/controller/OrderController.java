@@ -66,7 +66,7 @@ public class OrderController {
 	}
 	
 	@PatchMapping(value = "/orders/{id}")
-	public ResponseEntity<OrderDTO> doftDelete(@PathVariable("id") Long id){
+	public ResponseEntity<OrderDTO> softDelete(@PathVariable("id") Long id){
 		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.softDelete(id)), HttpStatus.OK);
 	}
 }
