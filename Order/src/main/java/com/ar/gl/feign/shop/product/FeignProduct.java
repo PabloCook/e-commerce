@@ -11,36 +11,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ar.gl.feign.dto.ProductDTO;
+import com.ar.gl.feign.shop.product.fallback.HystrixProductFallbackFactory;
 
-@FeignClient(contextId = "product" ,name="Product-Shop")
-@RequestMapping(value="/products/v1")
+@FeignClient(contextId = "product", name="Product-Shop", fallback = HystrixProductFallbackFactory.class)
 public interface FeignProduct {
 	
-	@GetMapping(value = "/products")
-	public ResponseEntity<List<ProductDTO>> productFindAll();
+	@GetMapping(value = "/products/v1/products")
+	public ResponseEntity<List<ProductDTO>> findAll();
 	
-	@GetMapping(value = "/products/{id}")
-	public ResponseEntity<ProductDTO> productGetById(@PathVariable(name = "id") Long id);
+	@GetMapping(value = "/products/v1/products/{id}")
+	public ResponseEntity<ProductDTO> getById(@PathVariable(name = "id") Long id);
 	
-	@GetMapping(value = "/products/name/{name}")
-	public ResponseEntity<ProductDTO> productGetByName(@PathVariable(name = "name") String name);
+	@GetMapping(value = "/products/v1/products/name/{name}")
+	public ResponseEntity<ProductDTO> getByName(@PathVariable(name = "name") String name);
 	
-	@GetMapping(value = "/products/category/{id}")
-	public ResponseEntity<List<ProductDTO>> productGetByCategoryId(@PathVariable(name = "id") Long id);
+	@GetMapping(value = "/products/v1/products/category/{id}")
+	public ResponseEntity<List<ProductDTO>> getByCategoryId(@PathVariable(name = "id") Long id);
 	
-	@PostMapping(value = "/products")
-	public ResponseEntity<ProductDTO> productCreate(@RequestBody ProductDTO productDTO);
+	@PostMapping(value = "/products/v1/products")
+	public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO productDTO);
 	
-	@PutMapping(value = "/productos/{id}")
-	public ResponseEntity<ProductDTO> productUpdate(@PathVariable(name = "id") Long id, @RequestBody ProductDTO productDTO);
+	@PutMapping(value = "/products/v1/productos/{id}")
+	public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") Long id, @RequestBody ProductDTO productDTO);
 	
-	@PatchMapping(value = "/products/{id}")
-	public ResponseEntity<ProductDTO> productPatch(@PathVariable(name = "id") Long id);
+	@PatchMapping(value = "/products/v1/products/{id}")
+	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id);
 	
-	@DeleteMapping(value = "/products/{id}")
-	public ResponseEntity<String> productDelete(@PathVariable(name = "id") Long id);
+	@DeleteMapping(value = "/products/v1/products/{id}")
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id);
 
 }
