@@ -30,7 +30,7 @@ public class OrderDTOConverter extends Converter{
 		return OrdersDTO;
 	}
 	
-	public Order toEntity(OrderDTO OrderDTO, Order prod) {
-		return (Order) super.fromTo(OrderDTO, prod);
+	public Order toEntity(OrderDTO orderDTO, Order prod) {
+		return (Order) super.fromTo(orderDTO, prod);
 	}
 }
