@@ -1,5 +1,5 @@
 server:
-  port: 9099
+  port: 9999
 
 spring:
   # Spring Cloud Config Server Repository
@@ -7,12 +7,9 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/GloballogicServiceAndIntegration/celula9-omega
-          default-label: 
-          search-paths:          - folder
-          username: 
-          password: 
-
+          uri: https://github.com/PabloCook/SpringCloudConfig
+          default-label: master
+          
   # Spring properties in case you use different profiles
   profiles:
     active: dev
