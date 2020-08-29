@@ -15,7 +15,7 @@ import com.ar.gl.feign.dto.CategoryDTO;
 import com.ar.gl.feign.shop.product.FeignCatalog;
 
 @RestController
-public class CatalogController {
+public class CatalogController implements FeignCatalog{
 	
 	private FeignCatalog catalog;
 	
@@ -23,35 +23,41 @@ public class CatalogController {
 		this.catalog = catalog;
 	}
 	
+	@Override
 	@GetMapping(value="/categories")
-	public ResponseEntity<List<CategoryDTO>> categoryFindAll(){
+	public ResponseEntity<List<CategoryDTO>> findAll(){
 		
-		return catalog.categoryFindAll();
+		return catalog.findAll();
 	}
 	
+	@Override
 	@GetMapping(value="/categories/name/{name}")
-	public ResponseEntity<CategoryDTO> categoryFindbyName(@PathVariable(name = "name") String name){
-		return catalog.categoryFindbyName(name);
+	public ResponseEntity<CategoryDTO> findbyName(@PathVariable(name = "name") String name){
+		return catalog.findbyName(name);
 	}
 	
+	@Override
 	@GetMapping(value = "/categories/{id}")
-	public ResponseEntity<CategoryDTO> categoryGetById(@PathVariable(name = "id") Long id){
-		return catalog.categoryGetById(id);
+	public ResponseEntity<CategoryDTO> getById(@PathVariable(name = "id") Long id){
+		return catalog.getById(id);
 	}
 	
+	@Override
 	@PostMapping(value = "/categories")
-	public ResponseEntity<CategoryDTO> categoryCreate(@RequestBody CategoryDTO categoryDTO){
-		return catalog.categoryCreate(categoryDTO);
+	public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO categoryDTO){
+		return catalog.create(categoryDTO);
 	}
 	
+	@Override
 	@PatchMapping(value = "/categories/{id}/description")
-	public ResponseEntity<CategoryDTO> categoryPatchDescription(@PathVariable(name = "id") Long id){
-		return catalog.categoryPatch(id);
+	public ResponseEntity<CategoryDTO> patch(@PathVariable(name = "id") Long id){
+		return catalog.patch(id);
 	}
 	
+	@Override
 	@DeleteMapping(value = "/categories/{id}")
-	public ResponseEntity<String> categoryDelete(@PathVariable(name = "id") Long id){
-		return catalog.categoryDelete(id);
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id){
+		return catalog.delete(id);
 	}
 
 }

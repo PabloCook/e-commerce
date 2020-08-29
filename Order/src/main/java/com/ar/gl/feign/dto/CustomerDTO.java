@@ -1,5 +1,6 @@
 package com.ar.gl.feign.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryDTO {
+public class CustomerDTO {
 	private Long id;
+	
 	private String name;
-	private String description;
-	private Boolean enabled; 
+	
+	private String surname;
+	
+	private String dni;
+	
 }

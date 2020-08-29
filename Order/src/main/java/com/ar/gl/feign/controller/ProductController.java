@@ -16,7 +16,7 @@ import com.ar.gl.feign.dto.ProductDTO;
 import com.ar.gl.feign.shop.product.FeignProduct;
 
 @RestController
-public class ProductController {
+public class ProductController implements FeignProduct{
 	
 	private FeignProduct product;
 	
@@ -24,45 +24,53 @@ public class ProductController {
 		this.product = product;
 	}
 	
+	@Override
 	@GetMapping(value = "/products")
 	public ResponseEntity<List<ProductDTO>> findAll(){
-		return product.productFindAll();
+		return product.findAll();
 	}
 	
+	@Override
 	@GetMapping(value = "/products/{id}")
 	public ResponseEntity<ProductDTO> getById(@PathVariable(name = "id") Long id){
-		return product.productGetById(id);
+		return product.getById(id);
 	}
 	
+	@Override
 	@GetMapping(value = "/products/name/{name}")
 	public ResponseEntity<ProductDTO> getByName(@PathVariable(name = "name") String name){
-		return product.productGetByName(name);
+		return product.getByName(name);
 	}
 	
+	@Override
 	@GetMapping(value = "/products/category/{id}")
 	public ResponseEntity<List<ProductDTO>> getByCategoryId(@PathVariable(name = "id") Long id){
-		return product.productGetByCategoryId(id);
+		return product.getByCategoryId(id);
 	}
 	
+	@Override
 	@PostMapping(value = "/products")
 	public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO productDTO){
-		return product.productCreate(productDTO);
+		return product.create(productDTO);
 	}
 	
+	@Override
 	@PutMapping(value = "/productos/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") Long id,
 			@RequestBody ProductDTO productDTO){
-		return product.productUpdate(id, productDTO);
+		return product.update(id, productDTO);
 	}
 	
+	@Override
 	@PatchMapping(value = "/products/{id}")
-	public ResponseEntity<ProductDTO> patchDescription(@PathVariable(name = "id") Long id){
-		return product.productPatch(id);
+	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id){
+		return product.patch(id);
 	}
 	
+	@Override
 	@DeleteMapping(value = "/products/{id}")
 	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id){
-		return product.productDelete(id);
+		return product.delete(id);
 	}
 	
 }

@@ -30,43 +30,43 @@ public class HystrixProductFallbackFactory implements FeignProduct {
 	
 
 	@Override
-	public ResponseEntity<List<ProductDTO>> productFindAll() {
+	public ResponseEntity<List<ProductDTO>> findAll() {
 		
 		return new ResponseEntity<>(Arrays.asList(productDTO), HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<ProductDTO> productGetById(Long id) {
+	public ResponseEntity<ProductDTO> getById(Long id) {
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<ProductDTO> productGetByName(String name) {
+	public ResponseEntity<ProductDTO> getByName(String name) {
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<List<ProductDTO>> productGetByCategoryId(Long id) {
+	public ResponseEntity<List<ProductDTO>> getByCategoryId(Long id) {
 		return new ResponseEntity<>(Arrays.asList(productDTO), HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<ProductDTO> productCreate(ProductDTO productDTO) {
+	public ResponseEntity<ProductDTO> create(ProductDTO productDTO) {
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<ProductDTO> productUpdate(Long id, ProductDTO productDTO) {
+	public ResponseEntity<ProductDTO> update(Long id, ProductDTO productDTO) {
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<ProductDTO> productPatch(Long id) {
+	public ResponseEntity<ProductDTO> patch(Long id) {
 		return new ResponseEntity<>(productDTO, HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<String> productDelete(Long id) {
+	public ResponseEntity<String> delete(Long id) {
 		return new ResponseEntity<>("Servicio Caido no se pudo eliminar", HttpStatus.OK);
 	}
 
