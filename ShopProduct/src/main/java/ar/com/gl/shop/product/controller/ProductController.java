@@ -2,6 +2,7 @@ package ar.com.gl.shop.product.controller;
 
 import static java.util.Objects.isNull;
 
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -23,8 +24,8 @@ import ar.com.gl.shop.product.utils.ProductDTOConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @Api(value="Product Controller")
@@ -42,28 +43,28 @@ public class ProductController {
 
 	@ApiOperation(value = "return all products", response = ProductDTO.class, responseContainer = "List")
 	@GetMapping(value = "/products")
-	public ResponseEntity<Object> findAll() {
+	public ResponseEntity<List<ProductDTO>> findAll() {
 
 		return new ResponseEntity<>(productDTOConverter.toDTOList(productServiceImpl.findAll()), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "return product by ID", response = ProductDTO.class)
 	@GetMapping(value = "/products/{id}")
-	public ResponseEntity<Object> getById(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<ProductDTO> getById(@PathVariable(name = "id") Long id) {
 
 		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.getById(id, true)), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "return product by name", response = ProductDTO.class)
 	@GetMapping(value = "/products/name/{name}")
-	public ResponseEntity<Object> getByName(@PathVariable(name = "name") String name) {
+	public ResponseEntity<ProductDTO> getByName(@PathVariable(name = "name") String name) {
 
 		return new ResponseEntity<>(productDTOConverter.toDTO(productServiceImpl.getByName(name)), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "return all products by category", response = ProductDTO.class, responseContainer = "List" )
 	@GetMapping(value = "/products/category/{id}")
-	public ResponseEntity<Object> getByCategoryId(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<List<ProductDTO>> getByCategoryId(@PathVariable(name = "id") Long id) {
 
 		return new ResponseEntity<>(productDTOConverter.toDTOList(productServiceImpl.findCategoryById(id)),
 				HttpStatus.OK);
@@ -71,7 +72,7 @@ public class ProductController {
 
 	@ApiOperation(value = "create product", response = ProductDTO.class)
 	@PostMapping(value = "/products")
-	public ResponseEntity<Object> create(@Valid @RequestBody ProductDTO productDTO) {
+	public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO productDTO) {
 
 		return new ResponseEntity<>(
 				productDTOConverter.toDTO(productServiceImpl.create(productDTOConverter.toEntity(productDTO))),
@@ -82,7 +83,7 @@ public class ProductController {
 	
 	@ApiOperation(value = "update product", response = ProductDTO.class)
 	@PutMapping(value = "/products/{id}")
-	public ResponseEntity<Object> update(@PathVariable(name = "id") Long id,
+	public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") Long id,
 			@Valid @RequestBody ProductDTO productDTO) {
 
 		Product product = productServiceImpl.getById(id, false);
@@ -100,7 +101,7 @@ public class ProductController {
 	@ApiOperation(value = "update specific fields of product", response = ProductDTO.class)
 	@ApiModelProperty(value = "update specific fields of product", required = false)
 	@PatchMapping(value = "/products/{id}")
-	public ResponseEntity<Object> patchDescription(@PathVariable(name = "id") Long id,
+	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id,
 												   @Valid @RequestBody ProductDTO productDTO) {
 
 			Product product = productServiceImpl.getById(id, false);
@@ -113,7 +114,7 @@ public class ProductController {
 
 	@ApiResponses(value = {@ApiResponse(code=200,message = "Producto Eliminado")})
 	@DeleteMapping(value = "/products/{id}")
-	public ResponseEntity<Object> delete(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
 		productServiceImpl.delete(id);
 		return new ResponseEntity<>("Producto Eliminado", HttpStatus.OK);
 	}
