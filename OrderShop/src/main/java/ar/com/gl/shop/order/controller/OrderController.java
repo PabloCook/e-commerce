@@ -37,12 +37,12 @@ public class OrderController {
 	}
 	
 	@GetMapping(value = "/orders")
-	public ResponseEntity<List<OrderDTO>> getAllOrders(){
+	public ResponseEntity<List<OrderDTO>> findAll(){
 		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getAll()), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/orders/{id}")
-	public ResponseEntity<OrderDTO> get(@PathVariable("id") Long id){
+	public ResponseEntity<OrderDTO> getById(@PathVariable("id") Long id){
 		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.getById(id)), HttpStatus.OK);
 	}
 	
