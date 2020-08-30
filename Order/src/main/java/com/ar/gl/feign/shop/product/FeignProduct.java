@@ -33,11 +33,11 @@ public interface FeignProduct {
 	@PostMapping(value = "/products/v1/products")
 	public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO productDTO);
 	
-	@PutMapping(value = "/products/v1/productos/{id}")
+	@PutMapping(value = "/products/v1/products/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") Long id, @RequestBody ProductDTO productDTO);
 	
 	@PatchMapping(value = "/products/v1/products/{id}")
-	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id);
+	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id, @RequestBody ProductDTO productDTO);
 	
 	@DeleteMapping(value = "/products/v1/products/{id}")
 	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id);
