@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.ar.gl.feign.dto.CustomerDTO;
 import com.ar.gl.feign.shop.product.FeignCustomer;
 
-@Component
+//@Component
 public class HystrixCustomerFallBackFactory implements FeignCustomer {
 	
 	CustomerDTO customerDTO = CustomerDTO.builder()

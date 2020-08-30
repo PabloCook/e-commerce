@@ -2,6 +2,8 @@ package ar.com.gl.shop.order.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,7 +32,7 @@ public class OrderController {
 	
 	
 	@PostMapping(value = "/orders")
-	public ResponseEntity<OrderDTO> create(@RequestBody OrderDTO orderDTO){
+	public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderDTO orderDTO){
 		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.create(orderDTOConverter.toEntity(orderDTO))), HttpStatus.CREATED);
 	}
 	
@@ -55,7 +57,7 @@ public class OrderController {
 	}
 	
 	@PutMapping(value = "/orders/{id}")
-	public ResponseEntity<OrderDTO> update(@PathVariable("id") Long id, @RequestBody OrderDTO orderDTO){
+	public ResponseEntity<OrderDTO> update(@Valid @PathVariable("id") Long id, @RequestBody OrderDTO orderDTO){
 		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.update(orderDTO, id)), HttpStatus.OK);
 	}
 	

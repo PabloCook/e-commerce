@@ -6,11 +6,13 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ar.gl.feign.dto.CategoryDTO;
 import com.ar.gl.feign.shop.product.FeignCatalog;
 
-@Component
+//@Component
 public class HystrixCatalogFallBackFactory implements FeignCatalog {
 	
 	CategoryDTO categoryDTO = CategoryDTO.builder()
@@ -41,7 +43,7 @@ public class HystrixCatalogFallBackFactory implements FeignCatalog {
 	}
 
 	@Override
-	public ResponseEntity<CategoryDTO> patch(Long id) {
+	public ResponseEntity<CategoryDTO> patch(@PathVariable(name = "id") Long id, @RequestParam(name = "description") String description) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
