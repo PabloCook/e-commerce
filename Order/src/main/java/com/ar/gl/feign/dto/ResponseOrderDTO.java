@@ -1,16 +1,41 @@
 package com.ar.gl.feign.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@JsonInclude(Include.NON_NULL)
 public class ResponseOrderDTO {
 	
-	private OrderDTO orderDTO;
-	private ProductDTO productDTO;
-	private CustomerDTO customerDTO;
+	private Long id;
+	private Integer quantity;
+	private Double totalPrice;
+	private Boolean disable;
+	
+	private String productName;
+	private String productDescription;
+	private Double productPrice;
+	
+	private String categoryName;
+	private String categoryDescription;
+	
+	private String customerName;
+	private String customerSurname;
+	private String customerDni;
+	
+	private String errorMessage;
+	
+	
+	public ResponseOrderDTO(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 
 }
