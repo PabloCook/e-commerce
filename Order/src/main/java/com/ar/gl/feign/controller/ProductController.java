@@ -2,6 +2,8 @@ package com.ar.gl.feign.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +52,7 @@ public class ProductController implements FeignProduct{
 	
 	@Override
 	@PostMapping(value = "/products")
-	public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO productDTO){
+	public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO productDTO){
 
 		return product.create(productDTO);
 	}
@@ -58,13 +60,13 @@ public class ProductController implements FeignProduct{
 	@Override
 	@PutMapping(value = "/products/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") Long id,
-			@RequestBody ProductDTO productDTO){
+			@Valid @RequestBody ProductDTO productDTO){
 		return product.update(id, productDTO);
 	}
 	
 	@Override
 	@PatchMapping(value = "/products/{id}")
-	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id, ProductDTO productDTO){
+	public ResponseEntity<ProductDTO> patch(@PathVariable(name = "id") Long id, @Valid @RequestBody ProductDTO productDTO){
 		return product.patch(id, productDTO);
 	}
 	

@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ar.gl.feign.dto.OrderDTO;
-import com.ar.gl.feign.shop.product.fallback.HystrixOrderFallbackFactory;
 
-@FeignClient(name="Order-Shop", fallback = HystrixOrderFallbackFactory.class)
+@FeignClient(name="Order-Shop"/*, fallback = HystrixOrderFallbackFactory.class*/)
 public interface FeignOrder {
 	
 	@PostMapping(value = "/orders/v1/orders")
@@ -25,21 +24,21 @@ public interface FeignOrder {
 	public ResponseEntity<List<OrderDTO>> getAllOrders();
 	
 	@GetMapping(value = "/orders/v1/orders/{id}")
-	public ResponseEntity<OrderDTO> get(@PathVariable("id") Long id);
+	public ResponseEntity<OrderDTO> get(@PathVariable(name = "id") Long id);
 	
 	@GetMapping(value = "/orders/v1/orders/customer/{id}")
-	public ResponseEntity<List<OrderDTO>> getOrdersByCustomer(@PathVariable("id") Long id);
+	public ResponseEntity<List<OrderDTO>> getOrdersByCustomer(@PathVariable(name = "id") Long id);
 	
 	@GetMapping(value = "/orders/v1/orders/product/{id}")
-	public ResponseEntity<List<OrderDTO>> getOrdersByProduct(@PathVariable("id") Long id);
+	public ResponseEntity<List<OrderDTO>> getOrdersByProduct(@PathVariable(name = "id") Long id);
 	
 	@PutMapping(value = "/orders/v1/orders/{id}")
-	public ResponseEntity<OrderDTO> update(@PathVariable("id") Long id, @RequestBody OrderDTO orderDTO);
+	public ResponseEntity<OrderDTO> update(@PathVariable(name = "id") Long id, @RequestBody OrderDTO orderDTO);
 	
 	@DeleteMapping(value = "/orders/v1/orders/{id}")
-	public ResponseEntity<String> delete(@PathVariable("id") Long id);
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id);
 	
 	@PatchMapping(value = "/orders/v1/orders/{id}")
-	public ResponseEntity<OrderDTO> softDelete(@PathVariable("id") Long id);
+	public ResponseEntity<OrderDTO> softDelete(@PathVariable(name = "id") Long id);
 
 }

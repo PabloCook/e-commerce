@@ -15,33 +15,32 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ar.gl.feign.dto.CustomerDTO;
-import com.ar.gl.feign.shop.product.fallback.HystrixCustomerFallBackFactory;
 
-@FeignClient(name="Customer-Shop", fallback = HystrixCustomerFallBackFactory.class)
+@FeignClient(name="Customer-Shop"/*, fallback = HystrixCustomerFallBackFactory.class*/)
 public interface FeignCustomer {
 	
 	@GetMapping(value = "/api/v1/customers")
 	public ResponseEntity<List<CustomerDTO>> findAll();
 	
-	@GetMapping(value = "/customers/{id}")
-	public ResponseEntity<CustomerDTO> getById(@PathVariable Long id);
+	@GetMapping(value = "/api/v1/customers/{id}")
+	public ResponseEntity<CustomerDTO> getById(@PathVariable(name = "id") Long id);
 	
-	@PostMapping(value = "/customers")
+	@PostMapping(value = "/api/v1/customers")
 	public ResponseEntity<CustomerDTO> save(@Valid @RequestBody CustomerDTO customerDTO);
 	
-	@PutMapping(value ="/customers/{id}")
-	public ResponseEntity<CustomerDTO> update(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO);
+	@PutMapping(value ="/api/v1/customers/{id}")
+	public ResponseEntity<CustomerDTO> update(@PathVariable(name = "id") Long id, @Valid @RequestBody CustomerDTO customerDTO);
 	
-	@PatchMapping(value ="/customers/{id}")
-	public ResponseEntity<CustomerDTO> partialUpdate(@PathVariable Long id, @RequestBody CustomerDTO customerDTO);
+	@PatchMapping(value ="/api/v1/customers/{id}")
+	public ResponseEntity<CustomerDTO> partialUpdate(@PathVariable(name = "id") Long id, @Valid @RequestBody CustomerDTO customerDTO);
 	
-	@PatchMapping(value ="/customers/restore/{id}")
-	public ResponseEntity<CustomerDTO> restore(@PathVariable Long id);
+	@PatchMapping(value ="/api/v1/customers/restore/{id}")
+	public ResponseEntity<CustomerDTO> restore(@PathVariable(name = "id") Long id);
 	
-	@DeleteMapping(value = "/customers/{id}")
-	public ResponseEntity<String> delete(@PathVariable Long id);
+	@DeleteMapping(value = "/api/v1/customers/{id}")
+	public ResponseEntity<String> delete(@PathVariable(name = "id") Long id);
 	
-	@DeleteMapping(value = "/customers/softdelete/{id}")
-	public ResponseEntity<String> softDelete(@PathVariable Long id);
+	@DeleteMapping(value = "/api/v1/customers/softdelete/{id}")
+	public ResponseEntity<String> softDelete(@PathVariable(name = "id") Long id);
 
 }

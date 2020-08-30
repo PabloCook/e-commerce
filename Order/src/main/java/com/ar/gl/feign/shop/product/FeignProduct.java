@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ar.gl.feign.dto.ProductDTO;
-import com.ar.gl.feign.shop.product.fallback.HystrixProductFallbackFactory;
 
-@FeignClient(contextId = "product", name="Product-Shop", fallback = HystrixProductFallbackFactory.class)
+@FeignClient(contextId = "product", name="Product-Shop"/*, fallback = HystrixProductFallbackFactory.class*/)
 public interface FeignProduct {
 	
 	@GetMapping(value = "/products/v1/products")
