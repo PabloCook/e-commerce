@@ -121,13 +121,22 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders() {
 		
-		return new ResponseEntity<>(
-				feignOrder.getAllOrders().getBody()
-				.stream()
-				.map(o->get(o.getId()).getBody())
-				.collect(Collectors.toList()),
-				HttpStatus.OK
+		List<OrderDTO> orders = feignOrder.getAllOrders().getBody();
+		
+		List<CustomerDTO> customers = feignCustomer.findAll().getBody();
+		List<ProductDTO> products = feignProduct.findAll().getBody();
+		
+		List<ResponseOrderDTO> responseOrder = new ArrayList<>();
+		
+		for (OrderDTO orderDTO : orders) {	
+			responseOrder.add(this.makeResponseDTO(
+				orderDTO,
+				products.stream().filter(c -> c.getId().equals(orderDTO.getProductId())).findFirst().get(),
+				customers.stream().filter(c -> c.getId().equals(orderDTO.getCustomerId())).findFirst().get())
 				);
+		}
+		
+		return new ResponseEntity<>(responseOrder,HttpStatus.OK);
 	}
 
 	@Override

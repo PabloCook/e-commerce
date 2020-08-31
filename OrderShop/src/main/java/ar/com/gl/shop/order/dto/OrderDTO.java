@@ -1,6 +1,7 @@
 package ar.com.gl.shop.order.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
@@ -14,13 +15,13 @@ import lombok.NoArgsConstructor;
 public class OrderDTO {
 
 	private Long id;
-	@NotBlank
+	//@NotEmpty
 	private Long productId;
-	@NotBlank
+	//@NotEmpty
 	private Long customerId;
-	@NotBlank
+	//@NotEmpty
 	private Integer quantity;
-	@NotBlank
+	//@NotEmpty
 	private Double totalPrice;
 	private Boolean disable;
 }
