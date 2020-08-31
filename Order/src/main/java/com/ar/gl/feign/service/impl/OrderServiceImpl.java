@@ -70,52 +70,20 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public ResponseEntity<List<ResponseOrderDTO>> getOrdersByCustomer(Long id) {
 		
-		final List<OrderDTO> ORDERS_DTO = feignOrder.getOrdersByCustomer(id).getBody();
-		
-		if(ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontro cliente con id: " + id)), HttpStatus.OK);
-		
-		final List<ResponseOrderDTO> RESPONSE_ORDERS_DTO = new ArrayList<>();
-		
-		final CustomerDTO CUSTOMER_DTO = feignCustomer.getById(id).getBody();
-		
-		for (OrderDTO orderDTO : ORDERS_DTO) {
-			
-			RESPONSE_ORDERS_DTO.add(makeResponseDTO(
-					orderDTO, 
-					feignProduct.getById(orderDTO.getProductId()).getBody(), 
-					CUSTOMER_DTO
-					));
-		};
-		
-		if(RESPONSE_ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontraron ordenes del cliente con id: " + id)), HttpStatus.OK);
-		
-		return new ResponseEntity<>(RESPONSE_ORDERS_DTO, HttpStatus.OK);
-		
+		return new ResponseEntity<>(getAllOrders().getBody()
+				.stream()
+				.filter(o->o.getCustomerId().equals(id))
+				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<List<ResponseOrderDTO>> getOrdersByProduct(Long id) {
 		
-		final List<OrderDTO> ORDERS_DTO = feignOrder.getOrdersByProduct(id).getBody();
 		
-		if(ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontro producto con id: " + id)), HttpStatus.OK);
-		
-		final List<ResponseOrderDTO> RESPONSE_ORDERS_DTO = new ArrayList<>();
-		
-		final ProductDTO PRODUCT_DTO = feignProduct.getById(id).getBody();
-		
-		for (OrderDTO orderDTO : ORDERS_DTO) {
-			
-			RESPONSE_ORDERS_DTO.add(makeResponseDTO(
-					orderDTO, 
-					PRODUCT_DTO,
-					feignCustomer.getById(orderDTO.getCustomerId()).getBody()
-					));
-		};
-		
-		if(RESPONSE_ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontraron ordenes del cliente con id: " + id)), HttpStatus.OK);
-		
-		return new ResponseEntity<>(RESPONSE_ORDERS_DTO, HttpStatus.OK);
+		return new ResponseEntity<>(getAllOrders().getBody()
+				.stream()
+				.filter(o->o.getProductId().equals(id))
+				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@Override
@@ -167,11 +135,13 @@ public class OrderServiceImpl implements OrderService {
 													.id(orderDTO.getId())
 													.quantity(orderDTO.getQuantity())
 													.totalPrice(orderDTO.getTotalPrice())
+													.productId(productDTO.getId())
 													.productName(productDTO.getName())
 													.productDescription(productDTO.getDescription())
 													.productPrice(productDTO.getPrice())
 													.categoryName(productDTO.getCategoryName())
 													.categoryDescription(productDTO.getCategoryDescription())
+													.customerId(customerDTO.getId())
 													.customerName(customerDTO.getName())
 													.customerSurname(customerDTO.getSurname())
 													.customerDni(customerDTO.getDni())
