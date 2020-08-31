@@ -1,6 +1,7 @@
 package ar.com.gl.shop.order.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class OrderServiceImpl implements OrderService{
 	public Order getById(Long id) {
 		Optional<Order> order = orderRepository.findById(id);
 		if(order.isPresent()) return order.get();
-		return null;
+		else throw new NoSuchElementException();
 	}
 	
 	@Override

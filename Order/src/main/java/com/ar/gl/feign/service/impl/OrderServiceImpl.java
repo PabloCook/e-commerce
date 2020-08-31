@@ -1,7 +1,6 @@
 package com.ar.gl.feign.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,7 +77,6 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public ResponseEntity<List<ResponseOrderDTO>> getOrdersByProduct(Long id) {
-		
 		
 		return new ResponseEntity<>(getAllOrders().getBody()
 				.stream()
