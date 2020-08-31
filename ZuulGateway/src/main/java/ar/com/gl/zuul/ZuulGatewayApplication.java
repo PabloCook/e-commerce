@@ -33,11 +33,12 @@ public class ZuulGatewayApplication {
 	public PostFilter postFilter() {
 		return new PostFilter();
 	}
-	
-	/*
-	 * @Bean public ErrorFilter errorFilter() { return new ErrorFilter(); }
-	 */
-	
+
+	@Bean
+	public ErrorFilter errorFilter() {
+		return new ErrorFilter();
+	}
+
 	@Bean
 	public RouteFilter routeFilter() {
 		return new RouteFilter();

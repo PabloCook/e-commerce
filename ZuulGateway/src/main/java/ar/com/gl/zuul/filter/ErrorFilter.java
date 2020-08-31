@@ -11,20 +11,25 @@ import com.netflix.zuul.exception.ZuulException;
 
 public class ErrorFilter extends ZuulFilter {
 
+	protected static final String SEND_ERROR_FILTER_RAN = "sendErrorFilter.ran";
+
 	Logger log = LoggerFactory.getLogger(PreFilter.class);
 
 	@Override
 	public boolean shouldFilter() {
-		return RequestContext.getCurrentContext().getThrowable() != null;
+		RequestContext ctx = RequestContext.getCurrentContext();
+		//return ctx.getThrowable() != null && !ctx.getBoolean(SEND_ERROR_FILTER_RAN, false);
+		return false;
 	}
 
 	@Override
-	public Object run() throws ZuulException {
-		HttpServletResponse response = RequestContext.getCurrentContext().getResponse();
-		log.info("ErrorFilter: " + String.format("response status is %d", response.getStatus()));
-		Throwable throwable = RequestContext.getCurrentContext().getThrowable();
-		log.error("Exception was thrown in filters: ", throwable);
-		return null;
+	public Object run() {
+		 RequestContext context = RequestContext.getCurrentContext();
+	        Throwable throwable = context.getThrowable();
+	        log.error("this is a ErrorFilter :{}",throwable.getCause().getMessage());
+	        context.set("error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	        context.set("error.message",throwable.getCause().getMessage());
+	        return null;
 	}
 
 	@Override

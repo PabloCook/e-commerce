@@ -21,7 +21,7 @@ public class PostFilter extends ZuulFilter {
 	}
 
 	@Override
-	public Object run() throws ZuulException {
+	public Object run() {
 
 		RequestContext context = RequestContext.getCurrentContext();
 		try (final InputStream responseDataStream = context.getResponseDataStream()) {
@@ -36,7 +36,8 @@ public class PostFilter extends ZuulFilter {
 
 			context.setResponseBody(responseData);
 		} catch (Exception e) {
-			throw new ZuulException(e, 500, e.getMessage());
+			log.error(e.getMessage());
+			//throw new ZuulException(e, 500, e.getMessage());
 		}
 
 		return null;
