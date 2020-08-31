@@ -31,11 +31,11 @@ public class ResponseOrderDTO {
 	private String customerSurname;
 	private String customerDni;
 	
-	private String errorMessage;
+	private String message;
 	
 	
-	public ResponseOrderDTO(String errorMessage) {
-		this.errorMessage = errorMessage;
+	public ResponseOrderDTO(String message) {
+		this.message = message;
 	}
 
 }
