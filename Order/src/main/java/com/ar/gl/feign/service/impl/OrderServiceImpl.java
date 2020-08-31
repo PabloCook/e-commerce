@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		final List<OrderDTO> ORDERS_DTO = feignOrder.getOrdersByCustomer(id).getBody();
 		
-		if(ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontro cliente con id: " + id)), HttpStatus.OK);
+		if(ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontro cliente con id: " + id)), HttpStatus.NOT_FOUND);
 		
 		final List<ResponseOrderDTO> RESPONSE_ORDERS_DTO = new ArrayList<>();
 		
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
 					));
 		};
 		
-		if(RESPONSE_ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontraron ordenes del cliente con id: " + id)), HttpStatus.OK);
+		if(RESPONSE_ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontraron ordenes del cliente con id: " + id)), HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<>(RESPONSE_ORDERS_DTO, HttpStatus.OK);
 		
@@ -98,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		final List<OrderDTO> ORDERS_DTO = feignOrder.getOrdersByProduct(id).getBody();
 		
-		if(ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontro producto con id: " + id)), HttpStatus.OK);
+		if(ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontro producto con id: " + id)), HttpStatus.NOT_FOUND);
 		
 		final List<ResponseOrderDTO> RESPONSE_ORDERS_DTO = new ArrayList<>();
 		
@@ -113,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
 					));
 		};
 		
-		if(RESPONSE_ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontraron ordenes del cliente con id: " + id)), HttpStatus.OK);
+		if(RESPONSE_ORDERS_DTO.isEmpty()) return new ResponseEntity<>(Arrays.asList(new ResponseOrderDTO("No se encontraron ordenes del cliente con id: " + id)), HttpStatus.NOT_FOUND);
 		
 		return new ResponseEntity<>(RESPONSE_ORDERS_DTO, HttpStatus.OK);
 	}
