@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import ar.com.gl.zuul.filter.ErrorFilter;
 import ar.com.gl.zuul.filter.PostFilter;
 import ar.com.gl.zuul.filter.PreFilter;
+import ar.com.gl.zuul.filter.RouteFilter;
 
 /**
  * @author Maribel
@@ -32,10 +33,15 @@ public class ZuulGatewayApplication {
 	public PostFilter postFilter() {
 		return new PostFilter();
 	}
-	
+
 	@Bean
 	public ErrorFilter errorFilter() {
 		return new ErrorFilter();
+	}
+
+	@Bean
+	public RouteFilter routeFilter() {
+		return new RouteFilter();
 	}
 
 }

@@ -2,6 +2,8 @@ package ar.com.gl.shop.order.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import com.sun.istack.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
