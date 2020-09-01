@@ -23,7 +23,8 @@
 		*/dto/*,
 		*/model/*,
 		*/test/*,
-		*/configuration/*
+		*/configuration/*,
+		*/error/*
 		</sonar.coverage.exclusions>
 		<spring-cloud.version>Hoxton.SR7</spring-cloud.version>
 	</properties>
