@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,8 +39,13 @@ public class OrderController {
 	}
 	
 	@GetMapping(value = "/orders")
-	public ResponseEntity<List<OrderDTO>> findAll(){
+	public ResponseEntity<List<OrderDTO>> getAll(){
 		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getAll()), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/orders/pageable")
+	public ResponseEntity<List<OrderDTO>> getAll(@PageableDefault(page=0) Pageable pageable){
+		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getAll(pageable)), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/orders/{id}")

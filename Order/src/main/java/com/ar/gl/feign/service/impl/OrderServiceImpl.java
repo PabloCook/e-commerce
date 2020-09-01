@@ -1,10 +1,12 @@
 package com.ar.gl.feign.service.impl;
 
-import java.util.ArrayList;
+import static com.ar.gl.feign.util.Utilities.toResponseDTO;
+import static com.ar.gl.feign.util.Utilities.mergeLists;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		final ProductDTO updatedProductDTO = feignProduct.update(productDTO.getId(), productDTO).getBody();
 		
-		return new ResponseEntity<>(makeResponseDTO(responseEntity, updatedProductDTO, customerDTO), HttpStatus.CREATED);
+		return new ResponseEntity<>(toResponseDTO(responseEntity, updatedProductDTO, customerDTO), HttpStatus.CREATED);
 	}
 	
 	@Override
@@ -59,12 +61,11 @@ public class OrderServiceImpl implements OrderService {
 		
 		final OrderDTO orderDTO = feignOrder.get(id).getBody();
 		
-		return new ResponseEntity<>(
-				makeResponseDTO(
-								orderDTO,
-								feignProduct.getById(orderDTO.getProductId()).getBody(),
-								feignCustomer.getById(orderDTO.getCustomerId()).getBody()
-							    ), HttpStatus.OK);
+		return new ResponseEntity<>(toResponseDTO(
+													orderDTO,
+													feignProduct.getById(orderDTO.getProductId()).getBody(),
+													feignCustomer.getById(orderDTO.getCustomerId()).getBody()
+												    ), HttpStatus.OK);
 	}
 
 	@Override
@@ -86,32 +87,27 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+
+	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders(Pageable pageable) {
+		
+		return new ResponseEntity<>(mergeLists(
+												feignOrder.getAllOrders(pageable).getBody(),
+												feignCustomer.findAll().getBody(),
+												feignProduct.findAll().getBody()
+												), HttpStatus.OK);
+	}
+	
+	@Override
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders() {
 		
-		List<OrderDTO> orders = feignOrder.getAllOrders().getBody();
-		List<CustomerDTO> customers = feignCustomer.findAll().getBody();
-		List<ProductDTO> products = feignProduct.findAll().getBody();
-		
-		List<ResponseOrderDTO> responseOrder = new ArrayList<>();
-		
-		for (OrderDTO orderDTO : orders) {	
-			
-			Optional<ProductDTO> oProductDTO = products.stream().filter(product -> product.getId().equals(orderDTO.getProductId())).findFirst();
-			Optional<CustomerDTO> oCustomerDTO = customers.stream().filter(customer -> customer.getId().equals(orderDTO.getCustomerId())).findFirst();
-			
-			if(oProductDTO.isPresent() && oCustomerDTO.isPresent()) {
-				responseOrder.add(this.makeResponseDTO(
-						orderDTO,
-						oProductDTO.get(),
-						oCustomerDTO.get()
-						));
-			}
-			
-
-		}
-		
-		return new ResponseEntity<>(responseOrder,HttpStatus.OK);
+		return new ResponseEntity<>(mergeLists(
+												feignOrder.getAllOrders().getBody(),
+												feignCustomer.findAll().getBody(),
+												feignProduct.findAll().getBody()
+												), HttpStatus.OK);
 	}
+	
+	
 
 	@Override
 	public ResponseEntity<ResponseOrderDTO> update(Long id, OrderDTO orderDTO) {
@@ -133,25 +129,6 @@ public class OrderServiceImpl implements OrderService {
 		feignOrder.softDelete(id);
 		
 		return new ResponseEntity<>(new ResponseOrderDTO("Order eliminada"),HttpStatus.OK);
-	}
-	
-	private ResponseOrderDTO makeResponseDTO(OrderDTO orderDTO, ProductDTO productDTO, CustomerDTO customerDTO) {
-		
-		return ResponseOrderDTO.builder()
-							   .id(orderDTO.getId())
-							   .quantity(orderDTO.getQuantity())
-							   .totalPrice(orderDTO.getTotalPrice())
-							   .productId(productDTO.getId())
-							   .productName(productDTO.getName())
-							   .productDescription(productDTO.getDescription())
-							   .productPrice(productDTO.getPrice())
-							   .categoryName(productDTO.getCategoryName())
-							   .categoryDescription(productDTO.getCategoryDescription())
-							   .customerId(customerDTO.getId())
-							   .customerName(customerDTO.getName())
-							   .customerSurname(customerDTO.getSurname())
-							   .customerDni(customerDTO.getDni())
-							   .build();
 	}
 
 }

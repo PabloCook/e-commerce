@@ -2,6 +2,7 @@ package com.ar.gl.feign.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import com.ar.gl.feign.dto.OrderDTO;
@@ -12,6 +13,8 @@ public interface OrderService {
 	public ResponseEntity<ResponseOrderDTO> create(OrderDTO orderDTO);
 	
 	public ResponseEntity<ResponseOrderDTO> get(Long id);
+	
+	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders(Pageable pageable);
 	
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders();
 	
