@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ar.gl.feign.dto.CategoryDTO;
 import com.ar.gl.feign.shop.product.FeignCatalog;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
-//@Component
+@Component
+
 public class HystrixCatalogFallBackFactory implements FeignCatalog {
 	
 	CategoryDTO categoryDTO = CategoryDTO.builder()
@@ -23,31 +25,37 @@ public class HystrixCatalogFallBackFactory implements FeignCatalog {
 							  .build();
 
 	@Override
+	@HystrixCommand(ignoreExceptions = Exception.class)
 	public ResponseEntity<List<CategoryDTO>> findAll() {
 		return new ResponseEntity<>(Arrays.asList(categoryDTO), HttpStatus.OK);
 	}
 
 	@Override
+	@HystrixCommand(ignoreExceptions = Exception.class)
 	public ResponseEntity<CategoryDTO> findbyName(String name) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
+	@HystrixCommand(ignoreExceptions = Exception.class)
 	public ResponseEntity<CategoryDTO> getById(Long id) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
+	@HystrixCommand(ignoreExceptions = Exception.class)
 	public ResponseEntity<CategoryDTO> create(CategoryDTO categoryDTO) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
+	@HystrixCommand(ignoreExceptions = Exception.class)
 	public ResponseEntity<CategoryDTO> patch(@PathVariable(name = "id") Long id, @RequestParam(name = "description") String description) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
+	@HystrixCommand(ignoreExceptions = Exception.class)
 	public ResponseEntity<String> delete(Long id) {
 		return new ResponseEntity<>("No se pudo eliminar", HttpStatus.OK);
 	}

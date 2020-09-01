@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ar.gl.feign.dto.CustomerDTO;
+import com.ar.gl.feign.shop.product.fallback.HystrixCustomerFallBackFactory;
 
-@FeignClient(name="Customer-Shop"/*, fallback = HystrixCustomerFallBackFactory.class*/)
+@FeignClient(name="Customer-Shop", fallback = HystrixCustomerFallBackFactory.class)
 public interface FeignCustomer {
 	
 	@GetMapping(value = "/api/v1/customers")
