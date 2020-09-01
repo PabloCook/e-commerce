@@ -1,15 +1,16 @@
-package com.ar.gl.customer.shop.Customershop.service.impl;
+package com.ar.gl.customer.shop.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.ar.gl.customer.shop.Customershop.DTO.CustomerDTO;
-import com.ar.gl.customer.shop.Customershop.model.Customer;
-import com.ar.gl.customer.shop.Customershop.repository.CustomerRepository;
-import com.ar.gl.customer.shop.Customershop.service.CustomerService;
-import com.ar.gl.customer.shop.Customershop.util.CustomerConverter;
+import com.ar.gl.customer.shop.dto.CustomerDTO;
+import com.ar.gl.customer.shop.model.Customer;
+import com.ar.gl.customer.shop.repository.CustomerRepository;
+import com.ar.gl.customer.shop.service.CustomerService;
+import com.ar.gl.customer.shop.util.CustomerConverter;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -30,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	public List<CustomerDTO> findAll(){
-		List<Customer> customers = new ArrayList<Customer>();
+		List<Customer> customers = new ArrayList<>();
 		for(Customer customer : customerRepository.findAll()) {
 			if(customer.getEnabled().equals(Boolean.TRUE)) {
 				customers.add(customer);
@@ -41,28 +42,62 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	public void delete(Long id) {
-		customerRepository.delete(customerRepository.findById(id).get());
+		
+		Optional<Customer> oCustomer = customerRepository.findById(id);
+		
+		if(oCustomer.isPresent()) customerRepository.delete(oCustomer.get());
+		
 	}
 	
 	public CustomerDTO findById(Long id) {
-		return customerConverte.toDTO(customerRepository.findById(id).get()); 
+		
+		Optional<Customer> oCustomer = customerRepository.findById(id);
+		
+		if(oCustomer.isPresent()) return customerConverte.toDTO(oCustomer.get()); 
+		
+		return null;
+		
 	}
 	
 	public CustomerDTO update(Long id,CustomerDTO customerDTO) {
-		Customer customerUpdate = customerConverte.toEntity(customerDTO, customerRepository.findById(id).get());
-		return customerConverte.toDTO(customerRepository.save(customerUpdate));
+		
+		Optional<Customer> oCustomer = customerRepository.findById(id);
+		
+		if(oCustomer.isPresent()) {
+			Customer customerUpdate = customerConverte.toEntity(customerDTO, oCustomer.get());
+			return customerConverte.toDTO(customerRepository.save(customerUpdate));
+		}
+		
+		return null;
 	}
 	
 	public void softDelete(Long id) {
-		Customer customerDelete = customerRepository.findById(id).get();
-		customerDelete.setEnabled(Boolean.FALSE);
-		customerRepository.save(customerDelete);
+		
+		Optional<Customer> oCustomer = customerRepository.findById(id);
+		
+		if(oCustomer.isPresent()) {
+			Customer customerDelete = oCustomer.get();
+			customerDelete.setEnabled(Boolean.FALSE);
+			customerRepository.save(customerDelete);
+		}
+		
+
 	}
 	
 	public CustomerDTO restore(Long id) {
-		Customer customerRestore = customerRepository.findById(id).get();
-		customerRestore.setEnabled(Boolean.TRUE);
-		return customerConverte.toDTO(customerRepository.save(customerRestore));
+		
+		Optional<Customer> oCustomer = customerRepository.findById(id);
+		
+		if (oCustomer.isPresent()) {
+			
+			Customer customerRestore = oCustomer.get();
+			customerRestore.setEnabled(Boolean.TRUE);
+			return customerConverte.toDTO(customerRepository.save(customerRestore));
+			
+		}
+		
+		return null;
+
 	}
 	
 }

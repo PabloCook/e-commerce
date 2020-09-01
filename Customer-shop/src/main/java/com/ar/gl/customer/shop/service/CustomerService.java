@@ -1,4 +1,4 @@
-package com.ar.gl.customer.shop.Customershop.service;
+package com.ar.gl.customer.shop.service;
 
 public interface CustomerService {
 

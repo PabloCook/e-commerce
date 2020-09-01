@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.CharStreams;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
 
 public class PostFilter extends ZuulFilter {
 
@@ -37,7 +36,6 @@ public class PostFilter extends ZuulFilter {
 			context.setResponseBody(responseData);
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			//throw new ZuulException(e, 500, e.getMessage());
 		}
 
 		return null;

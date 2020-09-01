@@ -1,4 +1,4 @@
-package com.ar.gl.customer.shop.Customershop.controller;
+package com.ar.gl.customer.shop.controller;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ar.gl.customer.shop.Customershop.DTO.CustomerDTO;
-import com.ar.gl.customer.shop.Customershop.service.impl.CustomerServiceImpl;
+import com.ar.gl.customer.shop.dto.CustomerDTO;
+import com.ar.gl.customer.shop.service.impl.CustomerServiceImpl;
 
 @RequestMapping(value = "/customers")
 @RestController
@@ -31,7 +31,7 @@ public class CustomerController {
 	
 	@GetMapping(value = "")
 	public ResponseEntity<List<CustomerDTO>> findAll(){
-		return new ResponseEntity<List<CustomerDTO>>(customerService.findAll(),HttpStatus.OK);
+		return new ResponseEntity<>(customerService.findAll(),HttpStatus.OK);
 	}
 	
 	

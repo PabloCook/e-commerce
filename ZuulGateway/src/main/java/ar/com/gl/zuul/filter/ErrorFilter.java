@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
 
 public class ErrorFilter extends ZuulFilter {
 
@@ -18,7 +17,6 @@ public class ErrorFilter extends ZuulFilter {
 	@Override
 	public boolean shouldFilter() {
 		RequestContext ctx = RequestContext.getCurrentContext();
-		//return ctx.getThrowable() != null && !ctx.getBoolean(SEND_ERROR_FILTER_RAN, false);
 		return false;
 	}
 

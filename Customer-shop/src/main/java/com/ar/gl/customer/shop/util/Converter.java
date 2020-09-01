@@ -1,4 +1,4 @@
-package com.ar.gl.customer.shop.Customershop.util;
+package com.ar.gl.customer.shop.util;
 
 import java.lang.reflect.Type;
 

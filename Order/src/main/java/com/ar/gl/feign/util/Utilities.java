@@ -11,7 +11,11 @@ import com.ar.gl.feign.dto.ResponseOrderDTO;
 
 public class Utilities {
 	
-	static public List<ResponseOrderDTO> mergeLists(List<OrderDTO> orders,List<CustomerDTO> customers,List<ProductDTO> products) {
+	private Utilities() {
+		
+	}
+	
+	public static List<ResponseOrderDTO> mergeLists(List<OrderDTO> orders,List<CustomerDTO> customers,List<ProductDTO> products) {
 		
 		List<ResponseOrderDTO> responseOrder = new ArrayList<>();
 		
@@ -27,7 +31,7 @@ public class Utilities {
 		return responseOrder;
 	}
 	
-	static public ResponseOrderDTO toResponseDTO(OrderDTO orderDTO, ProductDTO productDTO, CustomerDTO customerDTO) {
+	public static ResponseOrderDTO toResponseDTO(OrderDTO orderDTO, ProductDTO productDTO, CustomerDTO customerDTO) {
 		
 		return ResponseOrderDTO.builder()
 					.id(orderDTO.getId())

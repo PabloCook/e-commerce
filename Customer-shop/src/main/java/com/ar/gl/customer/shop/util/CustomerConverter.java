@@ -1,12 +1,12 @@
-package com.ar.gl.customer.shop.Customershop.util;
+package com.ar.gl.customer.shop.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.ar.gl.customer.shop.Customershop.DTO.CustomerDTO;
-import com.ar.gl.customer.shop.Customershop.model.Customer;
+import com.ar.gl.customer.shop.dto.CustomerDTO;
+import com.ar.gl.customer.shop.model.Customer;
 
 @Component
 public class CustomerConverter extends Converter {

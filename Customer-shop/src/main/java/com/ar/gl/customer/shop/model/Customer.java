@@ -1,4 +1,4 @@
-package com.ar.gl.customer.shop.Customershop.model;
+package com.ar.gl.customer.shop.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

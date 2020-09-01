@@ -1,7 +1,7 @@
 package com.ar.gl.feign.service.impl;
 
-import static com.ar.gl.feign.util.Utilities.toResponseDTO;
 import static com.ar.gl.feign.util.Utilities.mergeLists;
+import static com.ar.gl.feign.util.Utilities.toResponseDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;

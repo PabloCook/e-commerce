@@ -1,4 +1,4 @@
-package com.ar.gl.customer.shop.Customershop.exception;
+package com.ar.gl.customer.shop.exception;
 
 
 import java.util.NoSuchElementException;
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.ar.gl.customer.shop.Customershop.DTO.ErrorDTO;
+import com.ar.gl.customer.shop.dto.ErrorDTO;
 
 
 
 @ControllerAdvice
-public class CustomHandlerException extends ResponseEntityExceptionHandler {
+public class CustomHandler extends ResponseEntityExceptionHandler {
 	
 	@Override
 	public ResponseEntity<Object>handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders head, HttpStatus status , WebRequest request){
 		ErrorDTO responseError = new ErrorDTO(e.getBindingResult().getFieldError().getField() +" not valid",HttpStatus.BAD_REQUEST.value());
-		return new ResponseEntity<Object>(responseError, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(responseError, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler({ NoSuchElementException.class})

@@ -35,47 +35,47 @@ public class OrderController {
 	
 	@PostMapping(value = "/orders")
 	public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderDTO orderDTO){
-		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.create(orderDTOConverter.toEntity(orderDTO))), HttpStatus.CREATED);
+		return new ResponseEntity<>(orderDTOConverter.toDTO(orderService.create(orderDTOConverter.toEntity(orderDTO))), HttpStatus.CREATED);
 	}
 	
 	@GetMapping(value = "/orders")
 	public ResponseEntity<List<OrderDTO>> getAll(){
-		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getAll()), HttpStatus.OK);
+		return new ResponseEntity<>(orderDTOConverter.toDTOList(orderService.getAll()), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/orders/pageable")
 	public ResponseEntity<List<OrderDTO>> getAll(@PageableDefault(page=0) Pageable pageable){
-		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getAll(pageable)), HttpStatus.OK);
+		return new ResponseEntity<>(orderDTOConverter.toDTOList(orderService.getAll(pageable)), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/orders/{id}")
 	public ResponseEntity<OrderDTO> getById(@PathVariable("id") Long id){
-		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.getById(id)), HttpStatus.OK);
+		return new ResponseEntity<>(orderDTOConverter.toDTO(orderService.getById(id)), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/orders/customer/{id}")
 	public ResponseEntity<List<OrderDTO>> getOrdersByCustomer(@PathVariable("id") Long id){
-		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getOrdersByCustomer(id)), HttpStatus.OK);
+		return new ResponseEntity<>(orderDTOConverter.toDTOList(orderService.getOrdersByCustomer(id)), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/orders/product/{id}")
 	public ResponseEntity<List<OrderDTO>> getOrdersByProduct(@PathVariable("id") Long id){
-		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getOrdersByProduct(id)), HttpStatus.OK);
+		return new ResponseEntity<>(orderDTOConverter.toDTOList(orderService.getOrdersByProduct(id)), HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/orders/{id}")
 	public ResponseEntity<OrderDTO> update( @PathVariable("id") Long id, @Valid @RequestBody OrderDTO orderDTO){
-		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.update(orderDTO, id)), HttpStatus.OK);
+		return new ResponseEntity<>(orderDTOConverter.toDTO(orderService.update(orderDTO, id)), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value = "/orders/{id}")
 	public ResponseEntity<String> delete(@PathVariable("id") Long id){
 		orderService.delete(id);
-		return new ResponseEntity<String>("Orden eliminada", HttpStatus.OK);
+		return new ResponseEntity<>("Orden eliminada", HttpStatus.OK);
 	}
 	
 	@PatchMapping(value = "/orders/{id}")
 	public ResponseEntity<OrderDTO> softDelete(@PathVariable("id") Long id){
-		return new ResponseEntity<OrderDTO>(orderDTOConverter.toDTO(orderService.softDelete(id)), HttpStatus.OK);
+		return new ResponseEntity<>(orderDTOConverter.toDTO(orderService.softDelete(id)), HttpStatus.OK);
 	}
 }
