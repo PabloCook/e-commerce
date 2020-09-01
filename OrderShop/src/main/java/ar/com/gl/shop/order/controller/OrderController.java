@@ -39,7 +39,12 @@ public class OrderController {
 	}
 	
 	@GetMapping(value = "/orders")
-	public ResponseEntity<List<OrderDTO>> findPage(@PageableDefault(page=0, size=100) Pageable pageable){
+	public ResponseEntity<List<OrderDTO>> getAll(){
+		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getAll()), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/orders/pageable")
+	public ResponseEntity<List<OrderDTO>> getAll(@PageableDefault(page=0) Pageable pageable){
 		return new ResponseEntity<List<OrderDTO>>(orderDTOConverter.toDTOList(orderService.getAll(pageable)), HttpStatus.OK);
 	}
 	

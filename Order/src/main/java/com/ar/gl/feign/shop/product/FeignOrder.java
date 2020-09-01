@@ -3,6 +3,7 @@ package com.ar.gl.feign.shop.product;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,9 @@ public interface FeignOrder {
 	
 	@PostMapping(value = "/orders/v1/orders")
 	public ResponseEntity<OrderDTO> create(@RequestBody OrderDTO orderDTO);
+	
+	@GetMapping(value = "/orders/v1/orders/pageable")
+	public ResponseEntity<List<OrderDTO>> getAllOrders(Pageable pageable);
 	
 	@GetMapping(value = "/orders/v1/orders")
 	public ResponseEntity<List<OrderDTO>> getAllOrders();

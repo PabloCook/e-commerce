@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,11 @@ public class OrderController {
 		return orderService.create(orderDTO);
 	}
 
+	@GetMapping(value = "/orders/pageable")
+	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders(Pageable pageable) {
+		return orderService.getAllOrders(pageable);
+	}
+	
 	@GetMapping(value = "/orders")
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders() {
 		return orderService.getAllOrders();

@@ -1,9 +1,9 @@
 package com.ar.gl.feign.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,8 @@ import com.ar.gl.feign.service.OrderService;
 import com.ar.gl.feign.shop.product.FeignCustomer;
 import com.ar.gl.feign.shop.product.FeignOrder;
 import com.ar.gl.feign.shop.product.FeignProduct;
+import static com.ar.gl.feign.util.Utilities.mergeLists;
+import static com.ar.gl.feign.util.Utilities.makeResponseDTO;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -85,25 +87,28 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders(Pageable pageable) {
+		
+		return new ResponseEntity<>(
+				mergeLists(
+						feignOrder.getAllOrders(pageable).getBody(),
+						feignCustomer.findAll().getBody(),
+						feignProduct.findAll().getBody())
+				,HttpStatus.OK);
+	}
+	
+	@Override
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders() {
 		
-		List<OrderDTO> orders = feignOrder.getAllOrders().getBody();
-		
-		List<CustomerDTO> customers = feignCustomer.findAll().getBody();
-		List<ProductDTO> products = feignProduct.findAll().getBody();
-		
-		List<ResponseOrderDTO> responseOrder = new ArrayList<>();
-		
-		for (OrderDTO orderDTO : orders) {	
-			responseOrder.add(this.makeResponseDTO(
-				orderDTO,
-				products.stream().filter(c -> c.getId().equals(orderDTO.getProductId())).findFirst().get(),
-				customers.stream().filter(c -> c.getId().equals(orderDTO.getCustomerId())).findFirst().get())
-				);
-		}
-		
-		return new ResponseEntity<>(responseOrder,HttpStatus.OK);
+		return new ResponseEntity<>(
+				mergeLists(
+						feignOrder.getAllOrders().getBody(),
+						feignCustomer.findAll().getBody(),
+						feignProduct.findAll().getBody())
+				,HttpStatus.OK);
 	}
+	
+	
 
 	@Override
 	public ResponseEntity<ResponseOrderDTO> update(Long id, OrderDTO orderDTO) {
@@ -126,28 +131,5 @@ public class OrderServiceImpl implements OrderService {
 		
 		return new ResponseEntity<>(new ResponseOrderDTO("Order eliminada"),HttpStatus.OK);
 	}
-	
-	private ResponseOrderDTO makeResponseDTO(OrderDTO orderDTO, ProductDTO productDTO, CustomerDTO customerDTO) {
-		
-		final ResponseOrderDTO RESPONSE_ORDER_DTO = ResponseOrderDTO.builder()
-													.id(orderDTO.getId())
-													.quantity(orderDTO.getQuantity())
-													.totalPrice(orderDTO.getTotalPrice())
-													.productId(productDTO.getId())
-													.productName(productDTO.getName())
-													.productDescription(productDTO.getDescription())
-													.productPrice(productDTO.getPrice())
-													.categoryName(productDTO.getCategoryName())
-													.categoryDescription(productDTO.getCategoryDescription())
-													.customerId(customerDTO.getId())
-													.customerName(customerDTO.getName())
-													.customerSurname(customerDTO.getSurname())
-													.customerDni(customerDTO.getDni())
-													.build();
-		
-		return RESPONSE_ORDER_DTO;
-	}
-
-
 
 }

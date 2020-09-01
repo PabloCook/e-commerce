@@ -15,6 +15,8 @@ public interface OrderService {
 	
 	public List<Order> getAll(Pageable pageable);
 	
+	public List<Order> getAll();
+	
 	public List<Order> getOrdersByCustomer(Long customerId);
 
 	public List<Order> getOrdersByProduct(Long productId);
