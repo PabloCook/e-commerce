@@ -1,5 +1,6 @@
 package com.ar.gl.feign.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties(value= {"customerId", "productId"})
 public class ResponseOrderDTO {
 	
 	private Long id;
@@ -20,6 +22,7 @@ public class ResponseOrderDTO {
 	private Double totalPrice;
 	private Boolean disable;
 	
+	private Long productId;
 	private String productName;
 	private String productDescription;
 	private Double productPrice;
@@ -27,15 +30,16 @@ public class ResponseOrderDTO {
 	private String categoryName;
 	private String categoryDescription;
 	
+	private Long customerId;
 	private String customerName;
 	private String customerSurname;
 	private String customerDni;
 	
-	private String errorMessage;
+	private String message;
 	
 	
-	public ResponseOrderDTO(String errorMessage) {
-		this.errorMessage = errorMessage;
+	public ResponseOrderDTO(String message) {
+		this.message = message;
 	}
 
 }

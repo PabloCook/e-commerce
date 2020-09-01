@@ -17,16 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ar.gl.feign.dto.OrderDTO;
 import com.ar.gl.feign.dto.ResponseOrderDTO;
 import com.ar.gl.feign.service.impl.OrderServiceImpl;
-import com.ar.gl.feign.shop.product.FeignOrder;
 
 @RestController
 public class OrderController {
 	
-	private FeignOrder order;
 	private OrderServiceImpl orderService;
 	
-	public OrderController(FeignOrder order, OrderServiceImpl orderService) {
-		this.order = order;
+	public OrderController(OrderServiceImpl orderService) {
 		this.orderService = orderService;
 	}
 
