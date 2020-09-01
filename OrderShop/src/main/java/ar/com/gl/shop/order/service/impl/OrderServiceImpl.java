@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import static java.util.Objects.nonNull;
@@ -38,10 +39,11 @@ public class OrderServiceImpl implements OrderService{
 		else throw new NoSuchElementException();
 	}
 	
+
 	@Override
-	public List<Order> getAll() {
-		return orderRepository.findAll();
-	}
+	public List<Order> getAll(Pageable pageable) {
+		return orderRepository.findAll(pageable).toList();
+	}	
 
 	@Override
 	public List<Order> getOrdersByCustomer(Long customerId) {
@@ -77,6 +79,7 @@ public class OrderServiceImpl implements OrderService{
 			order = orderRepository.save(order);
 		}
 		return order;
-	}	
+	}
+
 	
 }
