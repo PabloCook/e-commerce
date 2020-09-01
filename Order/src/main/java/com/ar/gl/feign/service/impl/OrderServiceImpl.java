@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		return new ResponseEntity<>(getAllOrders().getBody()
 				.stream()
-				.filter(o->o.getCustomerId().equals(id))
+				.filter(order -> order.getCustomerId().equals(id))
 				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		return new ResponseEntity<>(getAllOrders().getBody()
 				.stream()
-				.filter(o->o.getProductId().equals(id))
+				.filter(order -> order.getProductId().equals(id))
 				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
@@ -96,14 +96,14 @@ public class OrderServiceImpl implements OrderService {
 		
 		for (OrderDTO orderDTO : orders) {	
 			
-			Optional<ProductDTO> oProduct = products.stream().filter(product -> product.getId().equals(orderDTO.getProductId())).findFirst();
-			Optional<CustomerDTO> oCustomer = customers.stream().filter(customer -> customer.getId().equals(orderDTO.getCustomerId())).findFirst();
+			Optional<ProductDTO> oProductDTO = products.stream().filter(product -> product.getId().equals(orderDTO.getProductId())).findFirst();
+			Optional<CustomerDTO> oCustomerDTO = customers.stream().filter(customer -> customer.getId().equals(orderDTO.getCustomerId())).findFirst();
 			
-			if(oProduct.isPresent() && oCustomer.isPresent()) {
+			if(oProductDTO.isPresent() && oCustomerDTO.isPresent()) {
 				responseOrder.add(this.makeResponseDTO(
 						orderDTO,
-						oProduct.get(),
-						oCustomer.get()
+						oProductDTO.get(),
+						oCustomerDTO.get()
 						));
 			}
 			
@@ -153,7 +153,5 @@ public class OrderServiceImpl implements OrderService {
 							   .customerDni(customerDTO.getDni())
 							   .build();
 	}
-
-
 
 }
