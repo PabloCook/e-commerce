@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ar.gl.feign.dto.OrderDTO;
+import com.ar.gl.feign.shop.product.fallback.HystrixOrderFallbackFactory;
 
-@FeignClient(name="Order-Shop"/*, fallback = HystrixOrderFallbackFactory.class*/)
+@FeignClient(name="Order-Shop", fallback = HystrixOrderFallbackFactory.class)
 public interface FeignOrder {
 	
 	@PostMapping(value = "/orders/v1/orders")
