@@ -57,12 +57,12 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public Order update(OrderDTO orderDTO, Long id) {
-		Order order = getById(id);
-		if(nonNull(order)) {
+		if(nonNull(id)) {
+			Order order = getById(id);
 			order = orderDTOConverter.toEntity(orderDTO, order);
 			return orderRepository.save(order);
 		}
-		return order;
+		return null;
 	}
 
 	@Override
@@ -73,12 +73,12 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public Order softDelete(Long id) {
-		Order order = getById(id);
-		if(nonNull(order)) {
+		if(nonNull(id)) {
+			Order order = getById(id);
 			order.setDisable(!order.getDisable());
-			order = orderRepository.save(order);
+			return orderRepository.save(order);
 		}
-		return order;
+		return null;
 	}
 
 	@Override
