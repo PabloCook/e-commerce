@@ -3,6 +3,7 @@ package com.ar.gl.feign.shop.product.fallback;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -25,37 +26,37 @@ public class HystrixCatalogFallBackFactory implements FeignCatalog {
 							  .build();
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = HttpMediaTypeNotAcceptableException.class )
 	public ResponseEntity<List<CategoryDTO>> findAll() {
 		return new ResponseEntity<>(Arrays.asList(categoryDTO), HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = HttpMediaTypeNotAcceptableException.class)
 	public ResponseEntity<CategoryDTO> findbyName(String name) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = HttpMediaTypeNotAcceptableException.class)
 	public ResponseEntity<CategoryDTO> getById(Long id) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = HttpMediaTypeNotAcceptableException.class)
 	public ResponseEntity<CategoryDTO> create(CategoryDTO categoryDTO) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = HttpMediaTypeNotAcceptableException.class)
 	public ResponseEntity<CategoryDTO> patch(@PathVariable(name = "id") Long id, @RequestParam(name = "description") String description) {
 		return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = HttpMediaTypeNotAcceptableException.class)
 	public ResponseEntity<String> delete(Long id) {
 		return new ResponseEntity<>("No se pudo eliminar", HttpStatus.OK);
 	}
