@@ -2,6 +2,7 @@ package com.ar.gl.feign.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -33,36 +34,36 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public ResponseEntity<ResponseOrderDTO> create(OrderDTO orderDTO) {
 		
-		final ProductDTO PRODUCT_DTO = feignProduct.getById(orderDTO.getProductId()).getBody();
+		final ProductDTO productDTO = feignProduct.getById(orderDTO.getProductId()).getBody();
 		
-		final CustomerDTO CUSTOMER_DTO = feignCustomer.getById(orderDTO.getCustomerId()).getBody();
+		final CustomerDTO customerDTO = feignCustomer.getById(orderDTO.getCustomerId()).getBody();
 		
-		if (orderDTO.getQuantity() > PRODUCT_DTO.getStockQuantity()) {
+		if (orderDTO.getQuantity() > productDTO.getStockQuantity()) {
 			
 			return new ResponseEntity<>(new ResponseOrderDTO("No hay stock disponbile"), HttpStatus.OK);
 		}
 		
-		orderDTO.setTotalPrice(PRODUCT_DTO.getPrice() * orderDTO.getQuantity());
+		orderDTO.setTotalPrice(productDTO.getPrice() * orderDTO.getQuantity());
 		
-		final OrderDTO RESPONSE_ENTITY = feignOrder.create(orderDTO).getBody();
+		final OrderDTO responseEntity = feignOrder.create(orderDTO).getBody();
 		
-		PRODUCT_DTO.setStockQuantity(PRODUCT_DTO.getStockQuantity() - orderDTO.getQuantity());
+		productDTO.setStockQuantity(productDTO.getStockQuantity() - orderDTO.getQuantity());
 		
-		final ProductDTO UPDATED_PRODUCT_DTO = feignProduct.update(PRODUCT_DTO.getId(), PRODUCT_DTO).getBody();
+		final ProductDTO updatedProductDTO = feignProduct.update(productDTO.getId(), productDTO).getBody();
 		
-		return new ResponseEntity<>(makeResponseDTO(RESPONSE_ENTITY, UPDATED_PRODUCT_DTO, CUSTOMER_DTO), HttpStatus.CREATED);
+		return new ResponseEntity<>(makeResponseDTO(responseEntity, updatedProductDTO, customerDTO), HttpStatus.CREATED);
 	}
 	
 	@Override
 	public ResponseEntity<ResponseOrderDTO> get(Long id) {
 		
-		final OrderDTO ORDER_DTO = feignOrder.get(id).getBody();
+		final OrderDTO orderDTO = feignOrder.get(id).getBody();
 		
 		return new ResponseEntity<>(
 				makeResponseDTO(
-								ORDER_DTO,
-								feignProduct.getById(ORDER_DTO.getProductId()).getBody(),
-								feignCustomer.getById(ORDER_DTO.getCustomerId()).getBody()
+								orderDTO,
+								feignProduct.getById(orderDTO.getProductId()).getBody(),
+								feignCustomer.getById(orderDTO.getCustomerId()).getBody()
 							    ), HttpStatus.OK);
 	}
 
@@ -88,18 +89,25 @@ public class OrderServiceImpl implements OrderService {
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders() {
 		
 		List<OrderDTO> orders = feignOrder.getAllOrders().getBody();
-		
 		List<CustomerDTO> customers = feignCustomer.findAll().getBody();
 		List<ProductDTO> products = feignProduct.findAll().getBody();
 		
 		List<ResponseOrderDTO> responseOrder = new ArrayList<>();
 		
 		for (OrderDTO orderDTO : orders) {	
-			responseOrder.add(this.makeResponseDTO(
-				orderDTO,
-				products.stream().filter(c -> c.getId().equals(orderDTO.getProductId())).findFirst().get(),
-				customers.stream().filter(c -> c.getId().equals(orderDTO.getCustomerId())).findFirst().get())
-				);
+			
+			Optional<ProductDTO> oProduct = products.stream().filter(product -> product.getId().equals(orderDTO.getProductId())).findFirst();
+			Optional<CustomerDTO> oCustomer = customers.stream().filter(customer -> customer.getId().equals(orderDTO.getCustomerId())).findFirst();
+			
+			if(oProduct.isPresent() && oCustomer.isPresent()) {
+				responseOrder.add(this.makeResponseDTO(
+						orderDTO,
+						oProduct.get(),
+						oCustomer.get()
+						));
+			}
+			
+
 		}
 		
 		return new ResponseEntity<>(responseOrder,HttpStatus.OK);
@@ -129,23 +137,21 @@ public class OrderServiceImpl implements OrderService {
 	
 	private ResponseOrderDTO makeResponseDTO(OrderDTO orderDTO, ProductDTO productDTO, CustomerDTO customerDTO) {
 		
-		final ResponseOrderDTO RESPONSE_ORDER_DTO = ResponseOrderDTO.builder()
-													.id(orderDTO.getId())
-													.quantity(orderDTO.getQuantity())
-													.totalPrice(orderDTO.getTotalPrice())
-													.productId(productDTO.getId())
-													.productName(productDTO.getName())
-													.productDescription(productDTO.getDescription())
-													.productPrice(productDTO.getPrice())
-													.categoryName(productDTO.getCategoryName())
-													.categoryDescription(productDTO.getCategoryDescription())
-													.customerId(customerDTO.getId())
-													.customerName(customerDTO.getName())
-													.customerSurname(customerDTO.getSurname())
-													.customerDni(customerDTO.getDni())
-													.build();
-		
-		return RESPONSE_ORDER_DTO;
+		return ResponseOrderDTO.builder()
+							   .id(orderDTO.getId())
+							   .quantity(orderDTO.getQuantity())
+							   .totalPrice(orderDTO.getTotalPrice())
+							   .productId(productDTO.getId())
+							   .productName(productDTO.getName())
+							   .productDescription(productDTO.getDescription())
+							   .productPrice(productDTO.getPrice())
+							   .categoryName(productDTO.getCategoryName())
+							   .categoryDescription(productDTO.getCategoryDescription())
+							   .customerId(customerDTO.getId())
+							   .customerName(customerDTO.getName())
+							   .customerSurname(customerDTO.getSurname())
+							   .customerDni(customerDTO.getDni())
+							   .build();
 	}
 
 
