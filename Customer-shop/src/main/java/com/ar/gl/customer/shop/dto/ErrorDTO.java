@@ -1,4 +1,4 @@
-package com.ar.gl.customer.shop.Customershop.DTO;
+package com.ar.gl.customer.shop.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

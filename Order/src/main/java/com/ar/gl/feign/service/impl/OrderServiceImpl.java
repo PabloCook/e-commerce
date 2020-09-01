@@ -1,5 +1,8 @@
 package com.ar.gl.feign.service.impl;
 
+import static com.ar.gl.feign.util.Utilities.mergeLists;
+import static com.ar.gl.feign.util.Utilities.toResponseDTO;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +19,6 @@ import com.ar.gl.feign.service.OrderService;
 import com.ar.gl.feign.shop.product.FeignCustomer;
 import com.ar.gl.feign.shop.product.FeignOrder;
 import com.ar.gl.feign.shop.product.FeignProduct;
-import static com.ar.gl.feign.util.Utilities.mergeLists;
-import static com.ar.gl.feign.util.Utilities.makeResponseDTO;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -35,37 +36,36 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public ResponseEntity<ResponseOrderDTO> create(OrderDTO orderDTO) {
 		
-		final ProductDTO PRODUCT_DTO = feignProduct.getById(orderDTO.getProductId()).getBody();
+		final ProductDTO productDTO = feignProduct.getById(orderDTO.getProductId()).getBody();
 		
-		final CustomerDTO CUSTOMER_DTO = feignCustomer.getById(orderDTO.getCustomerId()).getBody();
+		final CustomerDTO customerDTO = feignCustomer.getById(orderDTO.getCustomerId()).getBody();
 		
-		if (orderDTO.getQuantity() > PRODUCT_DTO.getStockQuantity()) {
+		if (orderDTO.getQuantity() > productDTO.getStockQuantity()) {
 			
 			return new ResponseEntity<>(new ResponseOrderDTO("No hay stock disponbile"), HttpStatus.OK);
 		}
 		
-		orderDTO.setTotalPrice(PRODUCT_DTO.getPrice() * orderDTO.getQuantity());
+		orderDTO.setTotalPrice(productDTO.getPrice() * orderDTO.getQuantity());
 		
-		final OrderDTO RESPONSE_ENTITY = feignOrder.create(orderDTO).getBody();
+		final OrderDTO responseEntity = feignOrder.create(orderDTO).getBody();
 		
-		PRODUCT_DTO.setStockQuantity(PRODUCT_DTO.getStockQuantity() - orderDTO.getQuantity());
+		productDTO.setStockQuantity(productDTO.getStockQuantity() - orderDTO.getQuantity());
 		
-		final ProductDTO UPDATED_PRODUCT_DTO = feignProduct.update(PRODUCT_DTO.getId(), PRODUCT_DTO).getBody();
+		final ProductDTO updatedProductDTO = feignProduct.update(productDTO.getId(), productDTO).getBody();
 		
-		return new ResponseEntity<>(makeResponseDTO(RESPONSE_ENTITY, UPDATED_PRODUCT_DTO, CUSTOMER_DTO), HttpStatus.CREATED);
+		return new ResponseEntity<>(toResponseDTO(responseEntity, updatedProductDTO, customerDTO), HttpStatus.CREATED);
 	}
 	
 	@Override
 	public ResponseEntity<ResponseOrderDTO> get(Long id) {
 		
-		final OrderDTO ORDER_DTO = feignOrder.get(id).getBody();
+		final OrderDTO orderDTO = feignOrder.get(id).getBody();
 		
-		return new ResponseEntity<>(
-				makeResponseDTO(
-								ORDER_DTO,
-								feignProduct.getById(ORDER_DTO.getProductId()).getBody(),
-								feignCustomer.getById(ORDER_DTO.getCustomerId()).getBody()
-							    ), HttpStatus.OK);
+		return new ResponseEntity<>(toResponseDTO(
+													orderDTO,
+													feignProduct.getById(orderDTO.getProductId()).getBody(),
+													feignCustomer.getById(orderDTO.getCustomerId()).getBody()
+												    ), HttpStatus.OK);
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		return new ResponseEntity<>(getAllOrders().getBody()
 				.stream()
-				.filter(o->o.getCustomerId().equals(id))
+				.filter(order -> order.getCustomerId().equals(id))
 				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
@@ -82,30 +82,29 @@ public class OrderServiceImpl implements OrderService {
 		
 		return new ResponseEntity<>(getAllOrders().getBody()
 				.stream()
-				.filter(o->o.getProductId().equals(id))
+				.filter(order -> order.getProductId().equals(id))
 				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@Override
+
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders(Pageable pageable) {
 		
-		return new ResponseEntity<>(
-				mergeLists(
-						feignOrder.getAllOrders(pageable).getBody(),
-						feignCustomer.findAll().getBody(),
-						feignProduct.findAll().getBody())
-				,HttpStatus.OK);
+		return new ResponseEntity<>(mergeLists(
+												feignOrder.getAllOrders(pageable).getBody(),
+												feignCustomer.findAll().getBody(),
+												feignProduct.findAll().getBody()
+												), HttpStatus.OK);
 	}
 	
 	@Override
 	public ResponseEntity<List<ResponseOrderDTO>> getAllOrders() {
 		
-		return new ResponseEntity<>(
-				mergeLists(
-						feignOrder.getAllOrders().getBody(),
-						feignCustomer.findAll().getBody(),
-						feignProduct.findAll().getBody())
-				,HttpStatus.OK);
+		return new ResponseEntity<>(mergeLists(
+												feignOrder.getAllOrders().getBody(),
+												feignCustomer.findAll().getBody(),
+												feignProduct.findAll().getBody()
+												), HttpStatus.OK);
 	}
 	
 	

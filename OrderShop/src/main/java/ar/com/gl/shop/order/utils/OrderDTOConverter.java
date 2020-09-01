@@ -22,12 +22,12 @@ public class OrderDTOConverter extends Converter{
 	}
 	
 	
-	public List<OrderDTO> toDTOList(List<Order> Orders) {
-		List<OrderDTO> OrdersDTO = new ArrayList<>();
-		for(Order Order : Orders) {
-			OrdersDTO.add(toDTO(Order));
+	public List<OrderDTO> toDTOList(List<Order> orders) {
+		List<OrderDTO> ordersDTO = new ArrayList<>();
+		for(Order order : orders) {
+			ordersDTO.add(toDTO(order));
 		}
-		return OrdersDTO;
+		return ordersDTO;
 	}
 	
 	public Order toEntity(OrderDTO orderDTO, Order prod) {
