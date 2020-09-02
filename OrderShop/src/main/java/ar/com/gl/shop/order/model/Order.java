@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "orderShop")
 public class Order {
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,4 +39,10 @@ public class Order {
 	
 	@Column(nullable = false)
 	private Boolean disable;
+	
+	public Order(Long productId, Long customerId, Integer quantity) {
+		this.productId = productId;
+		this.customerId = customerId;
+		this.quantity = quantity;
+	}
 }

@@ -2,6 +2,7 @@ package com.ar.gl.customer.shop.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -42,62 +43,35 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	public void delete(Long id) {
-		
-		Optional<Customer> oCustomer = customerRepository.findById(id);
-		
-		if(oCustomer.isPresent()) customerRepository.delete(oCustomer.get());
-		
+		customerRepository.delete(this.getCustomerById(id));
 	}
 	
 	public CustomerDTO findById(Long id) {
-		
-		Optional<Customer> oCustomer = customerRepository.findById(id);
-		
-		if(oCustomer.isPresent()) return customerConverte.toDTO(oCustomer.get()); 
-		
-		return null;
+		return customerConverte.toDTO(this.getCustomerById(id)); 
 		
 	}
 	
 	public CustomerDTO update(Long id,CustomerDTO customerDTO) {
-		
-		Optional<Customer> oCustomer = customerRepository.findById(id);
-		
-		if(oCustomer.isPresent()) {
-			Customer customerUpdate = customerConverte.toEntity(customerDTO, oCustomer.get());
-			return customerConverte.toDTO(customerRepository.save(customerUpdate));
-		}
-		
-		return null;
+		Customer customerUpdate = customerConverte.toEntity(customerDTO, this.getCustomerById(id));
+		return customerConverte.toDTO(customerRepository.save(customerUpdate));
 	}
 	
-	public void softDelete(Long id) {
-		
-		Optional<Customer> oCustomer = customerRepository.findById(id);
-		
-		if(oCustomer.isPresent()) {
-			Customer customerDelete = oCustomer.get();
-			customerDelete.setEnabled(Boolean.FALSE);
-			customerRepository.save(customerDelete);
-		}
-		
-
+	public void softDelete(Long id) {			
+		Customer customerDelete = this.getCustomerById(id);
+		customerDelete.setEnabled(Boolean.FALSE);
+		customerRepository.save(customerDelete);
 	}
 	
 	public CustomerDTO restore(Long id) {
-		
+		Customer customerRestore = this.getCustomerById(id);
+		customerRestore.setEnabled(Boolean.TRUE);
+		return customerConverte.toDTO(customerRepository.save(customerRestore));
+	}
+	
+	private Customer getCustomerById(Long id) {
 		Optional<Customer> oCustomer = customerRepository.findById(id);
-		
-		if (oCustomer.isPresent()) {
-			
-			Customer customerRestore = oCustomer.get();
-			customerRestore.setEnabled(Boolean.TRUE);
-			return customerConverte.toDTO(customerRepository.save(customerRestore));
-			
-		}
-		
-		return null;
-
+		if (!oCustomer.isPresent()) throw new NoSuchElementException("customer not found");
+		return oCustomer.get();
 	}
 	
 }
