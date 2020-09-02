@@ -225,10 +225,6 @@ public class OrderServiceTest {
 		
 		List<ResponseOrderDTO> responseOrdersDTO = mergeLists(responseEntityOrdersDTO.getBody(), responseEntityCustomerDTO.getBody(), responseEntityProductsDTO.getBody());
 		
-		System.out.println(responseOrdersDTO);
-		
-		System.out.println(orderServiceImpl.getAllOrders(pageable));
-		
 		assertEquals(responseOrdersDTO, orderServiceImpl.getAllOrders(pageable).getBody());
 		
 	}
@@ -239,9 +235,33 @@ public class OrderServiceTest {
 		
 		ResponseEntity<List<ProductDTO>> responseEntityProductsDTO = new ResponseEntity<>(productsDTO, HttpStatus.OK);
 		
+		responseEntityOrdersDTO = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		
 		when(feignOrder.getAllOrders()).thenReturn(responseEntityOrdersDTO);
 		when(feignCustomer.findAll()).thenReturn(responseEntityCustomerDTO);
 		when(feignProduct.findAll()).thenReturn(responseEntityProductsDTO);
+		
+		List<ResponseOrderDTO> responseOrderDTO = mergeLists(responseEntityOrdersDTO.getBody(), responseEntityCustomerDTO.getBody(), responseEntityProductsDTO.getBody());
+		
+		assertEquals(responseOrderDTO, orderServiceImpl.getOrdersByCustomer(1l).getBody());
+
+	}
+	
+	@Test
+	@DisplayName("get all orderes by products")
+	void getAllOrderByPRoducts() {
+		
+		ResponseEntity<List<ProductDTO>> responseEntityProductsDTO = new ResponseEntity<>(productsDTO, HttpStatus.OK);
+		
+		responseEntityOrdersDTO = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		
+		when(feignOrder.getAllOrders()).thenReturn(responseEntityOrdersDTO);
+		when(feignCustomer.findAll()).thenReturn(responseEntityCustomerDTO);
+		when(feignProduct.findAll()).thenReturn(responseEntityProductsDTO);
+		
+		List<ResponseOrderDTO> responseOrderDTO = mergeLists(responseEntityOrdersDTO.getBody(), responseEntityCustomerDTO.getBody(), responseEntityProductsDTO.getBody());
+		
+		assertEquals(responseOrderDTO, orderServiceImpl.getOrdersByProduct(1l).getBody());
 
 	}
 	
