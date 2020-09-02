@@ -51,6 +51,8 @@ public class OrderControllerTest {
 	OrderDTO orderDTO;
 	Pageable pageable;
 	Page<Order> pageOrder;
+	ResponseEntity<OrderDTO> responseDTO;
+	ResponseEntity<List<OrderDTO>> responseDTOList;
 
 	@BeforeEach
 	void setUp() {
@@ -74,8 +76,8 @@ public class OrderControllerTest {
 		when(orderDTOConverter.toEntity(orderDTO)).thenReturn(order);
 		when(orderService.create(order)).thenReturn(order2);
 		when(orderDTOConverter.toDTO(order2)).thenReturn(orderDTO);
-		ResponseEntity<OrderDTO> response = new ResponseEntity<>(orderDTO, HttpStatus.CREATED);
-		assertEquals(response, orderController.create(orderDTO));
+		responseDTO = new ResponseEntity<>(orderDTO, HttpStatus.CREATED);
+		assertEquals(responseDTO, orderController.create(orderDTO));
 	}
 
 	@Test
@@ -83,8 +85,8 @@ public class OrderControllerTest {
 	void testCase_2() {
 		when(orderDTOConverter.toDTOList(orders)).thenReturn(ordersDTO);
 		when(orderService.getAll()).thenReturn(orders);
-		ResponseEntity<List<OrderDTO>> response = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
-		assertEquals(response, orderController.getAll());
+		responseDTOList = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		assertEquals(responseDTOList, orderController.getAll());
 	}
 
 	@Test
@@ -92,8 +94,8 @@ public class OrderControllerTest {
 	void testCase_3() {
 		when(orderDTOConverter.toDTOList(orders)).thenReturn(ordersDTO);
 		when(orderService.getAll(pageable)).thenReturn(orders);
-		ResponseEntity<List<OrderDTO>> response = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
-		assertEquals(response, orderController.getAll(pageable));
+		responseDTOList = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		assertEquals(responseDTOList, orderController.getAll(pageable));
 	}
 
 	@Test
@@ -101,8 +103,8 @@ public class OrderControllerTest {
 	void testCase_4() {
 		lenient().when(orderDTOConverter.toDTO(order2)).thenReturn(orderDTO);
 		when(orderService.getById(1L)).thenReturn(order2);
-		ResponseEntity<OrderDTO> response = new ResponseEntity<>(orderDTO, HttpStatus.OK);
-		assertEquals(response, orderController.getById(1L));
+		responseDTO = new ResponseEntity<>(orderDTO, HttpStatus.OK);
+		assertEquals(responseDTO, orderController.getById(1L));
 	}
 
 	@Test
@@ -110,8 +112,8 @@ public class OrderControllerTest {
 	void testCase_5() {
 		when(orderDTOConverter.toDTOList(orders)).thenReturn(ordersDTO);
 		when(orderService.getOrdersByCustomer(2L)).thenReturn(orders);
-		ResponseEntity<List<OrderDTO>> response = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
-		assertEquals(response, orderController.getOrdersByCustomer(2L));
+		responseDTOList = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		assertEquals(responseDTOList, orderController.getOrdersByCustomer(2L));
 	}
 
 	@Test
@@ -119,8 +121,8 @@ public class OrderControllerTest {
 	void testCase_6() {
 		when(orderDTOConverter.toDTOList(orders)).thenReturn(ordersDTO);
 		when(orderService.getOrdersByProduct(4L)).thenReturn(orders);
-		ResponseEntity<List<OrderDTO>> response = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
-		assertEquals(response, orderController.getOrdersByProduct(4L));
+		responseDTOList = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		assertEquals(responseDTOList, orderController.getOrdersByProduct(4L));
 	}
 
 	@Test
@@ -128,8 +130,8 @@ public class OrderControllerTest {
 	void testCase_7() {
 		when(orderDTOConverter.toDTO(order2)).thenReturn(orderDTO);
 		when(orderService.update(orderDTO, 1L)).thenReturn(order2);
-		ResponseEntity<OrderDTO> response = new ResponseEntity<>(orderDTO, HttpStatus.OK);
-		assertEquals(response, orderController.update(1L, orderDTO));
+		responseDTO = new ResponseEntity<>(orderDTO, HttpStatus.OK);
+		assertEquals(responseDTO, orderController.update(1L, orderDTO));
 	}
 
 	@Test
@@ -146,8 +148,8 @@ public class OrderControllerTest {
 	void testCase_9() {
 		when(orderDTOConverter.toDTO(order2)).thenReturn(orderDTO);
 		when(orderService.softDelete(1L)).thenReturn(order2);
-		ResponseEntity<OrderDTO> response = new ResponseEntity<>(orderDTO, HttpStatus.OK);
-		assertEquals(response, orderController.softDelete(1L));
+		responseDTO = new ResponseEntity<>(orderDTO, HttpStatus.OK);
+		assertEquals(responseDTO, orderController.softDelete(1L));
 	}
 
 
