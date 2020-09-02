@@ -1,4 +1,4 @@
-package com.ar.gl.customer.shop.Customershop;
+package com.ar.gl.customer.shop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +8,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 public class CustomerShopApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CustomerShopApplication.class, args);
+	public static void main(final String[] args) {
+		SpringApplication.run(CustomerShopApplication.class);
 	}
 
 }

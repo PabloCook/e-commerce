@@ -2,6 +2,7 @@ package com.ar.gl.feign.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.ar.gl.feign.dto.CustomerDTO;
 import com.ar.gl.feign.dto.OrderDTO;
@@ -10,19 +11,27 @@ import com.ar.gl.feign.dto.ResponseOrderDTO;
 
 public class Utilities {
 	
-	static public List<ResponseOrderDTO> mergeLists(List<OrderDTO> orders,List<CustomerDTO> customers,List<ProductDTO> products) {
+	private Utilities() {
+		
+	}
+	
+	public static List<ResponseOrderDTO> mergeLists(List<OrderDTO> orders,List<CustomerDTO> customers,List<ProductDTO> products) {
+		
 		List<ResponseOrderDTO> responseOrder = new ArrayList<>();
+		
 		for (OrderDTO orderDTO : orders) {	
-			responseOrder.add(makeResponseDTO(
-				orderDTO,
-				products.stream().filter(c -> c.getId().equals(orderDTO.getProductId())).findFirst().get(),
-				customers.stream().filter(c -> c.getId().equals(orderDTO.getCustomerId())).findFirst().get())
-				);
+			
+			Optional<ProductDTO> oProductDTO = products.stream().filter(product -> product.getId().equals(orderDTO.getProductId())).findFirst();
+			Optional<CustomerDTO> oCustomerDTO = customers.stream().filter(customer -> customer.getId().equals(orderDTO.getCustomerId())).findFirst();
+		
+			if(oProductDTO.isPresent() && oCustomerDTO.isPresent()) {				
+				responseOrder.add(toResponseDTO(orderDTO,	oProductDTO.get(), oCustomerDTO.get()));
+			}
 		}
 		return responseOrder;
 	}
 	
-	static public ResponseOrderDTO makeResponseDTO(OrderDTO orderDTO, ProductDTO productDTO, CustomerDTO customerDTO) {
+	public static ResponseOrderDTO toResponseDTO(OrderDTO orderDTO, ProductDTO productDTO, CustomerDTO customerDTO) {
 		
 		return ResponseOrderDTO.builder()
 					.id(orderDTO.getId())

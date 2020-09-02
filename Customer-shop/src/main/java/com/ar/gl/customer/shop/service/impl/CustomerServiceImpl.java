@@ -1,15 +1,17 @@
-package com.ar.gl.customer.shop.Customershop.service.impl;
+package com.ar.gl.customer.shop.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.ar.gl.customer.shop.Customershop.DTO.CustomerDTO;
-import com.ar.gl.customer.shop.Customershop.model.Customer;
-import com.ar.gl.customer.shop.Customershop.repository.CustomerRepository;
-import com.ar.gl.customer.shop.Customershop.service.CustomerService;
-import com.ar.gl.customer.shop.Customershop.util.CustomerConverter;
+import com.ar.gl.customer.shop.dto.CustomerDTO;
+import com.ar.gl.customer.shop.model.Customer;
+import com.ar.gl.customer.shop.repository.CustomerRepository;
+import com.ar.gl.customer.shop.service.CustomerService;
+import com.ar.gl.customer.shop.util.CustomerConverter;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -30,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	public List<CustomerDTO> findAll(){
-		List<Customer> customers = new ArrayList<Customer>();
+		List<Customer> customers = new ArrayList<>();
 		for(Customer customer : customerRepository.findAll()) {
 			if(customer.getEnabled().equals(Boolean.TRUE)) {
 				customers.add(customer);
@@ -41,28 +43,35 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	public void delete(Long id) {
-		customerRepository.delete(customerRepository.findById(id).get());
+		customerRepository.delete(this.getCustomerById(id));
 	}
 	
 	public CustomerDTO findById(Long id) {
-		return customerConverte.toDTO(customerRepository.findById(id).get()); 
+		return customerConverte.toDTO(this.getCustomerById(id)); 
+		
 	}
 	
 	public CustomerDTO update(Long id,CustomerDTO customerDTO) {
-		Customer customerUpdate = customerConverte.toEntity(customerDTO, customerRepository.findById(id).get());
+		Customer customerUpdate = customerConverte.toEntity(customerDTO, this.getCustomerById(id));
 		return customerConverte.toDTO(customerRepository.save(customerUpdate));
 	}
 	
-	public void softDelete(Long id) {
-		Customer customerDelete = customerRepository.findById(id).get();
+	public void softDelete(Long id) {			
+		Customer customerDelete = this.getCustomerById(id);
 		customerDelete.setEnabled(Boolean.FALSE);
 		customerRepository.save(customerDelete);
 	}
 	
 	public CustomerDTO restore(Long id) {
-		Customer customerRestore = customerRepository.findById(id).get();
+		Customer customerRestore = this.getCustomerById(id);
 		customerRestore.setEnabled(Boolean.TRUE);
 		return customerConverte.toDTO(customerRepository.save(customerRestore));
+	}
+	
+	private Customer getCustomerById(Long id) {
+		Optional<Customer> oCustomer = customerRepository.findById(id);
+		if (!oCustomer.isPresent()) throw new NoSuchElementException("customer not found");
+		return oCustomer.get();
 	}
 	
 }

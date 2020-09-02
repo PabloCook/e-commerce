@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -24,49 +25,49 @@ public class HystrixCustomerFallBackFactory implements FeignCustomer {
 							  .build();
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<List<CustomerDTO>> findAll() {
 		return new ResponseEntity<>(Arrays.asList(customerDTO), HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<CustomerDTO> getById(Long id) {
 		return new ResponseEntity<>(customerDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<CustomerDTO> save(@Valid CustomerDTO customerDTO) {
 		return new ResponseEntity<>(customerDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<CustomerDTO> update(Long id, @Valid CustomerDTO customerDTO) {
 		return new ResponseEntity<>(customerDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<CustomerDTO> partialUpdate(Long id, CustomerDTO customerDTO) {
 		return new ResponseEntity<>(customerDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<CustomerDTO> restore(Long id) {
 		return new ResponseEntity<>(customerDTO, HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<String> delete(Long id) {
 		return new ResponseEntity<>("No se pudo eliminar", HttpStatus.OK);
 	}
 
 	@Override
-	@HystrixCommand(ignoreExceptions = Exception.class)
+	@HystrixCommand(ignoreExceptions = TypeMismatchException.class)
 	public ResponseEntity<String> softDelete(Long id) {
 		return new ResponseEntity<>("No se pudo eliminar", HttpStatus.OK);
 	}
