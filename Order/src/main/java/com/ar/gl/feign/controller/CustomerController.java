@@ -25,7 +25,7 @@ public class CustomerController implements FeignCustomer{
 	public CustomerController(FeignCustomer customer) {
 		this.customer = customer;
 	}
-
+	
 	@GetMapping(value = "/customers")
 	@Override
 	public ResponseEntity<List<CustomerDTO>> findAll() {
