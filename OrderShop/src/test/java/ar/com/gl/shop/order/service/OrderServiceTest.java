@@ -18,7 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import ar.com.gl.shop.order.dto.OrderDTO;
 import ar.com.gl.shop.order.model.Order;
@@ -43,6 +47,7 @@ public class OrderServiceTest {
 	List<Order> orders = new ArrayList<>();
 	OrderDTO orderDTO;
 	Pageable pageable;
+	Page<Order> pageOrder;
 	
 	@BeforeEach
 	void setUp() {
@@ -54,6 +59,8 @@ public class OrderServiceTest {
 		orders.add(order2);
 		orders.add(order);
 		orderDTO = new OrderDTO(1L, 4L, 2L, 10, 20.0, false);
+		pageable = PageRequest.of(1, 10);
+		pageOrder = new PageImpl<>(orders);
 	}
 	
 	@Test
@@ -161,8 +168,8 @@ public class OrderServiceTest {
 	@Test
 	@DisplayName("getAll pageable")
 	void testCase_15() {
-		when(orderRepository.findAll(pageable).toList()).thenReturn(orders);
-		assertEquals(orders, orderService.getAll(pageable));
+		when(orderRepository.findAll(pageable)).thenReturn(pageOrder);
+		assertEquals(pageOrder.toList(), orderService.getAll(pageable));
 	}
 	
 }
