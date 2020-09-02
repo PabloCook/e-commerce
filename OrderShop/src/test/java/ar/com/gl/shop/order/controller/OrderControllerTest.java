@@ -59,7 +59,7 @@ public class OrderControllerTest {
 	Order order;
 	Order order2;
 	List<Order> orders = new ArrayList<>();
-	List<OrderDTO> ordersDTO = new ArrayList<>();;
+	List<OrderDTO> ordersDTO = new ArrayList<>();
 	OrderDTO orderDTO;
 	Pageable pageable;
 	Page<Order> pageOrder;
