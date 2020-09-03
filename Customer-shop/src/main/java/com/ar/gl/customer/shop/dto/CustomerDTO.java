@@ -28,4 +28,6 @@ public class CustomerDTO {
 	@NotNull
 	private String dni;
 	
+	private boolean enabled;
+	
 }
