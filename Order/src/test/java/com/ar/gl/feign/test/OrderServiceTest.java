@@ -225,10 +225,6 @@ public class OrderServiceTest {
 		
 		List<ResponseOrderDTO> responseOrdersDTO = mergeLists(responseEntityOrdersDTO.getBody(), responseEntityCustomerDTO.getBody(), responseEntityProductsDTO.getBody());
 		
-		System.out.println(responseOrdersDTO);
-		
-		System.out.println(orderServiceImpl.getAllOrders(pageable));
-		
 		assertEquals(responseOrdersDTO, orderServiceImpl.getAllOrders(pageable).getBody());
 		
 	}
@@ -239,10 +235,62 @@ public class OrderServiceTest {
 		
 		ResponseEntity<List<ProductDTO>> responseEntityProductsDTO = new ResponseEntity<>(productsDTO, HttpStatus.OK);
 		
+		responseEntityOrdersDTO = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		
 		when(feignOrder.getAllOrders()).thenReturn(responseEntityOrdersDTO);
 		when(feignCustomer.findAll()).thenReturn(responseEntityCustomerDTO);
 		when(feignProduct.findAll()).thenReturn(responseEntityProductsDTO);
+		
+		List<ResponseOrderDTO> responseOrderDTO = mergeLists(responseEntityOrdersDTO.getBody(), responseEntityCustomerDTO.getBody(), responseEntityProductsDTO.getBody());
+		
+		assertEquals(responseOrderDTO, orderServiceImpl.getOrdersByCustomer(1l).getBody());
 
 	}
+	
+	@Test
+	@DisplayName("get all orderes by products")
+	void getAllOrderByPRoducts() {
+		
+		ResponseEntity<List<ProductDTO>> responseEntityProductsDTO = new ResponseEntity<>(productsDTO, HttpStatus.OK);
+		
+		responseEntityOrdersDTO = new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+		
+		when(feignOrder.getAllOrders()).thenReturn(responseEntityOrdersDTO);
+		when(feignCustomer.findAll()).thenReturn(responseEntityCustomerDTO);
+		when(feignProduct.findAll()).thenReturn(responseEntityProductsDTO);
+		
+		List<ResponseOrderDTO> responseOrderDTO = mergeLists(responseEntityOrdersDTO.getBody(), responseEntityCustomerDTO.getBody(), responseEntityProductsDTO.getBody());
+		
+		assertEquals(responseOrderDTO, orderServiceImpl.getOrdersByProduct(1l).getBody());
+
+	}
+	
+	@Test
+	@DisplayName("update Order")
+	void updateOrder() {
+		when(feignOrder.update(orderDTOMock.getId(), orderDTOMock)).thenReturn(responseOrderDTOMock);
+		when(feignOrder.get(orderDTOMock.getId())).thenReturn(responseOrderDTOMock);
+		when(feignProduct.getById(orderDTOMock.getProductId())).thenReturn(responseProductDTOMock);
+		when(feignCustomer.getById(orderDTOMock.getCustomerId())).thenReturn(responseCustomerDTOMock);
+		
+		ResponseOrderDTO responseOrderDTO = toResponseDTO(responseOrderDTOMock.getBody(), responseProductDTOMock.getBody(), responseCustomerDTOMock.getBody());
+		
+		assertEquals(new ResponseEntity<>(responseOrderDTO,HttpStatus.OK),orderServiceImpl.update(orderDTOMock.getId(), orderDTOMock));
+	}
+	
+	@Test
+	@DisplayName("delete order")
+	void deleteOrder() {
+		when(feignOrder.delete(orderDTOMock.getId())).thenReturn(new ResponseEntity<>("deleted",HttpStatus.OK));
+		assertEquals(new ResponseEntity<>(new ResponseOrderDTO("Order eliminada"),HttpStatus.OK),orderServiceImpl.delete(orderDTOMock.getId()));
+	}
+	
+	@Test
+	@DisplayName("soft delete order")
+	void softDeleteOrder() {
+		when(feignOrder.softDelete(orderDTOMock.getId())).thenReturn(new ResponseEntity<>(orderDTOMock,HttpStatus.OK));
+		assertEquals(new ResponseEntity<>(new ResponseOrderDTO("Order eliminada"),HttpStatus.OK),orderServiceImpl.softDelete(orderDTOMock.getId()));
+	}
+	
 	
 }
