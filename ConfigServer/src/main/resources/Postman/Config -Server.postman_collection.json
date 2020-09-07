@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "cf5a4811-dda3-4c28-9ce7-36c474ffc3c4",
+		"name": "Config -Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get - Product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/product-shop/default",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"product-shop",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get - Customer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/customer-shop/default",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"customer-shop",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get - Orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/order-shop/default",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"order-shop",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get - Zuul",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/zuul-gateway/default",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"zuul-gateway",
+						"default"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

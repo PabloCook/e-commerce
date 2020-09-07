@@ -16,8 +16,7 @@ public class ErrorFilter extends ZuulFilter {
 
 	@Override
 	public boolean shouldFilter() {
-		RequestContext ctx = RequestContext.getCurrentContext();
-		return false;
+		return RequestContext.getCurrentContext().containsKey("error.status_code");
 	}
 
 	@Override
