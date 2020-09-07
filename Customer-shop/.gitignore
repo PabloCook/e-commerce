@@ -1,12 +1,9 @@
-*.class
-MANIFEST.FM
-pom.properties
-/.metadata/
 HELP.md
-/target/
+target/
 !.mvn/wrapper/maven-wrapper.jar
-dockerfile
-*.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
 ### STS ###
 .apt_generated
 .classpath
@@ -15,20 +12,25 @@ dockerfile
 .settings
 .springBeans
 .sts4-cache
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-/build/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
 ### VS Code ###
 .vscode/
-ocal
 
-bin/*
+/.mvn/
+mvn*
