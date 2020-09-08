@@ -1,7 +1,7 @@
 package com.ar.gl.customer.shop.util;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -18,17 +18,13 @@ public class CustomerConverter extends Converter {
 	public Customer toEntity(CustomerDTO customerDTO, Customer customer) {
 		return (Customer) super.fromTo(customerDTO, customer);
 	}
-	
+
 	public CustomerDTO toDTO(Customer customer) {
 		return (CustomerDTO) super.fromTo(customer, CustomerDTO.class);
 	}
-		
+
 	public List<CustomerDTO> toDTOList(List<Customer> customers) {
-		List<CustomerDTO> customersDTO = new ArrayList<>();
-		for(Customer customer : customers) {
-			customersDTO.add(toDTO(customer));
-		}
-		return customersDTO;
+		return customers.stream().map(c -> toDTO(c)).collect(Collectors.toList());
 	}
-	
+
 }
