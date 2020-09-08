@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> findAllDisabled() {
 
-		return repositoryImpl.findAll();
+		return repositoryImpl.findAll().stream().collect(Collectors.toList());
 	}
 
 	@Override
@@ -120,7 +120,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getByName(String name) {
-		Optional<Product> product = repositoryImpl.findByName(name);
+		Optional<Product> product = repositoryImpl.findAll()
+									.stream()
+									.filter(producto -> producto.getName().equals(name))
+									.findFirst();
 		
 		if(product.isPresent())	return product.get();
 			

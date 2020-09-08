@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> findAllDisabled() {
-		return repositoryImpl.findAll();
+		return repositoryImpl.findAll().stream().collect(Collectors.toList());
 
 	}
 
