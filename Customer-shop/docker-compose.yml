@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  config:
+    image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/config-server:v1
+    ports:
+      - 8888:8888
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://192.168.99.100:8761/eureka
+  eureka:
+    image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/eurekaserver:v1
+    ports:
+      - 8761:8761
+    depends_on:
+      - config
+networks:
+  default:
+    external:
+      name: net-bootcamp

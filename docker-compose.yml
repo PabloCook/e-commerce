@@ -1,0 +1,72 @@
+version: '3.7'
+services:
+  #config:
+   # image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/config-server:v1
+   # ports:
+   #   - 8888:8888
+ # eureka:
+  #  image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/eurekaserver:v1
+  #  ports:
+  #    - 8761:8761
+   # depends_on:
+    #  - config
+  zuul:
+    image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/zuul-gateway:v1
+    ports:
+      - 8051:8080
+      - 8050:8050
+    environment:
+        - eureka.client.serviceUrl.defaultZone=http://192.168.99.100:8761/eureka
+        - spring.cloud.config.uri=http://192.168.99.100:8888
+    #depends_on:
+     # - eureka
+      #- config
+    links:
+      - shopproduct
+  shopproduct:
+    image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/shop-product:v1
+    ports:
+      - 9098:8080
+      - 9099:9099
+    environment:
+        - eureka.client.serviceUrl.defaultZone=http://192.168.99.100:8761/eureka
+        - spring.cloud.config.uri=http://192.168.99.100:8888
+    #depends_on:
+     # - eureka
+      #- config
+  customer:
+    image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/customer-shop:1.0
+    ports:
+      - 8080:8080
+    environment:
+        - eureka.client.serviceUrl.defaultZone=http://192.168.99.100:8761/eureka
+        - spring.cloud.config.uri=http://192.168.99.100:8888
+    #depends_on:
+     # - eureka
+     # - config
+  ecommerce:
+    image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/e-commerce:v1
+    ports:
+      - 8098:8080
+      - 8099:8099
+    environment:
+        - eureka.client.serviceUrl.defaultZone=http://192.168.99.100:8761/eureka
+        - spring.cloud.config.uri=http://192.168.99.100:8888
+    #depends_on:
+      #- eureka
+     # - config
+  order:
+    image: docker.pkg.github.com/globallogicserviceandintegration/celula9-omega/order-shop:v1
+    ports:
+      - 9091:8080
+      - 9090:9090
+    environment:
+        - eureka.client.serviceUrl.defaultZone=http://192.168.99.100:8761/eureka
+        - spring.cloud.config.uri=http://192.168.99.100:8888
+    #depends_on:
+   #   - eureka
+    #  - config
+networks:
+  default:
+    external:
+      name: net-bootcamp
