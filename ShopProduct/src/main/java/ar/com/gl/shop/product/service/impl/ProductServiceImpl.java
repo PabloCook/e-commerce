@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> findAllDisabled() {
 
-		return repositoryImpl.findAll();
+		return repositoryImpl.findAll().stream().collect(Collectors.toList());
 	}
 
 	@Override
