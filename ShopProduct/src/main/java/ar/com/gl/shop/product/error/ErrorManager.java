@@ -62,8 +62,8 @@ public class ErrorManager extends ResponseEntityExceptionHandler{
 	
 	@Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		ErrorDTO responseError = new ErrorDTO(exception.getMessage(),HttpStatus.NO_CONTENT.value());
-		return new ResponseEntity<>(responseError,HttpStatus.NO_CONTENT);
+		ErrorDTO responseError = new ErrorDTO(exception.getMessage(),HttpStatus.BAD_REQUEST.value());
+		return new ResponseEntity<>(responseError,HttpStatus.BAD_REQUEST);
     }
 	
 	

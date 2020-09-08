@@ -9,5 +9,6 @@ import ar.com.gl.shop.product.model.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+	
     public Optional<Category> findByName(String name);
 }
