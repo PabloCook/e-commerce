@@ -1,5 +1,7 @@
 package ar.com.gl.shop.product.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,6 +51,9 @@ public class Product {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id" , nullable = false)
 	private Category category;
+	
+	@Column
+	private LocalDate date;
 
 	public Product() {
 		this.enabled = true;
@@ -62,6 +67,7 @@ public class Product {
 		this.price = price;
 		this.category = category;
 		this.enabled = true;
+		this.date = LocalDate.now();
 	}
 
 }

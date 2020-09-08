@@ -68,6 +68,7 @@ public class ConvertProductTest {
 				product1.getDescription(),
 				product1.getPrice(),
 				product1.getEnabled(),
+				product1.getDate(),
 				product1.getCategory().getId(),
 				product1.getCategory().getName(),
 				product1.getCategory().getDescription(),

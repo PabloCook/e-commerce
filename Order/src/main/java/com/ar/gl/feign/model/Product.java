@@ -1,5 +1,7 @@
 package com.ar.gl.feign.model;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +26,7 @@ public class Product {
 	private Boolean enabled;
 
 	private Category category;
+	
+	private LocalDate date;
 
 }

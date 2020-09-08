@@ -1,5 +1,7 @@
 package com.ar.gl.feign.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -26,6 +28,7 @@ public class ResponseOrderDTO {
 	private String productName;
 	private String productDescription;
 	private Double productPrice;
+	private LocalDate productDate;
 	
 	private String categoryName;
 	private String categoryDescription;
