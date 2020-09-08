@@ -22,9 +22,7 @@ public class ProductDTOConverter extends Converter{
 	
 	public List<ProductDTO> toDTOList(List<Product> products) {
 		List<ProductDTO> productsDTO = new ArrayList<>();
-		for(Product product : products) {
-			productsDTO.add(toDTO(product));
-		}
+		products.stream().map(product -> productsDTO.add(toDTO(product)));
 		return productsDTO;
 	}
 	

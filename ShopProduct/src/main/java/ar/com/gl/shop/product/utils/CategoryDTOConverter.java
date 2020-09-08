@@ -24,9 +24,8 @@ public class CategoryDTOConverter extends Converter{
 	
 	public List<CategoryDTO> toDTOList(List<Category> categories) {
 		List<CategoryDTO> categoriesDTO = new ArrayList<>();
-		for(Category category : categories) {
-			categoriesDTO.add(toDTO(category));
-		}
+		categories.stream()
+			.map(category -> categoriesDTO.add(toDTO(category)));
 		return categoriesDTO;
 	}
 }

@@ -41,6 +41,7 @@ public class Utilities {
 					.productName(productDTO.getName())
 					.productDescription(productDTO.getDescription())
 					.productPrice(productDTO.getPrice())
+					.productDate(productDTO.getDate())
 					.categoryName(productDTO.getCategoryName())
 					.categoryDescription(productDTO.getCategoryDescription())
 					.customerId(customerDTO.getId())

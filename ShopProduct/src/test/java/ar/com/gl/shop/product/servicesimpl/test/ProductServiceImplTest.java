@@ -10,6 +10,8 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -74,7 +76,7 @@ class ProductServiceImplTest {
 		oProduct1 = Optional.of(product1);
 		oProduct2 = Optional.of(product2);
 		
-		productDTO1 = new ProductDTO(1l, "test productDTO", "test description", 500.0, true, 1l, "category name", "category description", true, 1l, 20, "buenos aires");
+		productDTO1 = new ProductDTO(1l, "test productDTO", "test description", 500.0, true, LocalDate.now(),1l, "category name", "category description", true, 1l, 20, "buenos aires");
 		
 	}
 
