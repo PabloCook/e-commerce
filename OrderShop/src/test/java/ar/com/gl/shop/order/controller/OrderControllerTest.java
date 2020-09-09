@@ -5,6 +5,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +28,8 @@ import ar.com.gl.shop.order.model.Order;
 import ar.com.gl.shop.order.service.impl.OrderServiceImpl;
 import ar.com.gl.shop.order.utils.OrderDTOConverter;
 
-//@WebMvcTest(controllers = OrderController.class)
-//@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class OrderControllerTest {
-
-	//@Autowired
-	//private MockMvc mockMvc;
 
 	@Mock
 	OrderServiceImpl orderService;
@@ -63,7 +59,7 @@ public class OrderControllerTest {
 		order2.setTotalPrice(20.0);
 		orders.add(order2);
 		orders.add(order);
-		orderDTO = new OrderDTO(1L, 4L, 2L, 10, 20.0, false);
+		orderDTO = new OrderDTO(1L, 4L, 2L, 10, 20.0, false,LocalDate.now());
 		ordersDTO.add(orderDTO);
 		ordersDTO.add(orderDTO);
 		pageable = PageRequest.of(1, 10);

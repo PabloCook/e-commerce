@@ -3,6 +3,7 @@ package ar.com.gl.shop.order.converter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,21 +36,25 @@ public class ConverterDTOTest {
 	OrderDTO orderDTO;
 	Order order;
 	Order order2;
+	LocalDate date;
 
 	List<Order> orders = new ArrayList<>();
 	List<OrderDTO> ordersDTO = new ArrayList<>();;
 
 	@BeforeEach
 	void setUp() {
+		date = LocalDate.now();
 		orderDTOConverter = new OrderDTOConverter();
 		order = new Order(4L, 2L, 10);
 		order.setId(1L);
+		order.setDate(date);
 		order2 = order;
 		order2.setDisable(false);
 		order2.setTotalPrice(20.0);
+		order.setDate(date);
 		orders.add(order2);
 		orders.add(order);
-		orderDTO = new OrderDTO(1L, 4L, 2L, 10, 20.0, false);
+		orderDTO = new OrderDTO(1L, 4L, 2L, 10, 20.0, false,date);
 		ordersDTO.add(orderDTO);
 		ordersDTO.add(orderDTO);
 	}

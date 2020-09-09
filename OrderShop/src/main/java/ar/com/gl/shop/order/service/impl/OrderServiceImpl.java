@@ -29,6 +29,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public Order create(Order order) {
 		order.setDisable(false);
+		order.setDate(this.getCurrentLocalDate());
 		return orderRepository.save(order);
 	}
 

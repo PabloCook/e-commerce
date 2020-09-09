@@ -1,5 +1,7 @@
 package ar.com.gl.shop.order.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +41,9 @@ public class Order {
 	
 	@Column(nullable = false)
 	private Boolean disable;
+	
+	@Column
+	private LocalDate date;
 	
 	public Order(Long productId, Long customerId, Integer quantity) {
 		this.productId = productId;

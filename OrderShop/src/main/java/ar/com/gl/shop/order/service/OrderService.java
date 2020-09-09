@@ -1,5 +1,6 @@
 package ar.com.gl.shop.order.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -27,5 +28,8 @@ public interface OrderService {
 	
 	public Order softDelete(Long id);
 	
-	
+	public default LocalDate getCurrentLocalDate()
+	{
+		return LocalDate.now();
+	}
 }

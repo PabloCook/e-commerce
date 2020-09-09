@@ -1,5 +1,7 @@
 package com.ar.gl.feign.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +19,6 @@ public class OrderDTO {
 	private Integer quantity;
 	private Double totalPrice;
 	private Boolean disable;
+	private LocalDate date;
 	
 }

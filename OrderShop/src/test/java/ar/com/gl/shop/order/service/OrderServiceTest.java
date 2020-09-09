@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -57,7 +58,7 @@ public class OrderServiceTest {
 		order2.setTotalPrice(20.0);
 		orders.add(order2);
 		orders.add(order);
-		orderDTO = new OrderDTO(1L, 4L, 2L, 10, 20.0, false);
+		orderDTO = new OrderDTO(1L, 4L, 2L, 10, 20.0, false,LocalDate.now());
 		pageable = PageRequest.of(1, 10);
 		pageOrder = new PageImpl<>(orders);
 	}

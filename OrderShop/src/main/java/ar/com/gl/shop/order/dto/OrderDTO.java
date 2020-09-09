@@ -1,5 +1,7 @@
 package ar.com.gl.shop.order.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +17,5 @@ public class OrderDTO {
 	private Integer quantity;
 	private Double totalPrice;
 	private Boolean disable;
+	private LocalDate date;
 }
