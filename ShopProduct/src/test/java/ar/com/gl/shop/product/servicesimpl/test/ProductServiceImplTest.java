@@ -12,7 +12,9 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -261,8 +263,9 @@ class ProductServiceImplTest {
 	void testCase_14() {
 		
 		String name = product1.getName();
-		
-		when(productRepository.findByName(name)).thenReturn(oProduct1);
+		List<Product> list = new ArrayList<>();
+		list.add(product1);
+		when(productRepository.findAll()).thenReturn(list);
 		
 		assertEquals(product1, productService.getByName(name));
 		

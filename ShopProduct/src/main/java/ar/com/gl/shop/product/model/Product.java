@@ -67,7 +67,6 @@ public class Product {
 		this.price = price;
 		this.category = category;
 		this.enabled = true;
-		this.date = LocalDate.now();
 	}
 
 }

@@ -1,7 +1,8 @@
 package ar.com.gl.shop.product.utils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import ar.com.gl.shop.product.dto.ProductDTO;
@@ -21,9 +22,7 @@ public class ProductDTOConverter extends Converter{
 	
 	
 	public List<ProductDTO> toDTOList(List<Product> products) {
-		List<ProductDTO> productsDTO = new ArrayList<>();
-		products.stream().map(product -> productsDTO.add(toDTO(product)));
-		return productsDTO;
+		return products.stream().map(product -> toDTO(product)).collect(Collectors.toList());
 	}
 	
 	public Product toEntity(ProductDTO productDTO, Product prod) {

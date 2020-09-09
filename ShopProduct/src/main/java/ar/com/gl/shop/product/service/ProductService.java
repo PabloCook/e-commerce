@@ -1,5 +1,6 @@
 package ar.com.gl.shop.product.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import ar.com.gl.shop.product.dto.ProductDTO;
@@ -26,5 +27,8 @@ public interface ProductService {
 	public List<Product> findAllDisabled();
 	public Product getByName(String name);
 	public List<Product> findCategoryById(Long id);
-
+	public default LocalDate getCurrentLocalDate()
+	{
+		return LocalDate.now();
+	}
 }

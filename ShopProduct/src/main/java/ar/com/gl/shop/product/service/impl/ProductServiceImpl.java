@@ -3,6 +3,7 @@ package ar.com.gl.shop.product.service.impl;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product create(Product product) {
+		product.setDate(this.getCurrentLocalDate());
 		return repositoryImpl.save(product);
 	}
 
@@ -84,8 +86,8 @@ public class ProductServiceImpl implements ProductService {
 		productDTO.setId(product.getId());
 		
 		Product convertedProduct = productDTOConverter.toEntity(productDTO, product);
-		
 		convertedProduct.setCategory(categoryService.getById(product.getCategory().getId(), true));
+		convertedProduct.setDate(LocalDate.now());
 		
 		return repositoryImpl.save(convertedProduct);
 	}
