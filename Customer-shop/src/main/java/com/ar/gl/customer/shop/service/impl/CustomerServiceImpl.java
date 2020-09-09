@@ -1,9 +1,9 @@
 package com.ar.gl.customer.shop.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -32,12 +32,11 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	public List<CustomerDTO> findAll(){
-		List<Customer> customers = new ArrayList<>();
-		for(Customer customer : customerRepository.findAll()) {
-			if(customer.getEnabled().equals(Boolean.TRUE)) {
-				customers.add(customer);
-			}
-		}
+		
+		List<Customer> customers = customerRepository.findAll().stream()
+								   .filter(customer->customer.getEnabled().equals(Boolean.TRUE))
+								   .collect(Collectors.toList());
+
 		return customerConverte.toDTOList(customers);
 				
 	}

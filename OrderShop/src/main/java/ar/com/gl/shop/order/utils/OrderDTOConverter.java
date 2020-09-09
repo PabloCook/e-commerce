@@ -23,7 +23,10 @@ public class OrderDTOConverter extends Converter{
 	
 	
 	public List<OrderDTO> toDTOList(List<Order> orders) {
-		return orders.stream().map(o -> toDTO(o)).collect(Collectors.toList());
+		return orders.stream()
+				.map(this::toDTO)
+				.collect(Collectors.toList());
+		
 	}
 	
 	public Order toEntity(OrderDTO orderDTO, Order prod) {

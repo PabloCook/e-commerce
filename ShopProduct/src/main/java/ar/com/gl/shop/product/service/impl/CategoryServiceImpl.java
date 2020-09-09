@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.com.gl.shop.product.exceptions.CannotDelete;
@@ -21,7 +20,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	private CategoryRepository repositoryImpl;
 
-	@Autowired
 	public CategoryServiceImpl(CategoryRepository repositoryImpl) {
 		this.repositoryImpl = repositoryImpl;
 	}

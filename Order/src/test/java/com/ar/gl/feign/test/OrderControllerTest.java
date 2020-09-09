@@ -28,9 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ar.gl.feign.controller.OrderController;
-import com.ar.gl.feign.dto.CustomerDTO;
 import com.ar.gl.feign.dto.OrderDTO;
-import com.ar.gl.feign.dto.ProductDTO;
 import com.ar.gl.feign.dto.ResponseOrderDTO;
 import com.ar.gl.feign.service.impl.OrderServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
