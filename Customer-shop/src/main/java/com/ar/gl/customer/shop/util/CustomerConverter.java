@@ -24,7 +24,7 @@ public class CustomerConverter extends Converter {
 	}
 
 	public List<CustomerDTO> toDTOList(List<Customer> customers) {
-		return customers.stream().map(c -> toDTO(c)).collect(Collectors.toList());
+		return customers.stream().map(this::toDTO).collect(Collectors.toList());
 	}
 
 }

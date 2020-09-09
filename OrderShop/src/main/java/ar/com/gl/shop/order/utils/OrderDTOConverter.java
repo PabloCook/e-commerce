@@ -1,7 +1,7 @@
 package ar.com.gl.shop.order.utils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -23,10 +23,10 @@ public class OrderDTOConverter extends Converter{
 	
 	
 	public List<OrderDTO> toDTOList(List<Order> orders) {
-		List<OrderDTO> ordersDTO = new ArrayList<>();
-		for(Order order : orders) {
-			ordersDTO.add(toDTO(order));
-		}
+		List<OrderDTO> ordersDTO = orders.stream()
+								   .map(this::toDTO)
+								   .collect(Collectors.toList());
+
 		return ordersDTO;
 	}
 	

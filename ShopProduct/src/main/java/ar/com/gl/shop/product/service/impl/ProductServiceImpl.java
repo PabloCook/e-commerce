@@ -8,13 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
-
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.service.CategoryService;
@@ -30,7 +27,6 @@ public class ProductServiceImpl implements ProductService {
 	
 	private ProductDTOConverter productDTOConverter;
 
-	@Autowired
 	public ProductServiceImpl(ProductRepository repositoryImpl, CategoryService categoryService, ProductDTOConverter productDTOConverter) {
 		this.repositoryImpl = repositoryImpl;
 		this.categoryService = categoryService;

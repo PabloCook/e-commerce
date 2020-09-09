@@ -19,15 +19,16 @@ public class Utilities {
 		
 		List<ResponseOrderDTO> responseOrder = new ArrayList<>();
 		
-		for (OrderDTO orderDTO : orders) {	
+		orders.stream().forEach(orderDTO -> {
 			
-			Optional<ProductDTO> oProductDTO = products.stream().filter(product -> product.getId().equals(orderDTO.getProductId())).findFirst();
-			Optional<CustomerDTO> oCustomerDTO = customers.stream().filter(customer -> customer.getId().equals(orderDTO.getCustomerId())).findFirst();
-		
-			if(oProductDTO.isPresent() && oCustomerDTO.isPresent()) {				
-				responseOrder.add(toResponseDTO(orderDTO,	oProductDTO.get(), oCustomerDTO.get()));
-			}
-		}
+				Optional<ProductDTO> oProductDTO = products.stream().filter(product -> product.getId().equals(orderDTO.getProductId())).findFirst();
+				Optional<CustomerDTO> oCustomerDTO = customers.stream().filter(customer -> customer.getId().equals(orderDTO.getCustomerId())).findFirst();
+			
+				if(oProductDTO.isPresent() && oCustomerDTO.isPresent()) {				
+					responseOrder.add(toResponseDTO(orderDTO, oProductDTO.get(), oCustomerDTO.get()));
+				}
+		});
+
 		return responseOrder;
 	}
 	
