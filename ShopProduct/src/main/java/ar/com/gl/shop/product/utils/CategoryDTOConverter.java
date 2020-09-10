@@ -1,7 +1,7 @@
 package ar.com.gl.shop.product.utils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -23,10 +23,6 @@ public class CategoryDTOConverter extends Converter{
 	}
 	
 	public List<CategoryDTO> toDTOList(List<Category> categories) {
-		List<CategoryDTO> categoriesDTO = new ArrayList<>();
-		for(Category category : categories) {
-			categoriesDTO.add(toDTO(category));
-		}
-		return categoriesDTO;
+		return categories.stream().map(category -> toDTO(category)).collect(Collectors.toList());
 	}
 }

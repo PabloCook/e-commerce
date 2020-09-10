@@ -1,18 +1,15 @@
 package ar.com.gl.shop.product.service.impl;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.util.Optional;
 
-import static java.util.Objects.isNull;
-
+import org.springframework.stereotype.Service;
 
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
 import ar.com.gl.shop.product.model.Stock;
 import ar.com.gl.shop.product.repository.StockRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import ar.com.gl.shop.product.service.StockService;
 
 @Service
@@ -21,7 +18,6 @@ public class StockServiceImpl implements StockService {
 
 private StockRepository repositoryImpl;
 	
-	@Autowired
 	public StockServiceImpl(StockRepository repositoryImpl) {
 		this.repositoryImpl= repositoryImpl;
 	}

@@ -1,5 +1,7 @@
 package ar.com.gl.shop.product.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ public class ProductDTO {
 	private String description;
 	private Double price;
 	private Boolean enabled;
+	private LocalDate date;
 	private Long categoryId;
 	private String categoryName;
 	private String categoryDescription;

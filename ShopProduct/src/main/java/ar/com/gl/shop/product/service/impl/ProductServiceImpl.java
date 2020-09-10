@@ -3,17 +3,15 @@ package ar.com.gl.shop.product.service.impl;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import ar.com.gl.shop.product.dto.ProductDTO;
 import ar.com.gl.shop.product.exceptions.ItemNotFound;
-
 import ar.com.gl.shop.product.model.Product;
 import ar.com.gl.shop.product.repository.ProductRepository;
 import ar.com.gl.shop.product.service.CategoryService;
@@ -29,7 +27,6 @@ public class ProductServiceImpl implements ProductService {
 	
 	private ProductDTOConverter productDTOConverter;
 
-	@Autowired
 	public ProductServiceImpl(ProductRepository repositoryImpl, CategoryService categoryService, ProductDTOConverter productDTOConverter) {
 		this.repositoryImpl = repositoryImpl;
 		this.categoryService = categoryService;
@@ -38,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product create(Product product) {
+		product.setDate(this.getCurrentLocalDate());
 		return repositoryImpl.save(product);
 	}
 
@@ -51,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> findAllDisabled() {
 
-		return repositoryImpl.findAll();
+		return repositoryImpl.findAll().stream().collect(Collectors.toList());
 	}
 
 	@Override
@@ -84,8 +82,8 @@ public class ProductServiceImpl implements ProductService {
 		productDTO.setId(product.getId());
 		
 		Product convertedProduct = productDTOConverter.toEntity(productDTO, product);
-		
 		convertedProduct.setCategory(categoryService.getById(product.getCategory().getId(), true));
+		convertedProduct.setDate(LocalDate.now());
 		
 		return repositoryImpl.save(convertedProduct);
 	}
@@ -120,7 +118,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getByName(String name) {
-		Optional<Product> product = repositoryImpl.findByName(name);
+		Optional<Product> product = repositoryImpl.findAll()
+									.stream()
+									.filter(producto -> producto.getName().equals(name))
+									.findFirst();
 		
 		if(product.isPresent())	return product.get();
 			

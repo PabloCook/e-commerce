@@ -10,7 +10,11 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +78,7 @@ class ProductServiceImplTest {
 		oProduct1 = Optional.of(product1);
 		oProduct2 = Optional.of(product2);
 		
-		productDTO1 = new ProductDTO(1l, "test productDTO", "test description", 500.0, true, 1l, "category name", "category description", true, 1l, 20, "buenos aires");
+		productDTO1 = new ProductDTO(1l, "test productDTO", "test description", 500.0, true, LocalDate.now(),1l, "category name", "category description", true, 1l, 20, "buenos aires");
 		
 	}
 
@@ -259,8 +263,9 @@ class ProductServiceImplTest {
 	void testCase_14() {
 		
 		String name = product1.getName();
-		
-		when(productRepository.findByName(name)).thenReturn(oProduct1);
+		List<Product> list = new ArrayList<>();
+		list.add(product1);
+		when(productRepository.findAll()).thenReturn(list);
 		
 		assertEquals(product1, productService.getByName(name));
 		

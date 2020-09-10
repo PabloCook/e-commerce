@@ -1,5 +1,7 @@
 package com.ar.gl.feign.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,7 @@ public class ProductDTO {
 	private String description;
 	private Double price;
 	private Boolean enabled;
+	private LocalDate date;
 	private Long categoryId;
 	private String categoryName;
 	private String categoryDescription;
